@@ -85,6 +85,7 @@
 #include "MeHumitureSensor.h"
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the humiture sensor to arduino port,
  * no pins are used or initialized here.
@@ -106,6 +107,7 @@ MeHumiture::MeHumiture(uint8_t port) : MePort(port)
 {
 
 }
+
 #else // ME_PORT_DEFINED
 /**
  * \par Function
@@ -143,8 +145,8 @@ MeHumiture::MeHumiture(uint8_t port)
  */
 void MeHumiture::setpin(uint8_t port)
 {
-  _DataPin = port;
-  s2 = _DataPin;
+    _DataPin = port;
+    s2 = _DataPin;
 }
 
 /**
@@ -161,111 +163,102 @@ void MeHumiture::setpin(uint8_t port)
  */
 void MeHumiture::update(void)
 {
-  uint8_t data[5] = {0};
-  unsigned long Time, datatime;
-  
+    uint8_t data[5] = { 0 };
+    unsigned long Time, datatime;
+
 #ifdef ME_PORT_DEFINED
-  MePort::dWrite2(HIGH);
-  delay(250);
+    MePort::dWrite2(HIGH);
+    delay(250);
 
-  MePort::dWrite2(LOW);
-  delay(20);
+    MePort::dWrite2(LOW);
+    delay(20);
 
-  MePort::dWrite2(HIGH);
-  delayMicroseconds(40);
-  MePort::dWrite2(LOW);
+    MePort::dWrite2(HIGH);
+    delayMicroseconds(40);
+    MePort::dWrite2(LOW);
 
 #else // ME_PORT_DEFINED
-  pinMode(_DataPin,OUTPUT);
-  digitalWrite(_DataPin,HIGH);
-  delay(250);
+    pinMode(_DataPin,OUTPUT);
+    digitalWrite(_DataPin,HIGH);
+    delay(250);
 
-  digitalWrite(_DataPin,LOW);
-  delay(20);
-  
-  digitalWrite(_DataPin,HIGH);
-  delayMicroseconds(40);
-  digitalWrite(_DataPin,LOW);
-#endif // ME_PORT_DEFINED
-  delayMicroseconds(10);
-  Time = millis();
-#ifdef ME_PORT_DEFINED
-  while(MePort::dRead2() != HIGH)
-#else // ME_PORT_DEFINED
-  pinMode(_DataPin,INPUT_PULLUP);
-  while(digitalRead(_DataPin) != HIGH)
-#endif // ME_PORT_DEFINED
-  {
-    if( ( millis() - Time ) > 4)
-    {
-      Humidity = 0;
-      Temperature = 0;
-      break;
-    }
-  }
+    digitalWrite(_DataPin,LOW);
+    delay(20);
 
-  Time = millis();
-  
-#ifdef ME_PORT_DEFINED
-  while(MePort::dRead2() != LOW)
-#else // ME_PORT_DEFINED
-  pinMode(_DataPin,INPUT_PULLUP);
-  while(digitalRead(_DataPin) != LOW)
+    digitalWrite(_DataPin,HIGH);
+    delayMicroseconds(40);
+    digitalWrite(_DataPin,LOW);
 #endif // ME_PORT_DEFINED
-  {
-    if( ( millis() - Time ) > 4)
-    {
-      break;
-    }
-  }
-
-  for(int16_t i=0;i<40;i++)
-  {
-  	Time = millis();
-#ifdef ME_PORT_DEFINED
-    while(MePort::dRead2() == LOW)
-#else // ME_PORT_DEFINED
-    pinMode(_DataPin,INPUT_PULLUP);
-    while(digitalRead(_DataPin) == LOW)
-#endif // ME_PORT_DEFINED
-    {
-      if( ( millis() - Time ) > 4)
-      {
-        break;
-      }
-    }
-
-    datatime = micros();
+    delayMicroseconds(10);
     Time = millis();
 #ifdef ME_PORT_DEFINED
-    while(MePort::dRead2() == HIGH)
+    while (MePort::dRead2() != HIGH)
 #else // ME_PORT_DEFINED
-    pinMode(_DataPin,INPUT_PULLUP);
-    while(digitalRead(_DataPin) == HIGH)
+        pinMode(_DataPin,INPUT_PULLUP);
+        while(digitalRead(_DataPin) != HIGH)
 #endif // ME_PORT_DEFINED
     {
-      if( ( millis() - Time ) > 4 )
-      {
-        break;
-      }
+        if ((millis() - Time) > 4) {
+            Humidity = 0;
+            Temperature = 0;
+            break;
+        }
     }
 
-    if ( micros() - datatime > 40 )
+    Time = millis();
+
+#ifdef ME_PORT_DEFINED
+    while (MePort::dRead2() != LOW)
+#else // ME_PORT_DEFINED
+        pinMode(_DataPin,INPUT_PULLUP);
+        while(digitalRead(_DataPin) != LOW)
+#endif // ME_PORT_DEFINED
     {
-      data[i/8] <<= 1;
-      data[i/8] |= 0x01;
+        if ((millis() - Time) > 4) {
+            break;
+        }
     }
-    else
-    {
-      data[i/8] <<= 1;
+
+    for (int16_t i = 0; i < 40; i++) {
+        Time = millis();
+#ifdef ME_PORT_DEFINED
+        while (MePort::dRead2() == LOW)
+#else // ME_PORT_DEFINED
+            pinMode(_DataPin,INPUT_PULLUP);
+            while(digitalRead(_DataPin) == LOW)
+#endif // ME_PORT_DEFINED
+        {
+            if ((millis() - Time) > 4) {
+                break;
+            }
+        }
+
+        datatime = micros();
+        Time = millis();
+#ifdef ME_PORT_DEFINED
+        while (MePort::dRead2() == HIGH)
+#else // ME_PORT_DEFINED
+            pinMode(_DataPin,INPUT_PULLUP);
+            while(digitalRead(_DataPin) == HIGH)
+#endif // ME_PORT_DEFINED
+        {
+            if ((millis() - Time) > 4) {
+                break;
+            }
+        }
+
+        if (micros() - datatime > 40) {
+            data[i / 8] <<= 1;
+            data[i / 8] |= 0x01;
+        } else {
+            data[i / 8] <<= 1;
+        }
     }
-  }
-   
-  if(data[4] == ((data[0] + data[1] + data[2] + data[3]) & 0xFF))
-  {
-  	Humidity = data[0];
-    Temperature = data[2];
-  }
+
+    if (data[4] == ((data[0] + data[1] + data[2] + data[3]) & 0xFF)) {
+        Humidity = data[0];
+        Temperature = data[2];
+    }
 }
 
 /**
@@ -282,7 +275,7 @@ void MeHumiture::update(void)
  */
 uint8_t MeHumiture::getHumidity(void)
 {
-  return Humidity;
+    return Humidity;
 }
 
 /**
@@ -299,7 +292,7 @@ uint8_t MeHumiture::getHumidity(void)
  */
 uint8_t MeHumiture::getTemperature(void)
 {
-  return Temperature;
+    return Temperature;
 }
 
 /**
@@ -319,14 +312,11 @@ uint8_t MeHumiture::getTemperature(void)
  */
 uint8_t MeHumiture::getValue(uint8_t index)
 {
-  if(index == 0)
-  {
-    return Humidity;
-  }
-  else
-  {
-    return Temperature;
-  }
+    if (index == 0) {
+        return Humidity;
+    } else {
+        return Temperature;
+    }
 }
 
 /**
@@ -345,7 +335,7 @@ uint8_t MeHumiture::getValue(uint8_t index)
  */
 double MeHumiture::getFahrenheit(void)//Celsius degrees to Fahrenheit
 {
-  return 1.8 * Temperature + 32;
+    return 1.8 * Temperature + 32;
 }
 
 
@@ -365,7 +355,7 @@ double MeHumiture::getFahrenheit(void)//Celsius degrees to Fahrenheit
  */
 double MeHumiture::getKelvin(void)
 {
-  return Temperature + 273.15;
+    return Temperature + 273.15;
 }
 
 /**
@@ -386,15 +376,15 @@ double MeHumiture::getKelvin(void)
  */
 double MeHumiture::getdewPoint(void)
 {
-  double A0= 373.15/(273.15 + Temperature);
-  double SUM = -7.90298 * (A0-1);
-  SUM += 5.02808 * log10(A0);
-  SUM += -1.3816e-7 * (pow(10, (11.344*(1-1/A0)))-1) ;
-  SUM += 8.1328e-3 * (pow(10,(-3.49149*(A0-1)))-1) ;
-  SUM += log10(1013.246);
-  double VP = pow(10, SUM-3) * Humidity;
-  double T = log(VP/0.61078);   // temp var
-  return (241.88 * T) / (17.558-T);
+    double A0 = 373.15 / (273.15 + Temperature);
+    double SUM = -7.90298 * (A0 - 1);
+    SUM += 5.02808 * log10(A0);
+    SUM += -1.3816e-7 * (pow(10, (11.344 * (1 - 1 / A0))) - 1);
+    SUM += 8.1328e-3 * (pow(10, (-3.49149 * (A0 - 1))) - 1);
+    SUM += log10(1013.246);
+    double VP = pow(10, SUM - 3) * Humidity;
+    double T = log(VP / 0.61078);   // temp var
+    return (241.88 * T) / (17.558 - T);
 }
 
 /**
@@ -415,10 +405,10 @@ double MeHumiture::getdewPoint(void)
  */
 double MeHumiture::getPointFast()
 {
-  double a = 17.271;
-  double b = 237.7;
-  double temp = (a * Temperature) / (b + Temperature) + log((double)Humidity/100);
-  //double Td = (b * temp) / (a - temp);
-  return ((b * temp) / (a - temp));
+    double a = 17.271;
+    double b = 237.7;
+    double temp = (a * Temperature) / (b + Temperature) + log((double) Humidity / 100);
+    //double Td = (b * temp) / (a - temp);
+    return ((b * temp) / (a - temp));
 }
 

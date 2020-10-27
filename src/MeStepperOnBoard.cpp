@@ -65,8 +65,8 @@
 
 typedef enum
 {
-  DIRECTION_CCW = 0,  ///< Clockwise
-  DIRECTION_CW  = 1   ///< Counter-Clockwise
+    DIRECTION_CCW = 0,  ///< Clockwise
+    DIRECTION_CW = 1   ///< Counter-Clockwise
 } Direction;
 
 /**
@@ -87,36 +87,36 @@ MeStepperOnBoard::MeStepperOnBoard()
  */
 MeStepperOnBoard::MeStepperOnBoard(int slot)
 {
-  _currentPos = 0;
-  _enabled = false;
-  _targetPos = 0;
-  _acceleration = 0;
-  _lastStepTime = micros();
-  _speed = 0;
-  _dir = DIRECTION_CW;
-  setCurrentPosition(0);
-  _slot = slot;
-  _enable_pin = megaPi_slots[slot-1].pin[0];
-  _micro_step_pin1 = megaPi_slots[slot-1].pin[1];
-  _micro_step_pin2 = megaPi_slots[slot-1].pin[2];
-  _micro_step_pin3 = megaPi_slots[slot-1].pin[3];
-  _reset_pin = megaPi_slots[slot-1].pin[4];
-  _sleep_pin = megaPi_slots[slot-1].pin[5];
-  _step_data = megaPi_slots[slot-1].pin[6];
-  _dir_data = megaPi_slots[slot-1].pin[7];
-  pinMode(_dir_data, OUTPUT);
-  pinMode(_step_data, OUTPUT);
-  pinMode(_enable_pin, OUTPUT);
-  pinMode(_sleep_pin, OUTPUT);
-  pinMode(_reset_pin, OUTPUT);
-  digitalWrite(_sleep_pin,HIGH);
-  digitalWrite(_reset_pin,HIGH);
-  pinMode(_micro_step_pin1, OUTPUT);
-  pinMode(_micro_step_pin2, OUTPUT);
-  pinMode(_micro_step_pin3, OUTPUT);
-  digitalWrite(_micro_step_pin1,0);
-  digitalWrite(_micro_step_pin2,0);
-  digitalWrite(_micro_step_pin3,1);
+    _currentPos = 0;
+    _enabled = false;
+    _targetPos = 0;
+    _acceleration = 0;
+    _lastStepTime = micros();
+    _speed = 0;
+    _dir = DIRECTION_CW;
+    setCurrentPosition(0);
+    _slot = slot;
+    _enable_pin = megaPi_slots[slot - 1].pin[0];
+    _micro_step_pin1 = megaPi_slots[slot - 1].pin[1];
+    _micro_step_pin2 = megaPi_slots[slot - 1].pin[2];
+    _micro_step_pin3 = megaPi_slots[slot - 1].pin[3];
+    _reset_pin = megaPi_slots[slot - 1].pin[4];
+    _sleep_pin = megaPi_slots[slot - 1].pin[5];
+    _step_data = megaPi_slots[slot - 1].pin[6];
+    _dir_data = megaPi_slots[slot - 1].pin[7];
+    pinMode(_dir_data, OUTPUT);
+    pinMode(_step_data, OUTPUT);
+    pinMode(_enable_pin, OUTPUT);
+    pinMode(_sleep_pin, OUTPUT);
+    pinMode(_reset_pin, OUTPUT);
+    digitalWrite(_sleep_pin, HIGH);
+    digitalWrite(_reset_pin, HIGH);
+    pinMode(_micro_step_pin1, OUTPUT);
+    pinMode(_micro_step_pin2, OUTPUT);
+    pinMode(_micro_step_pin3, OUTPUT);
+    digitalWrite(_micro_step_pin1, 0);
+    digitalWrite(_micro_step_pin2, 0);
+    digitalWrite(_micro_step_pin3, 1);
 }
 
 /**
@@ -135,45 +135,44 @@ MeStepperOnBoard::MeStepperOnBoard(int slot)
  */
 void MeStepperOnBoard::setMicroStep(int8_t value)
 {
-  _micro_step = value;
-  switch (value)
-  {
-    case 1:
-      digitalWrite(_micro_step_pin1,0);
-      digitalWrite(_micro_step_pin2,0);
-      digitalWrite(_micro_step_pin3,0);
-      break;
-    case 2:
-      digitalWrite(_micro_step_pin1,1);
-      digitalWrite(_micro_step_pin2,0);
-      digitalWrite(_micro_step_pin3,0);
-      break;
-    case 4:
-      digitalWrite(_micro_step_pin1,0);
-      digitalWrite(_micro_step_pin2,1);
-      digitalWrite(_micro_step_pin3,0);
-      break;
-    case 8:
-      digitalWrite(_micro_step_pin1,1);
-      digitalWrite(_micro_step_pin2,1);
-      digitalWrite(_micro_step_pin3,0);
-      break;
-    case 16:
-      digitalWrite(_micro_step_pin1,0);
-      digitalWrite(_micro_step_pin2,0);
-      digitalWrite(_micro_step_pin3,1);
-      break;
-    case 32:
-      digitalWrite(_micro_step_pin1,1);
-      digitalWrite(_micro_step_pin2,1);
-      digitalWrite(_micro_step_pin3,1);
-      break;
-    default:
-      digitalWrite(_micro_step_pin1,0);
-      digitalWrite(_micro_step_pin2,0);
-      digitalWrite(_micro_step_pin3,0);
-      break;
-  }
+    _micro_step = value;
+    switch (value) {
+        case 1:
+            digitalWrite(_micro_step_pin1, 0);
+            digitalWrite(_micro_step_pin2, 0);
+            digitalWrite(_micro_step_pin3, 0);
+            break;
+        case 2:
+            digitalWrite(_micro_step_pin1, 1);
+            digitalWrite(_micro_step_pin2, 0);
+            digitalWrite(_micro_step_pin3, 0);
+            break;
+        case 4:
+            digitalWrite(_micro_step_pin1, 0);
+            digitalWrite(_micro_step_pin2, 1);
+            digitalWrite(_micro_step_pin3, 0);
+            break;
+        case 8:
+            digitalWrite(_micro_step_pin1, 1);
+            digitalWrite(_micro_step_pin2, 1);
+            digitalWrite(_micro_step_pin3, 0);
+            break;
+        case 16:
+            digitalWrite(_micro_step_pin1, 0);
+            digitalWrite(_micro_step_pin2, 0);
+            digitalWrite(_micro_step_pin3, 1);
+            break;
+        case 32:
+            digitalWrite(_micro_step_pin1, 1);
+            digitalWrite(_micro_step_pin2, 1);
+            digitalWrite(_micro_step_pin3, 1);
+            break;
+        default:
+            digitalWrite(_micro_step_pin1, 0);
+            digitalWrite(_micro_step_pin2, 0);
+            digitalWrite(_micro_step_pin3, 0);
+            break;
+    }
 }
 
 /**
@@ -192,34 +191,34 @@ void MeStepperOnBoard::setMicroStep(int8_t value)
  */
 void MeStepperOnBoard::setpin(int slot)
 {
-  // _currentPos = 0;
-  // _targetPos = 0;
-  // _acceleration = 0;
-  // _lastStepTime = micros();
-  // _speed = 0;
-  // _dir = DIRECTION_CW;
-  // setCurrentPosition(0);
-  _enable_pin = megaPi_slots[slot-1].pin[0];
-  _micro_step_pin1 = megaPi_slots[slot-1].pin[1];
-  _micro_step_pin2 = megaPi_slots[slot-1].pin[2];
-  _micro_step_pin3 = megaPi_slots[slot-1].pin[3];
-  _reset_pin = megaPi_slots[slot-1].pin[4];
-  _sleep_pin = megaPi_slots[slot-1].pin[5];
-  _step_data = megaPi_slots[slot-1].pin[6];
-  _dir_data = megaPi_slots[slot-1].pin[7];
-  pinMode(_dir_data, OUTPUT);
-  pinMode(_step_data, OUTPUT);
-  pinMode(_enable_pin, OUTPUT);
-  pinMode(_sleep_pin, OUTPUT);
-  pinMode(_reset_pin, OUTPUT);
-  digitalWrite(_sleep_pin,HIGH);
-  digitalWrite(_reset_pin,LOW);
-  pinMode(_micro_step_pin1, OUTPUT);
-  pinMode(_micro_step_pin2, OUTPUT);
-  pinMode(_micro_step_pin3, OUTPUT);
-  // digitalWrite(_micro_step_pin1,0);
-  // digitalWrite(_micro_step_pin2,0);
-  // digitalWrite(_micro_step_pin3,1);
+    // _currentPos = 0;
+    // _targetPos = 0;
+    // _acceleration = 0;
+    // _lastStepTime = micros();
+    // _speed = 0;
+    // _dir = DIRECTION_CW;
+    // setCurrentPosition(0);
+    _enable_pin = megaPi_slots[slot - 1].pin[0];
+    _micro_step_pin1 = megaPi_slots[slot - 1].pin[1];
+    _micro_step_pin2 = megaPi_slots[slot - 1].pin[2];
+    _micro_step_pin3 = megaPi_slots[slot - 1].pin[3];
+    _reset_pin = megaPi_slots[slot - 1].pin[4];
+    _sleep_pin = megaPi_slots[slot - 1].pin[5];
+    _step_data = megaPi_slots[slot - 1].pin[6];
+    _dir_data = megaPi_slots[slot - 1].pin[7];
+    pinMode(_dir_data, OUTPUT);
+    pinMode(_step_data, OUTPUT);
+    pinMode(_enable_pin, OUTPUT);
+    pinMode(_sleep_pin, OUTPUT);
+    pinMode(_reset_pin, OUTPUT);
+    digitalWrite(_sleep_pin, HIGH);
+    digitalWrite(_reset_pin, LOW);
+    pinMode(_micro_step_pin1, OUTPUT);
+    pinMode(_micro_step_pin2, OUTPUT);
+    pinMode(_micro_step_pin3, OUTPUT);
+    // digitalWrite(_micro_step_pin1,0);
+    // digitalWrite(_micro_step_pin2,0);
+    // digitalWrite(_micro_step_pin3,1);
 }
 
 /**
@@ -238,11 +237,10 @@ void MeStepperOnBoard::setpin(int slot)
  */
 void MeStepperOnBoard::moveTo(long absolute)
 {
-  if (_targetPos != absolute)
-  {
-    _targetPos = absolute;
-    computeNewSpeed();
-  }
+    if (_targetPos != absolute) {
+        _targetPos = absolute;
+        computeNewSpeed();
+    }
 }
 
 /**
@@ -265,14 +263,13 @@ void MeStepperOnBoard::moveTo(long absolute)
  */
 void MeStepperOnBoard::moveTo(long absolute, int16_t extId, cb callback)
 {
-  _mode = 1;
-  _moving = true;
-  _callback = callback;
-  _extId = extId;
-  if (_targetPos != absolute)
-  {
-    _targetPos = absolute;
-  }
+    _mode = 1;
+    _moving = true;
+    _callback = callback;
+    _extId = extId;
+    if (_targetPos != absolute) {
+        _targetPos = absolute;
+    }
 }
 
 /**
@@ -291,7 +288,7 @@ void MeStepperOnBoard::moveTo(long absolute, int16_t extId, cb callback)
  */
 void MeStepperOnBoard::move(long relative)
 {
-  moveTo(_currentPos + relative);
+    moveTo(_currentPos + relative);
 }
 
 /**
@@ -314,7 +311,7 @@ void MeStepperOnBoard::move(long relative)
  */
 void MeStepperOnBoard::move(long relative, int16_t extId, cb callback)
 {
-  moveTo(_currentPos + relative, extId, callback);
+    moveTo(_currentPos + relative, extId, callback);
 }
 
 /**
@@ -333,32 +330,25 @@ void MeStepperOnBoard::move(long relative, int16_t extId, cb callback)
  */
 boolean MeStepperOnBoard::runSpeed(void)
 {
-  // Dont do anything unless we actually have a step interval
-  if (!_stepInterval)
-  {
-    return false;
-  }
+    // Dont do anything unless we actually have a step interval
+    if (!_stepInterval) {
+        return false;
+    }
 
-  if (micros() - _lastStepTime > _stepInterval)
-  {
-    if (_dir == DIRECTION_CW)
-    {
-      // Clockwise
-      _currentPos += 1;
+    if (micros() - _lastStepTime > _stepInterval) {
+        if (_dir == DIRECTION_CW) {
+            // Clockwise
+            _currentPos += 1;
+        } else {
+            // Anticlockwise
+            _currentPos -= 1;
+        }
+        step();
+        _lastStepTime = micros();
+        return true;
+    } else {
+        return false;
     }
-    else
-    {
-      // Anticlockwise  
-      _currentPos -= 1;
-    }
-    step();
-    _lastStepTime = micros();
-    return true;
-  }
-  else
-  {
-    return false;
-  }
 }
 
 /**
@@ -377,7 +367,7 @@ boolean MeStepperOnBoard::runSpeed(void)
  */
 long MeStepperOnBoard::distanceToGo(void)
 {
-  return _targetPos - _currentPos;
+    return _targetPos - _currentPos;
 }
 
 /**
@@ -396,7 +386,7 @@ long MeStepperOnBoard::distanceToGo(void)
  */
 long MeStepperOnBoard::targetPosition(void)
 {
-  return _targetPos;
+    return _targetPos;
 }
 
 /**
@@ -415,7 +405,7 @@ long MeStepperOnBoard::targetPosition(void)
  */
 long MeStepperOnBoard::currentPosition(void)
 {
-  return _currentPos;
+    return _currentPos;
 }
 
 /**
@@ -434,9 +424,9 @@ long MeStepperOnBoard::currentPosition(void)
  */
 void MeStepperOnBoard::setCurrentPosition(long position)
 {
-  _targetPos = _currentPos = position;
-  _n = 0;
-  _stepInterval = 0;
+    _targetPos = _currentPos = position;
+    _n = 0;
+    _stepInterval = 0;
 }
 
 /**
@@ -455,80 +445,62 @@ void MeStepperOnBoard::setCurrentPosition(long position)
  */
 void MeStepperOnBoard::computeNewSpeed(void)
 {
-  long distanceTo = distanceToGo();
-  long stepsToStop = (long)((_speed * _speed) / (2.0 * _acceleration));
-  if (distanceTo == 0 && stepsToStop <= 1)
-  {
-    // We are at the target and its time to stop
-    _stepInterval = 0;
-    _speed = 0.0;
-    _n = 0;
-    return;
-  }
+    long distanceTo = distanceToGo();
+    long stepsToStop = (long) ((_speed * _speed) / (2.0 * _acceleration));
+    if (distanceTo == 0 && stepsToStop <= 1) {
+        // We are at the target and its time to stop
+        _stepInterval = 0;
+        _speed = 0.0;
+        _n = 0;
+        return;
+    }
 
-  if (distanceTo > 0)
-  {
-    // We are anticlockwise from the target
-    // Need to go clockwise from here, maybe decelerate now
-    if (_n > 0)
-    {
-      // Currently accelerating, need to decel now? Or maybe going the wrong way?
-      if ((stepsToStop >= distanceTo) || _dir == DIRECTION_CCW)
-      {
-        _n = -stepsToStop; // Start deceleration
-      }
+    if (distanceTo > 0) {
+        // We are anticlockwise from the target
+        // Need to go clockwise from here, maybe decelerate now
+        if (_n > 0) {
+            // Currently accelerating, need to decel now? Or maybe going the wrong way?
+            if ((stepsToStop >= distanceTo) || _dir == DIRECTION_CCW) {
+                _n = -stepsToStop; // Start deceleration
+            }
+        } else if (_n < 0) {
+            // Currently decelerating, need to accel again?
+            if ((stepsToStop < distanceTo) && _dir == DIRECTION_CW) {
+                _n = -_n; // Start accceleration
+            }
+        }
+    } else if (distanceTo < 0) {
+        // We are clockwise from the target
+        // Need to go anticlockwise from here, maybe decelerate
+        if (_n > 0) {
+            // Currently accelerating, need to decel now? Or maybe going the wrong way?
+            if ((stepsToStop >= -distanceTo) || _dir == DIRECTION_CW) {
+                _n = -stepsToStop; // Start deceleration
+            }
+        } else if (_n < 0) {
+            // Currently decelerating, need to accel again?
+            if ((stepsToStop < -distanceTo) && _dir == DIRECTION_CCW) {
+                _n = -_n; // Start accceleration
+            }
+        }
     }
-    else if (_n < 0)
-    {
-      // Currently decelerating, need to accel again?
-      if ((stepsToStop < distanceTo) && _dir == DIRECTION_CW)
-      {
-        _n = -_n; // Start accceleration
-      }
-    }
-  }
-  else if (distanceTo < 0)
-  {
-    // We are clockwise from the target
-    // Need to go anticlockwise from here, maybe decelerate
-    if (_n > 0)
-    {
-      // Currently accelerating, need to decel now? Or maybe going the wrong way?
-      if ((stepsToStop >= -distanceTo) || _dir == DIRECTION_CW)
-      {
-        _n = -stepsToStop; // Start deceleration
-      }
-    }
-    else if (_n < 0)
-    {
-      // Currently decelerating, need to accel again?
-      if ((stepsToStop < -distanceTo) && _dir == DIRECTION_CCW)
-      {
-        _n = -_n; // Start accceleration
-      }
-    }
-  }
 
-  // Need to accelerate or decelerate
-  if (_n == 0)
-  {
-    // First step from stopped
-    _cn = _c0;
-    _dir = (distanceTo > 0) ? DIRECTION_CW : DIRECTION_CCW;
-  }
-  else
-  {
-    // Subsequent step. Works for accel (n is +_ve) and decel (n is -ve).
-    _cn = _cn - ((2.0 * _cn) / ((4.0 * _n) + 1)); // Equation 13
-    _cn = max(_cn, _cmin);
-  }
-  _n++;
-  _stepInterval = _cn;
-  _speed = 1000000.0 / _cn;
-  if (_dir == DIRECTION_CCW)
-  {
-    _speed = -_speed;
-  }
+    // Need to accelerate or decelerate
+    if (_n == 0) {
+        // First step from stopped
+        _cn = _c0;
+        _dir = (distanceTo > 0) ? DIRECTION_CW : DIRECTION_CCW;
+    } else {
+        // Subsequent step. Works for accel (n is +_ve) and decel (n is -ve).
+        _cn = _cn - ((2.0 * _cn) / ((4.0 * _n) + 1)); // Equation 13
+        _cn = max(_cn, _cmin);
+    }
+    _n++;
+    _stepInterval = _cn;
+    _speed = 1000000.0 / _cn;
+    if (_dir == DIRECTION_CCW) {
+        _speed = -_speed;
+    }
 }
 
 /**
@@ -547,16 +519,14 @@ void MeStepperOnBoard::computeNewSpeed(void)
  */
 boolean MeStepperOnBoard::run(void)
 {
-  if((_speed == 0.0) || (distanceToGo() == 0))
-  {
-    return false;
-  }
+    if ((_speed == 0.0) || (distanceToGo() == 0)) {
+        return false;
+    }
 
-  if (runSpeed())
-  {
-    computeNewSpeed();
-    return true;
-  }
+    if (runSpeed()) {
+        computeNewSpeed();
+        return true;
+    }
 }
 
 /**
@@ -575,17 +545,15 @@ boolean MeStepperOnBoard::run(void)
  */
 void MeStepperOnBoard::setMaxSpeed(float speed)
 {
-  if (_maxSpeed != speed)
-  {
-    _maxSpeed = speed;
-    _cmin = 1000000.0 / speed;
-    // Recompute _n from current speed and adjust speed if accelerating or cruising
-    if (_n > 0)
-    {
-      _n = (long)((_speed * _speed) / (2.0 * _acceleration)); // Equation 16
-      computeNewSpeed();
+    if (_maxSpeed != speed) {
+        _maxSpeed = speed;
+        _cmin = 1000000.0 / speed;
+        // Recompute _n from current speed and adjust speed if accelerating or cruising
+        if (_n > 0) {
+            _n = (long) ((_speed * _speed) / (2.0 * _acceleration)); // Equation 16
+            computeNewSpeed();
+        }
     }
-  }
 }
 
 /**
@@ -604,19 +572,17 @@ void MeStepperOnBoard::setMaxSpeed(float speed)
  */
 void MeStepperOnBoard::setAcceleration(float acceleration)
 {
-  if(acceleration == 0.0)
-  {
-    return;
-  }
-  if(_acceleration != acceleration)
-  {
-    _n = _n * (_acceleration / acceleration);
-    //	_c0 = sqrt(2.0 / acceleration) * 1000000.0;
-    // Accelerates at half the expected rate. Why?
-    _c0 = sqrt(1.0/acceleration) * 1000000.0;
-    _acceleration = acceleration;
-    computeNewSpeed();
-  }
+    if (acceleration == 0.0) {
+        return;
+    }
+    if (_acceleration != acceleration) {
+        _n = _n * (_acceleration / acceleration);
+        //	_c0 = sqrt(2.0 / acceleration) * 1000000.0;
+        // Accelerates at half the expected rate. Why?
+        _c0 = sqrt(1.0 / acceleration) * 1000000.0;
+        _acceleration = acceleration;
+        computeNewSpeed();
+    }
 }
 
 /**
@@ -635,25 +601,20 @@ void MeStepperOnBoard::setAcceleration(float acceleration)
  */
 void MeStepperOnBoard::setSpeed(float speed)
 {
-  _mode = 0;
-  _moving = true;
-  if (speed == _speed)
-  {
-    return;
-  }
-  speed = constrain(speed, -_maxSpeed, _maxSpeed);
-  if (speed == 0.0)
-  {
-    _stepInterval = 0;
-  }
+    _mode = 0;
+    _moving = true;
+    if (speed == _speed) {
+        return;
+    }
+    speed = constrain(speed, -_maxSpeed, _maxSpeed);
+    if (speed == 0.0) {
+        _stepInterval = 0;
+    } else {
+        _stepInterval = fabs(1000000.0 / speed);
+        _dir = (speed > 0.0) ? DIRECTION_CW : DIRECTION_CCW;
+    }
 
-  else
-  {
-    _stepInterval = fabs(1000000.0 /speed);
-    _dir = (speed > 0.0) ? DIRECTION_CW : DIRECTION_CCW;
-  }
-  
-  _speed = speed;
+    _speed = speed;
 }
 
 /**
@@ -672,7 +633,7 @@ void MeStepperOnBoard::setSpeed(float speed)
  */
 float MeStepperOnBoard::speed(void)
 {
-  return _speed;
+    return _speed;
 }
 
 /**
@@ -691,17 +652,14 @@ float MeStepperOnBoard::speed(void)
  */
 void MeStepperOnBoard::step(void)
 {
-  if(_dir == DIRECTION_CW)
-  {
-    digitalWrite(_dir_data,LOW);
-  }
-  else
-  {
-    digitalWrite(_dir_data,HIGH);
-  }
-  digitalWrite(_step_data, HIGH);
-  delayMicroseconds(1);
-  digitalWrite(_step_data, LOW);
+    if (_dir == DIRECTION_CW) {
+        digitalWrite(_dir_data, LOW);
+    } else {
+        digitalWrite(_dir_data, HIGH);
+    }
+    digitalWrite(_step_data, HIGH);
+    delayMicroseconds(1);
+    digitalWrite(_step_data, LOW);
 }
 
 /**
@@ -720,10 +678,8 @@ void MeStepperOnBoard::step(void)
  */
 void MeStepperOnBoard::runToPosition(void)
 {
-  while (run())
-  {
-    ;
-  }
+    while (run()) { ;
+    }
 }
 
 /**
@@ -742,19 +698,15 @@ void MeStepperOnBoard::runToPosition(void)
  */
 boolean MeStepperOnBoard::runSpeedToPosition(void)
 {
-  if (_targetPos == _currentPos)
-  {
-    return false;
-  }
-  if (_targetPos >_currentPos)
-  {
-    _dir = DIRECTION_CW;
-  }
-  else
-  {
-    _dir = DIRECTION_CCW;
-  }
-  return runSpeed();
+    if (_targetPos == _currentPos) {
+        return false;
+    }
+    if (_targetPos > _currentPos) {
+        _dir = DIRECTION_CW;
+    } else {
+        _dir = DIRECTION_CCW;
+    }
+    return runSpeed();
 }
 
 /**
@@ -773,8 +725,8 @@ boolean MeStepperOnBoard::runSpeedToPosition(void)
  */
 void MeStepperOnBoard::runToNewPosition(long position)
 {
-  moveTo(position, _extId,_callback);
-  runToPosition();
+    moveTo(position, _extId, _callback);
+    runToPosition();
 }
 
 /**
@@ -793,8 +745,8 @@ void MeStepperOnBoard::runToNewPosition(long position)
  */
 void MeStepperOnBoard::disableOutputs(void)
 {
-  _enabled = false;
-  digitalWrite(_enable_pin,1);
+    _enabled = false;
+    digitalWrite(_enable_pin, 1);
 }
 
 /**
@@ -813,8 +765,8 @@ void MeStepperOnBoard::disableOutputs(void)
  */
 void MeStepperOnBoard::enableOutputs(void)
 {
-  _enabled = true;
-  digitalWrite(_enable_pin,0);
+    _enabled = true;
+    digitalWrite(_enable_pin, 0);
 }
 
 /**
@@ -833,26 +785,20 @@ void MeStepperOnBoard::enableOutputs(void)
  */
 void MeStepperOnBoard::update(void)
 {
-  if(!_enabled)return;
-  if(_mode == 0)
-  {
-    runSpeed();
-  }
-  else
-  {
-    long dist = distanceToGo();
-    if(dist==0)
-    {
-      if(_moving)
-      {
-        _moving = false;
-        _callback(_slot, _extId);
-      }
-    }else
-    {
-      runSpeedToPosition(); 
+    if (!_enabled)return;
+    if (_mode == 0) {
+        runSpeed();
+    } else {
+        long dist = distanceToGo();
+        if (dist == 0) {
+            if (_moving) {
+                _moving = false;
+                _callback(_slot, _extId);
+            }
+        } else {
+            runSpeedToPosition();
+        }
     }
-  }
 }
 
 /**
@@ -871,5 +817,5 @@ void MeStepperOnBoard::update(void)
  */
 int16_t MeStepperOnBoard::getPort(void)
 {
-  return _slot;
+    return _slot;
 }

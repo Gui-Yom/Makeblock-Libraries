@@ -50,31 +50,31 @@
  */
 MeMegaPiDCMotor::MeMegaPiDCMotor(void)
 {
-  //The PWM frequency is 976 Hz
+    //The PWM frequency is 976 Hz
 #if defined(__AVR_ATmega32U4__) //MeBaseBoard use ATmega32U4 as MCU
-  TCCR1A =  _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
+    TCCR1A =  _BV(WGM10);
+    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
 
-  TCCR3A = _BV(WGM30);
-  TCCR3B = _BV(CS31) | _BV(CS30) | _BV(WGM32);
+    TCCR3A = _BV(WGM30);
+    TCCR3B = _BV(CS31) | _BV(CS30) | _BV(WGM32);
 
-  TCCR4B = _BV(CS42) | _BV(CS41) | _BV(CS40);
-  TCCR4D = 0;
+    TCCR4B = _BV(CS42) | _BV(CS41) | _BV(CS40);
+    TCCR4D = 0;
 
 #elif defined(__AVR_ATmega328__) // else ATmega328
 
-  TCCR1A = _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
+    TCCR1A = _BV(WGM10);
+    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
 
-  TCCR2A = _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS22);
+    TCCR2A = _BV(WGM21) | _BV(WGM20);
+    TCCR2B = _BV(CS22);
 
 #elif defined(__AVR_ATmega2560__) //else ATmega2560
-  TCCR1A = _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
+    TCCR1A = _BV(WGM10);
+    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
 
-  TCCR2A = _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS22);
+    TCCR2A = _BV(WGM21) | _BV(WGM20);
+    TCCR2B = _BV(CS22);
 #endif
 }
 
@@ -85,63 +85,57 @@ MeMegaPiDCMotor::MeMegaPiDCMotor(void)
  */
 MeMegaPiDCMotor::MeMegaPiDCMotor(uint8_t port)
 {
-  //The PWM frequency is 976 Hz
+    //The PWM frequency is 976 Hz
 #if defined(__AVR_ATmega32U4__) //MeBaseBoard use ATmega32U4 as MCU
-  TCCR1A =  _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
+    TCCR1A =  _BV(WGM10);
+    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
 
-  TCCR3A = _BV(WGM30);
-  TCCR3B = _BV(CS31) | _BV(CS30) | _BV(WGM32);
+    TCCR3A = _BV(WGM30);
+    TCCR3B = _BV(CS31) | _BV(CS30) | _BV(WGM32);
 
-  TCCR4B = _BV(CS42) | _BV(CS41) | _BV(CS40);
-  TCCR4D = 0;
+    TCCR4B = _BV(CS42) | _BV(CS41) | _BV(CS40);
+    TCCR4D = 0;
 
 #elif defined(__AVR_ATmega328__) // else ATmega328
 
-  TCCR1A = _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
+    TCCR1A = _BV(WGM10);
+    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
 
-  TCCR2A = _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS22);
+    TCCR2A = _BV(WGM21) | _BV(WGM20);
+    TCCR2B = _BV(CS22);
 
 #elif defined(__AVR_ATmega2560__) //else ATmega2560
-  /*if((megapi_dc_Port[port].pwm_pin == 13) || (megapi_dc_Port[port].pwm_pin == 4))//timer0 default 970hz
-  {
-    TCCR0A = _BV(WGM01) | _BV(WGM00);//8kHZ
-    TCCR0B = _BV(CS01) | _BV(CS01);
-  }
-  else */if((megapi_dc_Port[port].pwm_pin == 12) || (megapi_dc_Port[port].pwm_pin == 11))
-  {
-    TCCR1A = _BV(WGM10);
-    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);//970hz
-  }
-  else if((megapi_dc_Port[port].pwm_pin == 10) || (megapi_dc_Port[port].pwm_pin == 9))
-  {
-    TCCR2A = _BV(WGM21) | _BV(WGM20);//970hz
-    TCCR2B = _BV(CS22);
-  }
-  else if((megapi_dc_Port[port].pwm_pin == 5) || (megapi_dc_Port[port].pwm_pin == 3) || (megapi_dc_Port[port].pwm_pin == 2))
-  {
-    TCCR3A = _BV(WGM30);
-    TCCR3B = _BV(CS31) | _BV(CS30) | _BV(WGM32);//970hz
-  }
-  else if((megapi_dc_Port[port].pwm_pin == 8) || (megapi_dc_Port[port].pwm_pin == 7) || (megapi_dc_Port[port].pwm_pin == 6))
-  {
-    TCCR4A = _BV(WGM40);
-    TCCR4B = _BV(CS41) | _BV(CS40) | _BV(WGM42);//970hz
-  }
-  else if((megapi_dc_Port[port].pwm_pin == 45) || (megapi_dc_Port[port].pwm_pin == 46) ||  (megapi_dc_Port[port].pwm_pin == 44))
-  {
-    TCCR5A = _BV(WGM50);
-    TCCR5B = _BV(CS51) | _BV(CS50) | _BV(WGM52);//970hz
-  }
+    /*if((megapi_dc_Port[port].pwm_pin == 13) || (megapi_dc_Port[port].pwm_pin == 4))//timer0 default 970hz
+    {
+      TCCR0A = _BV(WGM01) | _BV(WGM00);//8kHZ
+      TCCR0B = _BV(CS01) | _BV(CS01);
+    }
+    else */if ((megapi_dc_Port[port].pwm_pin == 12) || (megapi_dc_Port[port].pwm_pin == 11)) {
+        TCCR1A = _BV(WGM10);
+        TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);//970hz
+    } else if ((megapi_dc_Port[port].pwm_pin == 10) || (megapi_dc_Port[port].pwm_pin == 9)) {
+        TCCR2A = _BV(WGM21) | _BV(WGM20);//970hz
+        TCCR2B = _BV(CS22);
+    } else if ((megapi_dc_Port[port].pwm_pin == 5) || (megapi_dc_Port[port].pwm_pin == 3) ||
+               (megapi_dc_Port[port].pwm_pin == 2)) {
+        TCCR3A = _BV(WGM30);
+        TCCR3B = _BV(CS31) | _BV(CS30) | _BV(WGM32);//970hz
+    } else if ((megapi_dc_Port[port].pwm_pin == 8) || (megapi_dc_Port[port].pwm_pin == 7) ||
+               (megapi_dc_Port[port].pwm_pin == 6)) {
+        TCCR4A = _BV(WGM40);
+        TCCR4B = _BV(CS41) | _BV(CS40) | _BV(WGM42);//970hz
+    } else if ((megapi_dc_Port[port].pwm_pin == 45) || (megapi_dc_Port[port].pwm_pin == 46) ||
+               (megapi_dc_Port[port].pwm_pin == 44)) {
+        TCCR5A = _BV(WGM50);
+        TCCR5B = _BV(CS51) | _BV(CS50) | _BV(WGM52);//970hz
+    }
 #endif
-  _dc_dir_h1 = megapi_dc_Port[port].dc_dir_h1;
-  _dc_dir_h2 = megapi_dc_Port[port].dc_dir_h2;
-  _dc_pwm_pin = megapi_dc_Port[port].pwm_pin;
-  
-  pinMode(_dc_dir_h1, OUTPUT);
-  pinMode(_dc_dir_h2, OUTPUT);
+    _dc_dir_h1 = megapi_dc_Port[port].dc_dir_h1;
+    _dc_dir_h2 = megapi_dc_Port[port].dc_dir_h2;
+    _dc_pwm_pin = megapi_dc_Port[port].pwm_pin;
+
+    pinMode(_dc_dir_h1, OUTPUT);
+    pinMode(_dc_dir_h2, OUTPUT);
 }
 
 /**
@@ -154,40 +148,40 @@ MeMegaPiDCMotor::MeMegaPiDCMotor(uint8_t port)
  * \param[in]
  *   pwm_pin - arduino port for pwm input(should analog pin)
  */
-MeMegaPiDCMotor::MeMegaPiDCMotor(uint8_t dc_dir_h1,uint8_t dc_dir_h2,uint8_t pwm_pin)
+MeMegaPiDCMotor::MeMegaPiDCMotor(uint8_t dc_dir_h1, uint8_t dc_dir_h2, uint8_t pwm_pin)
 {
-  //The PWM frequency is 976 Hz
+    //The PWM frequency is 976 Hz
 #if defined(__AVR_ATmega32U4__) //MeBaseBoard use ATmega32U4 as MCU
-  TCCR1A =  _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
+    TCCR1A =  _BV(WGM10);
+    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
 
-  TCCR3A = _BV(WGM30);
-  TCCR3B = _BV(CS31) | _BV(CS30) | _BV(WGM32);
+    TCCR3A = _BV(WGM30);
+    TCCR3B = _BV(CS31) | _BV(CS30) | _BV(WGM32);
 
-  TCCR4B = _BV(CS42) | _BV(CS41) | _BV(CS40);
-  TCCR4D = 0;
+    TCCR4B = _BV(CS42) | _BV(CS41) | _BV(CS40);
+    TCCR4D = 0;
 
 #elif defined(__AVR_ATmega328__) // else ATmega328
 
-  TCCR1A = _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
+    TCCR1A = _BV(WGM10);
+    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
 
-  TCCR2A = _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS22);
+    TCCR2A = _BV(WGM21) | _BV(WGM20);
+    TCCR2B = _BV(CS22);
 
 #elif defined(__AVR_ATmega2560__) //else ATmega2560
-  TCCR1A = _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
+    TCCR1A = _BV(WGM10);
+    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
 
-  TCCR2A = _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS22);
+    TCCR2A = _BV(WGM21) | _BV(WGM20);
+    TCCR2B = _BV(CS22);
 #endif
-  _dc_dir_h1 = dc_dir_h1;
-  _dc_dir_h2 = dc_dir_h2;
-  _dc_pwm_pin = pwm_pin;
-  
-  pinMode(_dc_dir_h1, OUTPUT);
-  pinMode(_dc_dir_h2, OUTPUT);
+    _dc_dir_h1 = dc_dir_h1;
+    _dc_dir_h2 = dc_dir_h2;
+    _dc_pwm_pin = pwm_pin;
+
+    pinMode(_dc_dir_h1, OUTPUT);
+    pinMode(_dc_dir_h2, OUTPUT);
 }
 
 /**
@@ -206,13 +200,13 @@ MeMegaPiDCMotor::MeMegaPiDCMotor(uint8_t dc_dir_h1,uint8_t dc_dir_h2,uint8_t pwm
  */
 void MeMegaPiDCMotor::reset(uint8_t port)
 {
-  _dc_dir_h1 = megapi_dc_Port[port].dc_dir_h1;
-  _dc_dir_h2 = megapi_dc_Port[port].dc_dir_h2;
-  _dc_pwm_pin = megapi_dc_Port[port].pwm_pin;
-  
-  pinMode(_dc_dir_h1, OUTPUT);
-  pinMode(_dc_dir_h2, OUTPUT);
-  last_speed = 500;
+    _dc_dir_h1 = megapi_dc_Port[port].dc_dir_h1;
+    _dc_dir_h2 = megapi_dc_Port[port].dc_dir_h2;
+    _dc_pwm_pin = megapi_dc_Port[port].pwm_pin;
+
+    pinMode(_dc_dir_h1, OUTPUT);
+    pinMode(_dc_dir_h2, OUTPUT);
+    last_speed = 500;
 }
 
 /**
@@ -233,15 +227,15 @@ void MeMegaPiDCMotor::reset(uint8_t port)
  * \par Others
  *   None
  */
-void MeMegaPiDCMotor::setpin(uint8_t dc_dir_h1,uint8_t dc_dir_h2,uint8_t pwm_pin)
+void MeMegaPiDCMotor::setpin(uint8_t dc_dir_h1, uint8_t dc_dir_h2, uint8_t pwm_pin)
 {
-  _dc_dir_h1 = dc_dir_h1;
-  _dc_dir_h2 = dc_dir_h2;
-  _dc_pwm_pin = pwm_pin;
-  
-  pinMode(_dc_dir_h1, OUTPUT);
-  pinMode(_dc_dir_h2, OUTPUT);
-  last_speed = 500;
+    _dc_dir_h1 = dc_dir_h1;
+    _dc_dir_h2 = dc_dir_h2;
+    _dc_pwm_pin = pwm_pin;
+
+    pinMode(_dc_dir_h1, OUTPUT);
+    pinMode(_dc_dir_h2, OUTPUT);
+    last_speed = 500;
 }
 
 /**
@@ -260,38 +254,30 @@ void MeMegaPiDCMotor::setpin(uint8_t dc_dir_h1,uint8_t dc_dir_h2,uint8_t pwm_pin
  */
 void MeMegaPiDCMotor::run(int16_t speed)
 {
-  speed = speed > 255 ? 255 : speed;
-  speed = speed < -255 ? -255 : speed;
+    speed = speed > 255 ? 255 : speed;
+    speed = speed < -255 ? -255 : speed;
 
-  if(last_speed != speed)
-  {
-    last_speed = speed;
-  }
-  else
-  {
-    return;
-  }
- 
-  if(speed > 0)
-  {
-    digitalWrite(_dc_dir_h2, LOW);
-    delayMicroseconds(5);
-    digitalWrite(_dc_dir_h1, HIGH);
-    analogWrite(_dc_pwm_pin,speed);
-  }
-  else if(speed < 0)
-  {
-    digitalWrite(_dc_dir_h1, LOW);
-    delayMicroseconds(5);
-    digitalWrite(_dc_dir_h2, HIGH);
-    analogWrite(_dc_pwm_pin,-speed);
-  }
-  else
-  {
-    digitalWrite(_dc_dir_h2, LOW);
-    digitalWrite(_dc_dir_h1, LOW);
-    analogWrite(_dc_pwm_pin,0);
-  }
+    if (last_speed != speed) {
+        last_speed = speed;
+    } else {
+        return;
+    }
+
+    if (speed > 0) {
+        digitalWrite(_dc_dir_h2, LOW);
+        delayMicroseconds(5);
+        digitalWrite(_dc_dir_h1, HIGH);
+        analogWrite(_dc_pwm_pin, speed);
+    } else if (speed < 0) {
+        digitalWrite(_dc_dir_h1, LOW);
+        delayMicroseconds(5);
+        digitalWrite(_dc_dir_h2, HIGH);
+        analogWrite(_dc_pwm_pin, -speed);
+    } else {
+        digitalWrite(_dc_dir_h2, LOW);
+        digitalWrite(_dc_dir_h1, LOW);
+        analogWrite(_dc_pwm_pin, 0);
+    }
 }
 
 /**
@@ -308,6 +294,6 @@ void MeMegaPiDCMotor::run(int16_t speed)
  */
 void MeMegaPiDCMotor::stop(void)
 {
-  run(0);
+    run(0);
 }
 

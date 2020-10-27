@@ -51,6 +51,7 @@
 #include "MeSerial.h"
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the MePS2 to arduino port,
  * no pins are used or initialized here.
@@ -59,10 +60,10 @@
  */
 MePS2::MePS2() : MeSerial(0)
 {
-  _isReady = false;
-  _isAvailable = false;
-  _isStart = false;
-  _lasttime = millis();
+    _isReady = false;
+    _isAvailable = false;
+    _isStart = false;
+    _lasttime = millis();
 }
 
 /**
@@ -71,13 +72,14 @@ MePS2::MePS2() : MeSerial(0)
  * \param[in]
  *   port - RJ25 port from PORT_1 to M2
  */
- MePS2::MePS2(uint8_t port) : MeSerial(port)
+MePS2::MePS2(uint8_t port) : MeSerial(port)
 {
-  _isReady = false;
-  _isAvailable = false;
-  _isStart = false;
-  _lasttime = millis();
+    _isReady = false;
+    _isAvailable = false;
+    _isStart = false;
+    _lasttime = millis();
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the MePS2 to arduino port,
@@ -116,8 +118,8 @@ MePS2::MePS2(uint8_t receivePin, uint8_t transmitPin, bool inverse_logic)\
  */
 uint8_t MePS2::readBuffer(int16_t index)
 {
-  _index=index;
-  return buffer[_index];
+    _index = index;
+    return buffer[_index];
 }
 
 /**
@@ -134,10 +136,10 @@ uint8_t MePS2::readBuffer(int16_t index)
  * \par Others
  *    None
  */
-void MePS2::writeBuffer(int16_t index,uint8_t c)
+void MePS2::writeBuffer(int16_t index, uint8_t c)
 {
-  _index=index;
-  buffer[_index]=c;
+    _index = index;
+    buffer[_index] = c;
 }
 
 /**
@@ -156,12 +158,11 @@ void MePS2::writeBuffer(int16_t index,uint8_t c)
  */
 void MePS2::readSerial(void)
 {
-  _isAvailable = false;
-  if(MeSerial::available() > 0)
-  {
-    _isAvailable = true;
-    _serialRead = MeSerial::read();
-  }
+    _isAvailable = false;
+    if (MeSerial::available() > 0) {
+        _isAvailable = true;
+        _serialRead = MeSerial::read();
+    }
 }
 
 /**
@@ -180,67 +181,54 @@ void MePS2::readSerial(void)
  */
 boolean MePS2::readjoystick(void)
 {
-  boolean result = false;
-  if(millis() - _lasttime > 200)
-  {
-    _isReady = false;
-    _isStart=false;
-    _prevc = 0x00;
-    buffer[2] = buffer[4] = buffer[6] =buffer[8] =0x80;
-    buffer[1] = buffer[3] = buffer[5] =buffer[7] =0x00;
-  }
-  readSerial();
-  while(_isAvailable)
-  {
-    _lasttime = millis();
-    unsigned char c = _serialRead & 0xff;
-    if((c == 0x55) && (_isStart == false))
-    {
-      if(_prevc == 0xff)
-      {
-        _index=1;
-        _isStart = true;
-      }
-    }
-    else
-    {
-      _prevc = c;
-      if(_isStart)
-      {
-        writeBuffer(_index,c);
-      }
-    }
-    _index++;
-    if((_isStart == false) && (_index > 12))
-    {
-      _index=0; 
-      _isStart=false;
-      buffer[2] = buffer[4] = buffer[6] =buffer[8] =0x80;
-      buffer[1] = buffer[3] = buffer[5] =buffer[7] =0x00;
-    }
-    else if(_isStart && (_index > 9))
-    {
-      uint8_t checksum;
-      checksum = buffer[2]+buffer[3]+buffer[4]+buffer[5]+buffer[6]+buffer[7]+buffer[8];
-      if(checksum == buffer[9])
-      {
-        _isReady = true;
-       	_isStart = false;
-       	_index = 0;
-       	result = true;
-      }
-      else
-      {
+    boolean result = false;
+    if (millis() - _lasttime > 200) {
+        _isReady = false;
         _isStart = false;
-        _index = 0;
         _prevc = 0x00;
-        _isStart=false;
-        result = false;
-      }
+        buffer[2] = buffer[4] = buffer[6] = buffer[8] = 0x80;
+        buffer[1] = buffer[3] = buffer[5] = buffer[7] = 0x00;
     }
     readSerial();
-   }
-   return result;
+    while (_isAvailable) {
+        _lasttime = millis();
+        unsigned char c = _serialRead & 0xff;
+        if ((c == 0x55) && (_isStart == false)) {
+            if (_prevc == 0xff) {
+                _index = 1;
+                _isStart = true;
+            }
+        } else {
+            _prevc = c;
+            if (_isStart) {
+                writeBuffer(_index, c);
+            }
+        }
+        _index++;
+        if ((_isStart == false) && (_index > 12)) {
+            _index = 0;
+            _isStart = false;
+            buffer[2] = buffer[4] = buffer[6] = buffer[8] = 0x80;
+            buffer[1] = buffer[3] = buffer[5] = buffer[7] = 0x00;
+        } else if (_isStart && (_index > 9)) {
+            uint8_t checksum;
+            checksum = buffer[2] + buffer[3] + buffer[4] + buffer[5] + buffer[6] + buffer[7] + buffer[8];
+            if (checksum == buffer[9]) {
+                _isReady = true;
+                _isStart = false;
+                _index = 0;
+                result = true;
+            } else {
+                _isStart = false;
+                _index = 0;
+                _prevc = 0x00;
+                _isStart = false;
+                result = false;
+            }
+        }
+        readSerial();
+    }
+    return result;
 }
 
 /**
@@ -260,35 +248,25 @@ boolean MePS2::readjoystick(void)
  */
 int16_t MePS2::MeAnalog(uint8_t button)
 {
-  int16_t result;
-  if (!_isReady)
-  {
-    return (MeJOYSTICK_ANALOG_ERROR);
-  }
-  else
-  {
-    if(button == MeJOYSTICK_RX || button == MeJOYSTICK_RY || button == MeJOYSTICK_LX || button == MeJOYSTICK_LY)
-    {
-      result = 2*(ps2_data_list[button]-128);
-      if((button == MeJOYSTICK_RY) || (button == MeJOYSTICK_LY))
-      {
-        result = -result;
-      }
-      if((result == -256) || (result == -254))
-      {
-        result = -255;
-      }
-      else if((result == 254) || (result == 256))
-      {
-        result = 255;
-      }
-      return result;
+    int16_t result;
+    if (!_isReady) {
+        return (MeJOYSTICK_ANALOG_ERROR);
+    } else {
+        if (button == MeJOYSTICK_RX || button == MeJOYSTICK_RY || button == MeJOYSTICK_LX || button == MeJOYSTICK_LY) {
+            result = 2 * (ps2_data_list[button] - 128);
+            if ((button == MeJOYSTICK_RY) || (button == MeJOYSTICK_LY)) {
+                result = -result;
+            }
+            if ((result == -256) || (result == -254)) {
+                result = -255;
+            } else if ((result == 254) || (result == 256)) {
+                result = 255;
+            }
+            return result;
+        } else {
+            return MeJOYSTICK_INIT_VALUE;
+        }
     }
-    else
-    {
-      return MeJOYSTICK_INIT_VALUE;
-    }
-  }
 }
 
 /**
@@ -305,17 +283,14 @@ int16_t MePS2::MeAnalog(uint8_t button)
  * \par Others
  *    None
  */
-boolean MePS2::ButtonPressed(uint8_t button) 
+boolean MePS2::ButtonPressed(uint8_t button)
 {
-  if (!_isReady)
-  {
-    return ps2_data_list_bak[button];
-  }
-  else
-  {
-    ps2_data_list_bak[button] = ps2_data_list[button];
-    return  ps2_data_list[button];
-  }
+    if (!_isReady) {
+        return ps2_data_list_bak[button];
+    } else {
+        ps2_data_list_bak[button] = ps2_data_list[button];
+        return ps2_data_list[button];
+    }
 }
 
 /**
@@ -334,28 +309,27 @@ boolean MePS2::ButtonPressed(uint8_t button)
  */
 void MePS2::loop(void)
 {
-  if(readjoystick())
-  {
-    ps2_data_list[MeJOYSTICK_LX] = buffer[2];
-    ps2_data_list[MeJOYSTICK_LY] = buffer[4];
-    ps2_data_list[MeJOYSTICK_RX] = buffer[6];
-    ps2_data_list[MeJOYSTICK_RY] = buffer[8];
-    ps2_data_list[MeJOYSTICK_R1] = (buffer[3] & 0x01) == 0x01 ? true : false;
-    ps2_data_list[MeJOYSTICK_R2] = (buffer[3] & 0x02) == 0x02 ? true : false;
-    ps2_data_list[MeJOYSTICK_L1] = (buffer[3] & 0x04) == 0x04 ? true : false; 
-    ps2_data_list[MeJOYSTICK_L2] = (buffer[3] & 0x08) == 0x08 ? true : false;
-    ps2_data_list[MeJOYSTICK_MODE] = (buffer[3] & 0x10) ==0x10 ? true : false;
-    ps2_data_list[MeJOYSTICK_TRIANGLE] = (buffer[5] & 0x01) == 0x01 ? true : false;
-    ps2_data_list[MeJOYSTICK_XSHAPED] = (buffer[5] & 0x02) == 0x02 ? true : false;
-    ps2_data_list[MeJOYSTICK_SQUARE] = (buffer[5] & 0x04) == 0x04 ? true : false;
-    ps2_data_list[MeJOYSTICK_ROUND] = (buffer[5] & 0x08) == 0x08 ? true : false;
-    ps2_data_list[MeJOYSTICK_START] = (buffer[5] & 0x10) == 0x10 ? true : false;
-    ps2_data_list[MeJOYSTICK_UP] = (buffer[7] & 0x01) == 0x01 ? true : false;
-    ps2_data_list[MeJOYSTICK_DOWN] = (buffer[7] & 0x02) == 0x02 ? true : false ;
-    ps2_data_list[MeJOYSTICK_LEFT] = (buffer[7] & 0x04) == 0x04 ? true : false ;
-    ps2_data_list[MeJOYSTICK_RIGHT] = (buffer[7] & 0x08) == 0x08 ? true : false ;
-    ps2_data_list[MeJOYSTICK_SELECT] = (buffer[7] & 0x10) == 0x10 ? true : false ;
-    ps2_data_list[MeJOYSTICK_BUTTON_L] = (buffer[3] & 0x20) == 0x20 ? true : false ;
-    ps2_data_list[MeJOYSTICK_BUTTON_R] = (buffer[7] & 0x20) == 0x20 ? true : false ;
-  }
+    if (readjoystick()) {
+        ps2_data_list[MeJOYSTICK_LX] = buffer[2];
+        ps2_data_list[MeJOYSTICK_LY] = buffer[4];
+        ps2_data_list[MeJOYSTICK_RX] = buffer[6];
+        ps2_data_list[MeJOYSTICK_RY] = buffer[8];
+        ps2_data_list[MeJOYSTICK_R1] = (buffer[3] & 0x01) == 0x01 ? true : false;
+        ps2_data_list[MeJOYSTICK_R2] = (buffer[3] & 0x02) == 0x02 ? true : false;
+        ps2_data_list[MeJOYSTICK_L1] = (buffer[3] & 0x04) == 0x04 ? true : false;
+        ps2_data_list[MeJOYSTICK_L2] = (buffer[3] & 0x08) == 0x08 ? true : false;
+        ps2_data_list[MeJOYSTICK_MODE] = (buffer[3] & 0x10) == 0x10 ? true : false;
+        ps2_data_list[MeJOYSTICK_TRIANGLE] = (buffer[5] & 0x01) == 0x01 ? true : false;
+        ps2_data_list[MeJOYSTICK_XSHAPED] = (buffer[5] & 0x02) == 0x02 ? true : false;
+        ps2_data_list[MeJOYSTICK_SQUARE] = (buffer[5] & 0x04) == 0x04 ? true : false;
+        ps2_data_list[MeJOYSTICK_ROUND] = (buffer[5] & 0x08) == 0x08 ? true : false;
+        ps2_data_list[MeJOYSTICK_START] = (buffer[5] & 0x10) == 0x10 ? true : false;
+        ps2_data_list[MeJOYSTICK_UP] = (buffer[7] & 0x01) == 0x01 ? true : false;
+        ps2_data_list[MeJOYSTICK_DOWN] = (buffer[7] & 0x02) == 0x02 ? true : false;
+        ps2_data_list[MeJOYSTICK_LEFT] = (buffer[7] & 0x04) == 0x04 ? true : false;
+        ps2_data_list[MeJOYSTICK_RIGHT] = (buffer[7] & 0x08) == 0x08 ? true : false;
+        ps2_data_list[MeJOYSTICK_SELECT] = (buffer[7] & 0x10) == 0x10 ? true : false;
+        ps2_data_list[MeJOYSTICK_BUTTON_L] = (buffer[3] & 0x20) == 0x20 ? true : false;
+        ps2_data_list[MeJOYSTICK_BUTTON_R] = (buffer[7] & 0x20) == 0x20 ? true : false;
+    }
 }

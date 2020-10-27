@@ -42,6 +42,7 @@
 #include "MeTemperature.h"
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the temperature sensor to arduino port,
  * no pins are used or initialized here.
@@ -61,8 +62,8 @@ MeTemperature::MeTemperature(void) : MePort()
  */
 MeTemperature::MeTemperature(uint8_t port) : MePort(port)
 {
-  _DataPin = s2;
-  _ts.reset(s2);
+    _DataPin = s2;
+    _ts.reset(s2);
 }
 
 /**
@@ -74,10 +75,11 @@ MeTemperature::MeTemperature(uint8_t port) : MePort(port)
  */
 MeTemperature::MeTemperature(uint8_t port, uint8_t slot) : MePort(port)
 {
-  MePort::reset(port, slot);
-  _DataPin = SLOT2 ? s2 : s1;
-  _ts.reset(slot == SLOT2 ? s2 : s1);
+    MePort::reset(port, slot);
+    _DataPin = SLOT2 ? s2 : s1;
+    _ts.reset(slot == SLOT2 ? s2 : s1);
 }
+
 #else //ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the temperature sensor to arduino port.
@@ -108,8 +110,8 @@ MeTemperature::MeTemperature(uint8_t port)
  */
 void MeTemperature::reset(uint8_t port)
 {
-  MePort::reset(port);
-  _ts.reset(s2);
+    MePort::reset(port);
+    _ts.reset(s2);
 }
 
 /**
@@ -130,8 +132,8 @@ void MeTemperature::reset(uint8_t port)
  */
 void MeTemperature::reset(uint8_t port, uint8_t slot)
 {
-  MePort::reset(port, slot);
-  _ts.reset(slot == SLOT2 ? s2 : s1);
+    MePort::reset(port, slot);
+    _ts.reset(slot == SLOT2 ? s2 : s1);
 }
 
 /**
@@ -150,8 +152,8 @@ void MeTemperature::reset(uint8_t port, uint8_t slot)
  */
 void MeTemperature::setpin(uint8_t port)
 {
-  _DataPin = port;
-  _ts.reset(port);
+    _DataPin = port;
+    _ts.reset(port);
 }
 
 /**
@@ -168,30 +170,28 @@ void MeTemperature::setpin(uint8_t port)
  */
 float MeTemperature::temperature(void)
 {
-  byte  i;
-  byte  present = 0;
-  byte  data[12];
-  long  time;
+    byte i;
+    byte present = 0;
+    byte data[12];
+    long time;
 
-  _ts.reset();
-  _ts.skip();
-  _ts.write(STARTCONVO);       // start conversion, with parasite power on at the end
-  time = millis();
-  while(!_ts.readIO() && (millis() - time) < 750)
-  {
-    ;
-  }
+    _ts.reset();
+    _ts.skip();
+    _ts.write(STARTCONVO);       // start conversion, with parasite power on at the end
+    time = millis();
+    while (!_ts.readIO() && (millis() - time) < 750) { ;
+    }
 
-  present = _ts.reset();
-  _ts.skip();
-  _ts.write(READSCRATCH);
-  for(i = 0; i < 5; i++)      // we need 9 bytes
-  {
-    data[i] = _ts.read();
-  }
+    present = _ts.reset();
+    _ts.skip();
+    _ts.write(READSCRATCH);
+    for (i = 0; i < 5; i++)      // we need 9 bytes
+    {
+        data[i] = _ts.read();
+    }
 
-  int16_t rawTemperature = (data[1] << 8) | data[0];
+    int16_t rawTemperature = (data[1] << 8) | data[0];
 
-  return( (float)rawTemperature * 0.0625); // 12 bit
+    return ((float) rawTemperature * 0.0625); // 12 bit
 }
 

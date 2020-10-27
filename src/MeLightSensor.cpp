@@ -68,6 +68,7 @@ MeLightSensor::MeLightSensor(uint8_t port) : MePort(port)
 {
 
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the light sensor to arduino port
@@ -108,15 +109,15 @@ MeLightSensor::MeLightSensor(uint8_t ledPin, uint8_t sensorPin)
  */
 void MeLightSensor::setpin(uint8_t ledPin, uint8_t sensorPin)
 {
-  _ledPin = ledPin;
-  _sensorPin = sensorPin;
+    _ledPin = ledPin;
+    _sensorPin = sensorPin;
 
-  pinMode(_ledPin, OUTPUT);
-  pinMode(_sensorPin, INPUT);
+    pinMode(_ledPin, OUTPUT);
+    pinMode(_sensorPin, INPUT);
 
 #ifdef ME_PORT_DEFINED
-  s1 = _ledPin;
-  s2 = _sensorPin;
+    s1 = _ledPin;
+    s2 = _sensorPin;
 #endif // ME_PORT_DEFINED
 }
 
@@ -136,9 +137,9 @@ void MeLightSensor::setpin(uint8_t ledPin, uint8_t sensorPin)
 int16_t MeLightSensor::read(void)
 {
 #ifdef ME_PORT_DEFINED
-  return(MePort::aRead2());
+    return (MePort::aRead2());
 #else //ME_PORT_DEFINED
-  return(analogRead(_sensorPin));
+    return(analogRead(_sensorPin));
 #endif //ME_PORT_DEFINED
 
 }
@@ -159,9 +160,9 @@ int16_t MeLightSensor::read(void)
 void MeLightSensor::lightOn(void)
 {
 #ifdef ME_PORT_DEFINED
-  MePort::dWrite1(HIGH);
+    MePort::dWrite1(HIGH);
 #else //ME_PORT_DEFINED
-  digitalWrite(_ledPin,HIGH);
+    digitalWrite(_ledPin,HIGH);
 #endif //ME_PORT_DEFINED
 }
 
@@ -181,9 +182,9 @@ void MeLightSensor::lightOn(void)
 void MeLightSensor::lightOff(void)
 {
 #ifdef ME_PORT_DEFINED
-  MePort::dWrite1(LOW);
+    MePort::dWrite1(LOW);
 #else //ME_PORT_DEFINED
-  digitalWrite(_ledPin,LOW);
+    digitalWrite(_ledPin,LOW);
 #endif //ME_PORT_DEFINED
 
 }

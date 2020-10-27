@@ -65,6 +65,7 @@
 #include "MeRGBLed.h"
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the MeRGBLed to arduino port,
  * no pins are used or initialized here, it only assigned the LED display buffer. The default
@@ -74,7 +75,7 @@
  */
 MeRGBLed::MeRGBLed(void) : MePort()
 {
-  setNumber(DEFAULT_MAX_LED_NUMBER);
+    setNumber(DEFAULT_MAX_LED_NUMBER);
 }
 
 /**
@@ -86,13 +87,13 @@ MeRGBLed::MeRGBLed(void) : MePort()
  */
 MeRGBLed::MeRGBLed(uint8_t port) : MePort(port)
 {
-  pinMask       = digitalPinToBitMask(s2);
-  ws2812_port   = portOutputRegister(digitalPinToPort(s2) );
-  //set pinMode OUTPUT
-  pinMode(s2, OUTPUT);
-  setNumber(DEFAULT_MAX_LED_NUMBER);
-  _port = port;
-  _slot = SLOT2;
+    pinMask = digitalPinToBitMask(s2);
+    ws2812_port = portOutputRegister(digitalPinToPort(s2));
+    //set pinMode OUTPUT
+    pinMode(s2, OUTPUT);
+    setNumber(DEFAULT_MAX_LED_NUMBER);
+    _port = port;
+    _slot = SLOT2;
 }
 
 /**
@@ -106,13 +107,13 @@ MeRGBLed::MeRGBLed(uint8_t port) : MePort(port)
  */
 MeRGBLed::MeRGBLed(uint8_t port, uint8_t led_num) : MePort(port)
 {
-  pinMask       = digitalPinToBitMask(s2);
-  ws2812_port   = portOutputRegister(digitalPinToPort(s2) );
-  //set pinMode OUTPUT */
-  pinMode(s2, OUTPUT);
-  setNumber(led_num);
-  _port = port;
-  _slot = SLOT2;
+    pinMask = digitalPinToBitMask(s2);
+    ws2812_port = portOutputRegister(digitalPinToPort(s2));
+    //set pinMode OUTPUT */
+    pinMode(s2, OUTPUT);
+    setNumber(led_num);
+    _port = port;
+    _slot = SLOT2;
 }
 
 /**
@@ -128,24 +129,22 @@ MeRGBLed::MeRGBLed(uint8_t port, uint8_t led_num) : MePort(port)
  */
 MeRGBLed::MeRGBLed(uint8_t port, uint8_t slot, uint8_t led_num) : MePort(port)
 {
-  if(slot == SLOT1)
-  {
-    pinMask     = digitalPinToBitMask(s1);
-    ws2812_port = portOutputRegister(digitalPinToPort(s1) );
-    // set pinMode OUTPUT */
-    pinMode(s1, OUTPUT);
-  }
-  else
-  {
-    pinMask     = digitalPinToBitMask(s2);
-    ws2812_port = portOutputRegister(digitalPinToPort(s2) );
-    // set pinMode OUTPUT */
-    pinMode(s2, OUTPUT);
-  }
-  setNumber(led_num);
-  _port = port;
-  _slot = slot;
+    if (slot == SLOT1) {
+        pinMask = digitalPinToBitMask(s1);
+        ws2812_port = portOutputRegister(digitalPinToPort(s1));
+        // set pinMode OUTPUT */
+        pinMode(s1, OUTPUT);
+    } else {
+        pinMask = digitalPinToBitMask(s2);
+        ws2812_port = portOutputRegister(digitalPinToPort(s2));
+        // set pinMode OUTPUT */
+        pinMode(s2, OUTPUT);
+    }
+    setNumber(led_num);
+    _port = port;
+    _slot = slot;
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the MeRGBLed to arduino port,
@@ -183,6 +182,7 @@ MeRGBLed::MeRGBLed(uint8_t port, uint8_t led_num)
 #endif // ME_PORT_DEFINED
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * \par Function
  *   reset
@@ -199,15 +199,15 @@ MeRGBLed::MeRGBLed(uint8_t port, uint8_t led_num)
  */
 void MeRGBLed::reset(uint8_t port)
 {
-  _port = port;
-  _slot = SLOT2;
-  s2    = mePort[port].s2;
-  s1    = mePort[port].s1;
-  setColor(0,0,0,0);
-  fillPixelsBak(0,2,1);
-  pinMask = digitalPinToBitMask(s2);
-  ws2812_port = portOutputRegister(digitalPinToPort(s2) );
-  pinMode(s2, OUTPUT);
+    _port = port;
+    _slot = SLOT2;
+    s2 = mePort[port].s2;
+    s1 = mePort[port].s1;
+    setColor(0, 0, 0, 0);
+    fillPixelsBak(0, 2, 1);
+    pinMask = digitalPinToBitMask(s2);
+    ws2812_port = portOutputRegister(digitalPinToPort(s2));
+    pinMode(s2, OUTPUT);
 }
 
 /**
@@ -226,28 +226,27 @@ void MeRGBLed::reset(uint8_t port)
  * \par Others
  *   None
  */
-void MeRGBLed::reset(uint8_t port,uint8_t slot)
+void MeRGBLed::reset(uint8_t port, uint8_t slot)
 {
-  _port = port;
-  _slot = slot;
-  s2    = mePort[port].s2;
-  s1    = mePort[port].s1;
-  setColor(0,0,0,0);
-  fillPixelsBak(0,2,1);
-  if(SLOT2 == slot)
-  {
-    pinMask     = digitalPinToBitMask(s2);
-    ws2812_port = portOutputRegister(digitalPinToPort(s2) );
-    pinMode(s2, OUTPUT);
-  }
-  else
-  {
-    pinMask     = digitalPinToBitMask(s1);
-    ws2812_port = portOutputRegister(digitalPinToPort(s1) );
-    pinMode(s1, OUTPUT);
-  }
+    _port = port;
+    _slot = slot;
+    s2 = mePort[port].s2;
+    s1 = mePort[port].s1;
+    setColor(0, 0, 0, 0);
+    fillPixelsBak(0, 2, 1);
+    if (SLOT2 == slot) {
+        pinMask = digitalPinToBitMask(s2);
+        ws2812_port = portOutputRegister(digitalPinToPort(s2));
+        pinMode(s2, OUTPUT);
+    } else {
+        pinMask = digitalPinToBitMask(s1);
+        ws2812_port = portOutputRegister(digitalPinToPort(s1));
+        pinMode(s1, OUTPUT);
+    }
 }
+
 #endif //ME_PORT_DEFINED
+
 /**
  * \par Function
  *   setpin
@@ -264,13 +263,13 @@ void MeRGBLed::reset(uint8_t port,uint8_t slot)
  */
 void MeRGBLed::setpin(uint8_t port)
 {
-  setColor(0,0,0,0);
-  fillPixelsBak(0,2,1);
-  pinMask   = digitalPinToBitMask(port);
-  ws2812_port = portOutputRegister(digitalPinToPort(port) );
-  pinMode(port, OUTPUT);
-  _port = 0;
-  _slot = SLOT2;
+    setColor(0, 0, 0, 0);
+    fillPixelsBak(0, 2, 1);
+    pinMask = digitalPinToBitMask(port);
+    ws2812_port = portOutputRegister(digitalPinToPort(port));
+    pinMode(port, OUTPUT);
+    _port = 0;
+    _slot = SLOT2;
 }
 
 /**
@@ -289,26 +288,22 @@ void MeRGBLed::setpin(uint8_t port)
  */
 void MeRGBLed::setNumber(uint8_t num_leds)
 {
-  count_led = num_leds;
-  pixels    = (uint8_t*)malloc(count_led * 3);
-  if(!pixels)
-  {
-    printf("There is not enough space!\r\n");
-  }
-  for(int16_t i = 0; i < count_led * 3; i++)
-  {
-    pixels[i] = 0;
-  }
+    count_led = num_leds;
+    pixels = (uint8_t*) malloc(count_led * 3);
+    if (!pixels) {
+        printf("There is not enough space!\r\n");
+    }
+    for (int16_t i = 0; i < count_led * 3; i++) {
+        pixels[i] = 0;
+    }
 
-  pixels_bak    = (uint8_t*)malloc(count_led * 3);
-  if(!pixels_bak)
-  {
-    printf("There is not enough space!\r\n");
-  }
-  for(int16_t i = 0; i < count_led * 3; i++)
-  {
-    pixels_bak[i] = 0;
-  }
+    pixels_bak = (uint8_t*) malloc(count_led * 3);
+    if (!pixels_bak) {
+        printf("There is not enough space!\r\n");
+    }
+    for (int16_t i = 0; i < count_led * 3; i++) {
+        pixels_bak[i] = 0;
+    }
 }
 
 /**
@@ -327,18 +322,17 @@ void MeRGBLed::setNumber(uint8_t num_leds)
  */
 cRGB MeRGBLed::getColorAt(uint8_t index)
 {
-  cRGB px_value;
+    cRGB px_value;
 
-  if(index < count_led)
-  {
-    uint8_t tmp;
-    tmp = (index-1) * 3;
+    if (index < count_led) {
+        uint8_t tmp;
+        tmp = (index - 1) * 3;
 
-    px_value.g = pixels[tmp];
-    px_value.r = pixels[tmp + 1];
-    px_value.b = pixels[tmp + 2];
-  }
-  return(px_value);
+        px_value.g = pixels[tmp];
+        px_value.r = pixels[tmp + 1];
+        px_value.b = pixels[tmp + 2];
+    }
+    return (px_value);
 }
 
 /**
@@ -355,7 +349,7 @@ cRGB MeRGBLed::getColorAt(uint8_t index)
  */
 uint8_t MeRGBLed::getNumber(void)
 {
-  return(count_led);
+    return (count_led);
 }
 
 /**
@@ -378,13 +372,12 @@ uint8_t MeRGBLed::getNumber(void)
  */
 void MeRGBLed::fillPixelsBak(uint8_t red, uint8_t green, uint8_t blue)
 {
-  for(int16_t i = 0; i < count_led; i++)
-  {
-    uint8_t tmp = i * 3;
-    pixels_bak[tmp] = green;
-    pixels_bak[tmp + 1] = red;
-    pixels_bak[tmp + 2] = blue;
-  }
+    for (int16_t i = 0; i < count_led; i++) {
+        uint8_t tmp = i * 3;
+        pixels_bak[tmp] = green;
+        pixels_bak[tmp + 1] = red;
+        pixels_bak[tmp + 2] = blue;
+    }
 }
 
 /**
@@ -410,15 +403,14 @@ void MeRGBLed::fillPixelsBak(uint8_t red, uint8_t green, uint8_t blue)
  */
 bool MeRGBLed::setColorAt(uint8_t index, uint8_t red, uint8_t green, uint8_t blue)
 {
-  if(index < count_led)
-  {
-    uint8_t tmp = index * 3;
-    pixels[tmp] = green;
-    pixels[tmp + 1] = red;
-    pixels[tmp + 2] = blue;
-    return(true);
-  }
-  return(false);
+    if (index < count_led) {
+        uint8_t tmp = index * 3;
+        pixels[tmp] = green;
+        pixels[tmp + 1] = red;
+        pixels[tmp + 2] = blue;
+        return (true);
+    }
+    return (false);
 }
 
 /**
@@ -444,19 +436,15 @@ bool MeRGBLed::setColorAt(uint8_t index, uint8_t red, uint8_t green, uint8_t blu
  */
 bool MeRGBLed::setColor(uint8_t index, uint8_t red, uint8_t green, uint8_t blue)
 {
-  if(index == 0)
-  {
-    for(int16_t i = 0; i < count_led; i++)
-    {
-      setColorAt(i,red,green,blue);
+    if (index == 0) {
+        for (int16_t i = 0; i < count_led; i++) {
+            setColorAt(i, red, green, blue);
+        }
+        return (true);
+    } else {
+        setColorAt(index - 1, red, green, blue);
     }
-    return(true);
-  }
-  else
-  {
-    setColorAt(index-1,red,green,blue);
-  }
-  return(false);
+    return (false);
 }
 
 /**
@@ -480,7 +468,7 @@ bool MeRGBLed::setColor(uint8_t index, uint8_t red, uint8_t green, uint8_t blue)
  */
 bool MeRGBLed::setColor(uint8_t red, uint8_t green, uint8_t blue)
 {
-  return(setColor(0, red, green, blue) );;
+    return (setColor(0, red, green, blue));;
 }
 
 /**
@@ -500,32 +488,28 @@ bool MeRGBLed::setColor(uint8_t red, uint8_t green, uint8_t blue)
  */
 bool MeRGBLed::setColor(uint8_t index, long value)
 {
-  if(index == 0)
-  {
-    for(int16_t i = 0; i < count_led; i++)
-    {
-      uint8_t tmp    = index * 3;
-      uint8_t red    = (value & 0xff0000) >> 16;
-      uint8_t green  = (value & 0xff00) >> 8;
-      uint8_t blue   = value & 0xff;
-      pixels[tmp]    = green;
-      pixels[tmp + 1] = red;
-      pixels[tmp + 2] = blue;
+    if (index == 0) {
+        for (int16_t i = 0; i < count_led; i++) {
+            uint8_t tmp = index * 3;
+            uint8_t red = (value & 0xff0000) >> 16;
+            uint8_t green = (value & 0xff00) >> 8;
+            uint8_t blue = value & 0xff;
+            pixels[tmp] = green;
+            pixels[tmp + 1] = red;
+            pixels[tmp + 2] = blue;
+        }
+        return (true);
+    } else if (index < count_led) {
+        uint8_t tmp = (index - 1) * 3;
+        uint8_t red = (value & 0xff0000) >> 16;
+        uint8_t green = (value & 0xff00) >> 8;
+        uint8_t blue = value & 0xff;
+        pixels[tmp] = green;
+        pixels[tmp + 1] = red;
+        pixels[tmp + 2] = blue;
+        return (true);
     }
-    return(true);
-  }
-  else if(index < count_led)
-  {
-    uint8_t tmp    = (index - 1) * 3;
-    uint8_t red    = (value & 0xff0000) >> 16;
-    uint8_t green  = (value & 0xff00) >> 8;
-    uint8_t blue   = value & 0xff;
-    pixels[tmp]    = green;
-    pixels[tmp + 1] = red;
-    pixels[tmp + 2] = blue;
-    return(true);
-  }
-  return(false);
+    return (false);
 }
 
 /*
@@ -611,84 +595,83 @@ bool MeRGBLed::setColor(uint8_t index, long value)
  * \par Others
  *   None
  */
-void MeRGBLed::rgbled_sendarray_mask(uint8_t *data, uint16_t datlen, uint8_t maskhi, uint8_t *port)
+void MeRGBLed::rgbled_sendarray_mask(uint8_t* data, uint16_t datlen, uint8_t maskhi, uint8_t* port)
 {
-  uint8_t curbyte, ctr, masklo;
-  uint8_t oldSREG = SREG;
-  cli(); // Disables all interrupts
+    uint8_t curbyte, ctr, masklo;
+    uint8_t oldSREG = SREG;
+    cli(); // Disables all interrupts
 
-  masklo  = *port & ~maskhi;
-  maskhi  = *port | maskhi;
+    masklo = *port & ~maskhi;
+    maskhi = *port | maskhi;
 
-  while(datlen--)
-  {
-    curbyte = *data++;
+    while (datlen--) {
+        curbyte = *data++;
 
-    asm volatile (
-            "       ldi   %0,8  \n\t"
-            "loop%=:            \n\t"
-            "       st    X,%3 \n\t"        //  '1' [02] '0' [02] - re
-#if (w1_nops & 1)
-            w_nop1
-#endif
-#if (w1_nops & 2)
-            w_nop2
-#endif
-#if (w1_nops & 4)
-            w_nop4
-#endif
-#if (w1_nops & 8)
-            w_nop8
-#endif
-#if (w1_nops & 16)
-            w_nop16
-#endif
-            "       sbrs  %1,7  \n\t"       //  '1' [04] '0' [03]
-            "       st    X,%4 \n\t"        //  '1' [--] '0' [05] - fe-low
-            "       lsl   %1    \n\t"       //  '1' [05] '0' [06]
-#if (w2_nops & 1)
-            w_nop1
-#endif
-#if (w2_nops & 2)
-            w_nop2
-#endif
-#if (w2_nops & 4)
-            w_nop4
-#endif
-#if (w2_nops & 8)
-            w_nop8
-#endif
-#if (w2_nops & 16)
-            w_nop16
-#endif
-            "       brcc skipone%= \n\t"    /*  '1' [+1] '0' [+2] - */
-            "       st   X,%4      \n\t"    /*  '1' [+3] '0' [--] - fe-high */
-            "skipone%=:               "     /*  '1' [+3] '0' [+2] - */
+        asm volatile (
+        "       ldi   %0,8  \n\t"
+        "loop%=:            \n\t"
+        "       st    X,%3 \n\t"        //  '1' [02] '0' [02] - re
+        #if (w1_nops & 1)
+        w_nop1
+        #endif
+        #if (w1_nops & 2)
+        w_nop2
+        #endif
+        #if (w1_nops & 4)
+        w_nop4
+        #endif
+        #if (w1_nops & 8)
+        w_nop8
+        #endif
+        #if (w1_nops & 16)
+        w_nop16
+        #endif
+        "       sbrs  %1,7  \n\t"       //  '1' [04] '0' [03]
+        "       st    X,%4 \n\t"        //  '1' [--] '0' [05] - fe-low
+        "       lsl   %1    \n\t"       //  '1' [05] '0' [06]
+        #if (w2_nops & 1)
+        w_nop1
+        #endif
+        #if (w2_nops & 2)
+        w_nop2
+        #endif
+        #if (w2_nops & 4)
+        w_nop4
+        #endif
+        #if (w2_nops & 8)
+        w_nop8
+        #endif
+        #if (w2_nops & 16)
+        w_nop16
+        #endif
+        "       brcc skipone%= \n\t"    /*  '1' [+1] '0' [+2] - */
+        "       st   X,%4      \n\t"    /*  '1' [+3] '0' [--] - fe-high */
+        "skipone%=:               "     /*  '1' [+3] '0' [+2] - */
 
-#if (w3_nops & 1)
-            w_nop1
-#endif
-#if (w3_nops & 2)
-            w_nop2
-#endif
-#if (w3_nops & 4)
-            w_nop4
-#endif
-#if (w3_nops & 8)
-            w_nop8
-#endif
-#if (w3_nops & 16)
-            w_nop16
-#endif
+        #if (w3_nops & 1)
+        w_nop1
+        #endif
+        #if (w3_nops & 2)
+        w_nop2
+        #endif
+        #if (w3_nops & 4)
+        w_nop4
+        #endif
+        #if (w3_nops & 8)
+        w_nop8
+        #endif
+        #if (w3_nops & 16)
+        w_nop16
+        #endif
 
-            "       dec   %0    \n\t"       //  '1' [+4] '0' [+3]
-            "       brne  loop%=\n\t"       //  '1' [+5] '0' [+4]
-            : "=&d" (ctr)
-            : "r" (curbyte), "x" (port), "r" (maskhi), "r" (masklo)
-    );
-  }
+        "       dec   %0    \n\t"       //  '1' [+4] '0' [+3]
+        "       brne  loop%=\n\t"       //  '1' [+5] '0' [+4]
+        : "=&d" (ctr)
+        : "r" (curbyte), "x" (port), "r" (maskhi), "r" (masklo)
+        );
+    }
 
-  SREG = oldSREG;
+    SREG = oldSREG;
 }
 
 /**
@@ -705,12 +688,11 @@ void MeRGBLed::rgbled_sendarray_mask(uint8_t *data, uint16_t datlen, uint8_t mas
  */
 void MeRGBLed::show(void)
 {
-  if(memcmp(pixels_bak,pixels,3 * count_led) != 0)
-  {
-    rgbled_sendarray_mask(pixels, 3 * count_led, pinMask, (uint8_t*)ws2812_port);
-    memcpy(pixels_bak,pixels,3 * count_led);
-    delayMicroseconds(500);
-  }
+    if (memcmp(pixels_bak, pixels, 3 * count_led) != 0) {
+        rgbled_sendarray_mask(pixels, 3 * count_led, pinMask, (uint8_t*) ws2812_port);
+        memcpy(pixels_bak, pixels, 3 * count_led);
+        delayMicroseconds(500);
+    }
 }
 
 /**
@@ -718,9 +700,9 @@ void MeRGBLed::show(void)
  */
 MeRGBLed::~MeRGBLed(void)
 {
-  free(pixels);
-  pixels = NULL;
-  free(pixels_bak);
-  pixels_bak = NULL;
+    free(pixels);
+    pixels = NULL;
+    free(pixels_bak);
+    pixels_bak = NULL;
 }
 

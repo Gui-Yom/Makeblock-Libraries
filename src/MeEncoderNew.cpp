@@ -67,6 +67,7 @@
  */
 
 #include "MeEncoderNew.h"
+
 #define HOLD 0x40
 #define SYNC 0x80
 // move state and function
@@ -103,10 +104,10 @@
  * \param[in]
  *   slot - SLOT1 or SLOT2
  */
-MeEncoderNew::MeEncoderNew(uint8_t addr,uint8_t slot)
+MeEncoderNew::MeEncoderNew(uint8_t addr, uint8_t slot)
 {
-  _slot = slot - 1;
-  address = addr;
+    _slot = slot - 1;
+    address = addr;
 }
 
 /**
@@ -117,8 +118,8 @@ MeEncoderNew::MeEncoderNew(uint8_t addr,uint8_t slot)
  */
 MeEncoderNew::MeEncoderNew(uint8_t slot)
 {
-  _slot = slot - 1;
-  address = 0x9;
+    _slot = slot - 1;
+    address = 0x9;
 }
 
 /**
@@ -129,7 +130,7 @@ MeEncoderNew::MeEncoderNew(uint8_t slot)
  */
 MeEncoderNew::MeEncoderNew(void)
 {
-  address = 0x09;
+    address = 0x09;
 }
 
 /**
@@ -148,7 +149,7 @@ MeEncoderNew::MeEncoderNew(void)
  */
 void MeEncoderNew::begin(void)
 {
-  Wire.begin();
+    Wire.begin();
 }
 
 /**
@@ -167,10 +168,10 @@ void MeEncoderNew::begin(void)
  * \par Others
  *    None
  */
-void MeEncoderNew::setAddr(uint8_t i2cAddr,uint8_t slot)
+void MeEncoderNew::setAddr(uint8_t i2cAddr, uint8_t slot)
 {
-  address = i2cAddr;
-  _slot = slot - 1;
+    address = i2cAddr;
+    _slot = slot - 1;
 }
 
 /**
@@ -193,13 +194,13 @@ void MeEncoderNew::setAddr(uint8_t i2cAddr,uint8_t slot)
  */
 void MeEncoderNew::move(long angle, float speed, float lock_state)
 {
-  cmdBuf[0] = _slot;
-  cmdBuf[1] = CMD_MOVE;
-  memcpy(cmdBuf + 2, &lock_state, 4);
-  memcpy(cmdBuf + 6, &angle, 4);
-  memcpy(cmdBuf + 10,&speed,4);
-  sendCmd();
-  delay(2);
+    cmdBuf[0] = _slot;
+    cmdBuf[1] = CMD_MOVE;
+    memcpy(cmdBuf + 2, &lock_state, 4);
+    memcpy(cmdBuf + 6, &angle, 4);
+    memcpy(cmdBuf + 10, &speed, 4);
+    sendCmd();
+    delay(2);
 }
 
 /**
@@ -220,15 +221,15 @@ void MeEncoderNew::move(long angle, float speed, float lock_state)
  * \par Others
  *    None
  */
-void MeEncoderNew::moveTo(long angle, float speed,float lock_state)
+void MeEncoderNew::moveTo(long angle, float speed, float lock_state)
 {
-  cmdBuf[0] = _slot;
-  cmdBuf[1] = CMD_MOVE_TO;
-  memcpy(cmdBuf + 2, &lock_state, 4);
-  memcpy(cmdBuf + 6, &angle, 4);
-  memcpy(cmdBuf + 10,&speed,4);
-  sendCmd();
-  delay(2);
+    cmdBuf[0] = _slot;
+    cmdBuf[1] = CMD_MOVE_TO;
+    memcpy(cmdBuf + 2, &lock_state, 4);
+    memcpy(cmdBuf + 6, &angle, 4);
+    memcpy(cmdBuf + 10, &speed, 4);
+    sendCmd();
+    delay(2);
 }
 
 /**
@@ -247,14 +248,14 @@ void MeEncoderNew::moveTo(long angle, float speed,float lock_state)
  * \par Others
  *    None
  */
-void MeEncoderNew::runSpeed(float speed,float lock_state)
+void MeEncoderNew::runSpeed(float speed, float lock_state)
 {
-  cmdBuf[0] = _slot;
-  cmdBuf[1] = CMD_MOVE_SPD;
-  memcpy(cmdBuf + 2, &lock_state, 4);
-  memcpy(cmdBuf + 6, &speed, 4);
-  sendCmd();
-  delay(2);
+    cmdBuf[0] = _slot;
+    cmdBuf[1] = CMD_MOVE_SPD;
+    memcpy(cmdBuf + 2, &lock_state, 4);
+    memcpy(cmdBuf + 6, &speed, 4);
+    sendCmd();
+    delay(2);
 }
 
 /**
@@ -275,9 +276,9 @@ void MeEncoderNew::runSpeed(float speed,float lock_state)
  * \par Others
  *    None
  */
-void MeEncoderNew::runTurns(long turns, float speed,float lock_state)
+void MeEncoderNew::runTurns(long turns, float speed, float lock_state)
 {
-  return move(turns * 360, speed,lock_state);
+    return move(turns * 360, speed, lock_state);
 }
 
 /**
@@ -294,10 +295,10 @@ void MeEncoderNew::runTurns(long turns, float speed,float lock_state)
  */
 void MeEncoderNew::reset(void)
 {
-  cmdBuf[0] = _slot;
-  cmdBuf[1] = CMD_RESET;
-  sendCmd();
-  delay(2);
+    cmdBuf[0] = _slot;
+    cmdBuf[1] = CMD_RESET;
+    sendCmd();
+    delay(2);
 }
 
 /**
@@ -318,14 +319,14 @@ void MeEncoderNew::reset(void)
  * \par Others
  *    None
  */
-void MeEncoderNew::setSpeedPID(float p,float i,float d)
+void MeEncoderNew::setSpeedPID(float p, float i, float d)
 {
-  cmdBuf[0] = _slot;
-  cmdBuf[1] = CMD_SET_SPEED_PID;
-  memcpy(&cmdBuf[2],&p,4);
-  memcpy(&cmdBuf[6],&i,4);
-  memcpy(&cmdBuf[10],&d,4);
-  sendCmd();
+    cmdBuf[0] = _slot;
+    cmdBuf[1] = CMD_SET_SPEED_PID;
+    memcpy(&cmdBuf[2], &p, 4);
+    memcpy(&cmdBuf[6], &i, 4);
+    memcpy(&cmdBuf[10], &d, 4);
+    sendCmd();
 }
 
 /**
@@ -346,14 +347,14 @@ void MeEncoderNew::setSpeedPID(float p,float i,float d)
  * \par Others
  *    None
  */
-void MeEncoderNew::setPosPID(float p,float i,float d)
+void MeEncoderNew::setPosPID(float p, float i, float d)
 {
-  cmdBuf[0] = _slot;
-  cmdBuf[1] = CMD_SET_POS_PID;
-  memcpy(&cmdBuf[2],&p,4);
-  memcpy(&cmdBuf[6],&i,4);
-  memcpy(&cmdBuf[10],&d,4);
-  sendCmd();
+    cmdBuf[0] = _slot;
+    cmdBuf[1] = CMD_SET_POS_PID;
+    memcpy(&cmdBuf[2], &p, 4);
+    memcpy(&cmdBuf[6], &i, 4);
+    memcpy(&cmdBuf[10], &d, 4);
+    sendCmd();
 }
 
 /**
@@ -372,11 +373,11 @@ void MeEncoderNew::setPosPID(float p,float i,float d)
  */
 void MeEncoderNew::setMode(uint8_t mode)
 {
-  cmdBuf[0] = _slot;
-  cmdBuf[1] = CMD_SET_MODE;
-  cmdBuf[2] = mode;
-  sendCmd();
-  delay(2);
+    cmdBuf[0] = _slot;
+    cmdBuf[1] = CMD_SET_MODE;
+    cmdBuf[2] = mode;
+    sendCmd();
+    delay(2);
 }
 
 /**
@@ -395,11 +396,11 @@ void MeEncoderNew::setMode(uint8_t mode)
  */
 void MeEncoderNew::setPWM(int pwm)
 {
-  cmdBuf[0] = _slot;
-  cmdBuf[1] = CMD_SET_PWM;
-  memcpy(cmdBuf+2,&pwm,2);
-  sendCmd();
-  delay(2);
+    cmdBuf[0] = _slot;
+    cmdBuf[1] = CMD_SET_PWM;
+    memcpy(cmdBuf + 2, &pwm, 2);
+    sendCmd();
+    delay(2);
 }
 
 /**
@@ -418,11 +419,11 @@ void MeEncoderNew::setPWM(int pwm)
  */
 void MeEncoderNew::setCurrentPosition(long pulse_counter)
 {
-  cmdBuf[0] = _slot;
-  cmdBuf[1] = CMD_SET_CUR_POS;
-  memcpy(cmdBuf+2,&pulse_counter,4);
-  sendCmd();
-  delay(2);
+    cmdBuf[0] = _slot;
+    cmdBuf[1] = CMD_SET_CUR_POS;
+    memcpy(cmdBuf + 2, &pulse_counter, 4);
+    sendCmd();
+    delay(2);
 }
 
 /**
@@ -441,19 +442,18 @@ void MeEncoderNew::setCurrentPosition(long pulse_counter)
  */
 long MeEncoderNew::getCurrentPosition(void)
 {
-  long pos;
-  char buf[8];
-  Wire.beginTransmission(address); 
-  Wire.write(_slot);      
-  Wire.write(CMD_GET_POS);            
-  Wire.endTransmission(0);
-  Wire.requestFrom(address,(uint8_t)4);   
-  for(int i=0;i<4;i++)   
-  { 
-    buf[i] = Wire.read();
-  }
-  pos = *(long*)buf;
-  return pos;
+    long pos;
+    char buf[8];
+    Wire.beginTransmission(address);
+    Wire.write(_slot);
+    Wire.write(CMD_GET_POS);
+    Wire.endTransmission(0);
+    Wire.requestFrom(address, (uint8_t) 4);
+    for (int i = 0; i < 4; i++) {
+        buf[i] = Wire.read();
+    }
+    pos = *(long*) buf;
+    return pos;
 }
 
 /**
@@ -474,33 +474,30 @@ long MeEncoderNew::getCurrentPosition(void)
  * \par Others
  *    None
  */
-void MeEncoderNew::getSpeedPID(float * p,float * i,float * d)
+void MeEncoderNew::getSpeedPID(float* p, float* i, float* d)
 {
-  char buf[8];
+    char buf[8];
 
-  Wire.beginTransmission(address); 
-  Wire.write(_slot);       
-  Wire.write(CMD_GET_SPEED_PID);             
-  Wire.endTransmission(0);
-  Wire.requestFrom(address,(uint8_t)12);  
+    Wire.beginTransmission(address);
+    Wire.write(_slot);
+    Wire.write(CMD_GET_SPEED_PID);
+    Wire.endTransmission(0);
+    Wire.requestFrom(address, (uint8_t) 12);
 
-  for(int i=0;i<4;i++)   
-  { 
-    buf[i] = Wire.read(); 
-  }
-  *p = *(float*)buf;
+    for (int i = 0; i < 4; i++) {
+        buf[i] = Wire.read();
+    }
+    *p = *(float*) buf;
 
-  for(int i=0;i<4;i++)   
-  { 
-    buf[i] = Wire.read(); 
-  }
-  *i = *(float*)buf;
+    for (int i = 0; i < 4; i++) {
+        buf[i] = Wire.read();
+    }
+    *i = *(float*) buf;
 
-  for(int i=0;i<4;i++)   
-  { 
-    buf[i] = Wire.read(); 
-  }
-  *d = *(float*)buf;
+    for (int i = 0; i < 4; i++) {
+        buf[i] = Wire.read();
+    }
+    *d = *(float*) buf;
 }
 
 /**
@@ -521,33 +518,30 @@ void MeEncoderNew::getSpeedPID(float * p,float * i,float * d)
  * \par Others
  *    None
  */
-void MeEncoderNew::getPosPID(float * p,float * i,float * d)
+void MeEncoderNew::getPosPID(float* p, float* i, float* d)
 {
-  char buf[8];
+    char buf[8];
 
-  Wire.beginTransmission(address); 
-  Wire.write(_slot);       
-  Wire.write(CMD_GET_POS_PID);             
-  Wire.endTransmission(0);
-  Wire.requestFrom(address,(uint8_t)12);  
+    Wire.beginTransmission(address);
+    Wire.write(_slot);
+    Wire.write(CMD_GET_POS_PID);
+    Wire.endTransmission(0);
+    Wire.requestFrom(address, (uint8_t) 12);
 
-  for(int i=0;i<4;i++)   
-  { 
-    buf[i] = Wire.read(); 
-  }
-  *p = *(float*)buf;
+    for (int i = 0; i < 4; i++) {
+        buf[i] = Wire.read();
+    }
+    *p = *(float*) buf;
 
-  for(int i=0;i<4;i++)   
-  { 
-    buf[i] = Wire.read(); 
-  }
-  *i = *(float*)buf;
+    for (int i = 0; i < 4; i++) {
+        buf[i] = Wire.read();
+    }
+    *i = *(float*) buf;
 
-  for(int i=0;i<4;i++)   
-  { 
-    buf[i] = Wire.read(); 
-  }
-  *d = *(float*)buf;
+    for (int i = 0; i < 4; i++) {
+        buf[i] = Wire.read();
+    }
+    *d = *(float*) buf;
 }
 
 /**
@@ -566,19 +560,18 @@ void MeEncoderNew::getPosPID(float * p,float * i,float * d)
  */
 float MeEncoderNew::getCurrentSpeed(void)
 {
-  char buf[8];
-  float speed;
-  Wire.beginTransmission(address); 
-  Wire.write(_slot);      
-  Wire.write(CMD_GET_SPEED);             
-  Wire.endTransmission(0);
-  Wire.requestFrom(address,(uint8_t)4);   
-  for(int i=0;i<4;i++)   
-  { 
-    buf[i] = Wire.read(); 
-  }
-  speed = *(float*)buf;
-  return speed;
+    char buf[8];
+    float speed;
+    Wire.beginTransmission(address);
+    Wire.write(_slot);
+    Wire.write(CMD_GET_SPEED);
+    Wire.endTransmission(0);
+    Wire.requestFrom(address, (uint8_t) 4);
+    for (int i = 0; i < 4; i++) {
+        buf[i] = Wire.read();
+    }
+    speed = *(float*) buf;
+    return speed;
 }
 
 /**
@@ -597,10 +590,10 @@ float MeEncoderNew::getCurrentSpeed(void)
  */
 void MeEncoderNew::sendCmd(void)
 {
-  Wire.beginTransmission(address); 
-  for(int i=0;i<18;i++)
-    Wire.write(cmdBuf[i]);       
-  Wire.endTransmission();
+    Wire.beginTransmission(address);
+    for (int i = 0; i < 18; i++)
+        Wire.write(cmdBuf[i]);
+    Wire.endTransmission();
 }
 
 /**
@@ -618,20 +611,19 @@ void MeEncoderNew::sendCmd(void)
  *    None
  */
 float MeEncoderNew::getRatio(void)
-{ 
-  char buf[8];
-  float ratio;
-  Wire.beginTransmission(address); 
-  Wire.write(_slot);      
-  Wire.write(CMD_GET_RATIO);             
-  Wire.endTransmission(0);
-  Wire.requestFrom(address,(uint8_t)4);   
-  for(int i=0;i<4;i++)   
-  { 
-    buf[i] = Wire.read(); 
-  }
-  ratio = *(float*)buf;
-  return ratio;
+{
+    char buf[8];
+    float ratio;
+    Wire.beginTransmission(address);
+    Wire.write(_slot);
+    Wire.write(CMD_GET_RATIO);
+    Wire.endTransmission(0);
+    Wire.requestFrom(address, (uint8_t) 4);
+    for (int i = 0; i < 4; i++) {
+        buf[i] = Wire.read();
+    }
+    ratio = *(float*) buf;
+    return ratio;
 }
 
 /**
@@ -650,10 +642,10 @@ float MeEncoderNew::getRatio(void)
  */
 void MeEncoderNew::setRatio(float ratio)
 {
-  cmdBuf[0] = _slot;
-  cmdBuf[1] = CMD_SET_RATIO;
-  memcpy(cmdBuf+2,&ratio,4);
-  sendCmd();
+    cmdBuf[0] = _slot;
+    cmdBuf[1] = CMD_SET_RATIO;
+    memcpy(cmdBuf + 2, &ratio, 4);
+    sendCmd();
 }
 
 /**
@@ -671,20 +663,19 @@ void MeEncoderNew::setRatio(float ratio)
  *    None
  */
 int MeEncoderNew::getPulse(void)
-{ 
-  char buf[8];
-  int pulse;
-  Wire.beginTransmission(address); 
-  Wire.write(_slot);      
-  Wire.write(CMD_GET_PULSE);             
-  Wire.endTransmission(0);
-  Wire.requestFrom(address,(uint8_t)2);   
-  for(int i=0;i<2;i++)   
-  { 
-    buf[i] = Wire.read(); 
-  }
-  pulse = *(int*)buf;
-  return pulse;
+{
+    char buf[8];
+    int pulse;
+    Wire.beginTransmission(address);
+    Wire.write(_slot);
+    Wire.write(CMD_GET_PULSE);
+    Wire.endTransmission(0);
+    Wire.requestFrom(address, (uint8_t) 2);
+    for (int i = 0; i < 2; i++) {
+        buf[i] = Wire.read();
+    }
+    pulse = *(int*) buf;
+    return pulse;
 }
 
 /**
@@ -703,10 +694,10 @@ int MeEncoderNew::getPulse(void)
  */
 void MeEncoderNew::setPulse(int pulse)
 {
-  cmdBuf[0] = _slot;
-  cmdBuf[1] = CMD_SET_PULSE;
-  memcpy(cmdBuf+2,&pulse,2);
-  sendCmd();
+    cmdBuf[0] = _slot;
+    cmdBuf[1] = CMD_SET_PULSE;
+    memcpy(cmdBuf + 2, &pulse, 2);
+    sendCmd();
 }
 
 /**
@@ -725,10 +716,10 @@ void MeEncoderNew::setPulse(int pulse)
  */
 void MeEncoderNew::setDevid(uint8_t devid)
 {
-  cmdBuf[0] = _slot;
-  cmdBuf[1] = CMD_SET_DEVID;
-  cmdBuf[2] = devid;
-  sendCmd();
+    cmdBuf[0] = _slot;
+    cmdBuf[1] = CMD_SET_DEVID;
+    cmdBuf[2] = devid;
+    sendCmd();
 }
 
 /**
@@ -751,17 +742,15 @@ void MeEncoderNew::setDevid(uint8_t devid)
  */
 void MeEncoderNew::runSpeedAndTime(float speed, float time, float lock_state)
 {
-  if(_lastTime == 0)
-  {
-    _lastTime = millis();
-    runSpeed(speed,lock_state);
-  }
+    if (_lastTime == 0) {
+        _lastTime = millis();
+        runSpeed(speed, lock_state);
+    }
 
-  if(millis() - _lastTime > (1000 * time))
-  {
-    _lastTime = 0;
-    runSpeed(0,lock_state);
-  }
+    if (millis() - _lastTime > (1000 * time)) {
+        _lastTime = 0;
+        runSpeed(0, lock_state);
+    }
 }
 
 /**
@@ -781,19 +770,18 @@ void MeEncoderNew::runSpeedAndTime(float speed, float time, float lock_state)
  */
 boolean MeEncoderNew::isTarPosReached(void)
 {
-  uint8_t buf[8];
-  boolean lock_state;
-  Wire.beginTransmission(address); 
-  Wire.write(_slot);      
-  Wire.write(CMD_GET_LOCK_STATE);             
-  Wire.endTransmission(0);
-  Wire.requestFrom(address,(uint8_t)2);
-  for(int i=0;i<2;i++)   
-  { 
-    buf[i] = Wire.read(); 
-  }
-  lock_state = *(boolean*)buf;
-  return lock_state;
+    uint8_t buf[8];
+    boolean lock_state;
+    Wire.beginTransmission(address);
+    Wire.write(_slot);
+    Wire.write(CMD_GET_LOCK_STATE);
+    Wire.endTransmission(0);
+    Wire.requestFrom(address, (uint8_t) 2);
+    for (int i = 0; i < 2; i++) {
+        buf[i] = Wire.read();
+    }
+    lock_state = *(boolean*) buf;
+    return lock_state;
 }
 
 /**
@@ -809,15 +797,14 @@ boolean MeEncoderNew::isTarPosReached(void)
  *   None
  * \par Others
  */
-void MeEncoderNew::getFirmwareVersion(char *buffer)
-{ 
-  Wire.beginTransmission(address); 
-  Wire.write(_slot);      
-  Wire.write(CMD_GET_FIRWARE_VERSION);             
-  Wire.endTransmission(0);
-  Wire.requestFrom(address,(uint8_t)8);   
-  for(int i=0;i<8;i++)   
-  { 
-    buffer[i] = Wire.read(); 
-  }
+void MeEncoderNew::getFirmwareVersion(char* buffer)
+{
+    Wire.beginTransmission(address);
+    Wire.write(_slot);
+    Wire.write(CMD_GET_FIRWARE_VERSION);
+    Wire.endTransmission(0);
+    Wire.requestFrom(address, (uint8_t) 8);
+    for (int i = 0; i < 8; i++) {
+        buffer[i] = Wire.read();
+    }
 }

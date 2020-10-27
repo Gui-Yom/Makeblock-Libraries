@@ -44,6 +44,7 @@
 #include "MeDCMotor.h"
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the DC motor to arduino port,
  * no pins are used or initialized here.
@@ -52,31 +53,31 @@
  */
 MeDCMotor::MeDCMotor(void) : MePort(0)
 {
-  //The PWM frequency is 976 Hz
+    //The PWM frequency is 976 Hz
 #if defined(__AVR_ATmega32U4__) //MeBaseBoard use ATmega32U4 as MCU
-  TCCR1A =  _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
+    TCCR1A =  _BV(WGM10);
+    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
 
-  TCCR3A = _BV(WGM30);
-  TCCR3B = _BV(CS31) | _BV(CS30) | _BV(WGM32);
+    TCCR3A = _BV(WGM30);
+    TCCR3B = _BV(CS31) | _BV(CS30) | _BV(WGM32);
 
-  TCCR4B = _BV(CS42) | _BV(CS41) | _BV(CS40);
-  TCCR4D = 0;
+    TCCR4B = _BV(CS42) | _BV(CS41) | _BV(CS40);
+    TCCR4D = 0;
 
 #elif defined(__AVR_ATmega328__) // else ATmega328
 
-  TCCR1A = _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
+    TCCR1A = _BV(WGM10);
+    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
 
-  TCCR2A = _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS22);
+    TCCR2A = _BV(WGM21) | _BV(WGM20);
+    TCCR2B = _BV(CS22);
 
 #elif defined(__AVR_ATmega2560__) //else ATmega2560
-  TCCR1A = _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
+    TCCR1A = _BV(WGM10);
+    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
 
-  TCCR2A = _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS22);
+    TCCR2A = _BV(WGM21) | _BV(WGM20);
+    TCCR2B = _BV(CS22);
 #endif
 }
 
@@ -87,58 +88,50 @@ MeDCMotor::MeDCMotor(void) : MePort(0)
  */
 MeDCMotor::MeDCMotor(uint8_t port) : MePort(port)
 {
-  //The PWM frequency is 976 Hz
+    //The PWM frequency is 976 Hz
 #if defined(__AVR_ATmega32U4__) //MeBaseBoard use ATmega32U4 as MCU
-  TCCR1A =  _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
+    TCCR1A =  _BV(WGM10);
+    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
 
-  TCCR3A = _BV(WGM30);
-  TCCR3B = _BV(CS31) | _BV(CS30) | _BV(WGM32);
+    TCCR3A = _BV(WGM30);
+    TCCR3B = _BV(CS31) | _BV(CS30) | _BV(WGM32);
 
-  TCCR4B = _BV(CS42) | _BV(CS41) | _BV(CS40);
-  TCCR4D = 0;
+    TCCR4B = _BV(CS42) | _BV(CS41) | _BV(CS40);
+    TCCR4D = 0;
 
 #elif defined(__AVR_ATmega328__) // else ATmega328
 
-  TCCR1A = _BV(WGM10);
-  TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
+    TCCR1A = _BV(WGM10);
+    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);
 
-  TCCR2A = _BV(WGM21) | _BV(WGM20);
-  TCCR2B = _BV(CS22);
+    TCCR2A = _BV(WGM21) | _BV(WGM20);
+    TCCR2B = _BV(CS22);
 
 #elif defined(__AVR_ATmega2560__) //else ATmega2560
-  /*if((mePort[port].s1 == 13) || (mePort[port].s1 == 4))//timer0 default 970hz
-  {
-    TCCR0A = _BV(WGM01) | _BV(WGM00);//8KHZ
-    TCCR0B = _BV(CS01) | _BV(CS01);//
-  }
-  else */if((mePort[port].s1 == 12) || (mePort[port].s1 == 11))
-  {
-    TCCR1A = _BV(WGM10);
-    TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);//970hz
-  }
-  else if((mePort[port].s1 == 10) || (mePort[port].s1 == 9))
-  {
-    TCCR2A = _BV(WGM21) | _BV(WGM20);//970hz
-    TCCR2B = _BV(CS22);
-  }
-  else if((mePort[port].s1 == 5) || (mePort[port].s1 == 3) || (mePort[port].s1 == 2))
-  {
-    TCCR3A = _BV(WGM30);
-    TCCR3B = _BV(CS31) | _BV(CS30) | _BV(WGM32);//970hz
-  }
-  else if((mePort[port].s1 == 8) || (mePort[port].s1 == 7) || (mePort[port].s1 == 6))
-  {
-    TCCR4A = _BV(WGM40);
-    TCCR4B = _BV(CS41) | _BV(CS40) | _BV(WGM42);//970hz
-  }
-  else if((mePort[port].s1 == 45) || (mePort[port].s1 == 46) ||  (mePort[port].s1 == 44))
-  {
-    TCCR5A = _BV(WGM50);
-    TCCR5B = _BV(CS51) | _BV(CS50) | _BV(WGM52);//970hz
-  }
+    /*if((mePort[port].s1 == 13) || (mePort[port].s1 == 4))//timer0 default 970hz
+    {
+      TCCR0A = _BV(WGM01) | _BV(WGM00);//8KHZ
+      TCCR0B = _BV(CS01) | _BV(CS01);//
+    }
+    else */if ((mePort[port].s1 == 12) || (mePort[port].s1 == 11)) {
+        TCCR1A = _BV(WGM10);
+        TCCR1B = _BV(CS11) | _BV(CS10) | _BV(WGM12);//970hz
+    } else if ((mePort[port].s1 == 10) || (mePort[port].s1 == 9)) {
+        TCCR2A = _BV(WGM21) | _BV(WGM20);//970hz
+        TCCR2B = _BV(CS22);
+    } else if ((mePort[port].s1 == 5) || (mePort[port].s1 == 3) || (mePort[port].s1 == 2)) {
+        TCCR3A = _BV(WGM30);
+        TCCR3B = _BV(CS31) | _BV(CS30) | _BV(WGM32);//970hz
+    } else if ((mePort[port].s1 == 8) || (mePort[port].s1 == 7) || (mePort[port].s1 == 6)) {
+        TCCR4A = _BV(WGM40);
+        TCCR4B = _BV(CS41) | _BV(CS40) | _BV(WGM42);//970hz
+    } else if ((mePort[port].s1 == 45) || (mePort[port].s1 == 46) || (mePort[port].s1 == 44)) {
+        TCCR5A = _BV(WGM50);
+        TCCR5B = _BV(CS51) | _BV(CS50) | _BV(WGM52);//970hz
+    }
 #endif
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the DC motor to arduino port,
@@ -173,14 +166,14 @@ MeDCMotor::MeDCMotor(uint8_t dir_pin,uint8_t pwm_pin)
  * \par Others
  *   None
  */
-void MeDCMotor::setpin(uint8_t dir_pin,uint8_t pwm_pin)
+void MeDCMotor::setpin(uint8_t dir_pin, uint8_t pwm_pin)
 {
-  dc_dir_pin = dir_pin;
-  dc_pwm_pin = pwm_pin;
-  pinMode(dc_dir_pin, OUTPUT);
+    dc_dir_pin = dir_pin;
+    dc_pwm_pin = pwm_pin;
+    pinMode(dc_dir_pin, OUTPUT);
 #ifdef ME_PORT_DEFINED
-  s1 = pwm_pin;
-  s2 = dir_pin;
+    s1 = pwm_pin;
+    s2 = dir_pin;
 #endif // ME_PORT_DEFINED
 }
 
@@ -200,8 +193,8 @@ void MeDCMotor::setpin(uint8_t dir_pin,uint8_t pwm_pin)
  */
 void MeDCMotor::reset(uint8_t port)
 {
-  MePort::reset(port);
-  last_speed = 500;
+    MePort::reset(port);
+    last_speed = 500;
 }
 
 /**
@@ -222,8 +215,8 @@ void MeDCMotor::reset(uint8_t port)
  */
 void MeDCMotor::reset(uint8_t port, uint8_t slot)
 {
-  MePort::reset(port, slot);
-  last_speed = 500;
+    MePort::reset(port, slot);
+    last_speed = 500;
 }
 
 /**
@@ -242,40 +235,34 @@ void MeDCMotor::reset(uint8_t port, uint8_t slot)
  */
 void MeDCMotor::run(int16_t speed)
 {
-  speed	= speed > 255 ? 255 : speed;
-  speed	= speed < -255 ? -255 : speed;
+    speed = speed > 255 ? 255 : speed;
+    speed = speed < -255 ? -255 : speed;
 
-  if(last_speed != speed)
-  {
-    last_speed = speed;
-  }
-  else
-  {
-    return;
-  }
+    if (last_speed != speed) {
+        last_speed = speed;
+    } else {
+        return;
+    }
 
-  if(speed >= 0)
-  {
+    if (speed >= 0) {
 #ifdef ME_PORT_DEFINED
-    MePort::dWrite2(HIGH);
-    delayMicroseconds(5);
-    MePort::aWrite1(speed);
+        MePort::dWrite2(HIGH);
+        delayMicroseconds(5);
+        MePort::aWrite1(speed);
 #else /* ME_PORT_DEFINED */
-    digitalWrite(dc_dir_pin,HIGH);
-    analogWrite(dc_pwm_pin,speed);
+        digitalWrite(dc_dir_pin,HIGH);
+        analogWrite(dc_pwm_pin,speed);
 #endif/* ME_PORT_DEFINED */
-  }
-  else
-  {
+    } else {
 #ifdef ME_PORT_DEFINED
-    MePort::dWrite2(LOW);
-    delayMicroseconds(5);
-    MePort::aWrite1(-speed);
+        MePort::dWrite2(LOW);
+        delayMicroseconds(5);
+        MePort::aWrite1(-speed);
 #else /* ME_PORT_DEFINED */
-    digitalWrite(dc_dir_pin,LOW);
-    analogWrite(dc_pwm_pin,-speed);
+        digitalWrite(dc_dir_pin,LOW);
+        analogWrite(dc_pwm_pin,-speed);
 #endif/* ME_PORT_DEFINED */
-  }
+    }
 }
 
 /**
@@ -292,6 +279,6 @@ void MeDCMotor::run(int16_t speed)
  */
 void MeDCMotor::stop(void)
 {
-  MeDCMotor::run(0);
+    MeDCMotor::run(0);
 }
 

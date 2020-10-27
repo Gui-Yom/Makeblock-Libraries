@@ -48,6 +48,7 @@
 uint8_t buzzer_pin;
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the Buzzer to arduino port,
  * Buzzer pins are used and initialized here.
@@ -56,7 +57,7 @@ uint8_t buzzer_pin;
  */
 MeBuzzer::MeBuzzer()
 {
-  buzzer_pin = 8;
+    buzzer_pin = 8;
 }
 
 /**
@@ -65,9 +66,9 @@ MeBuzzer::MeBuzzer()
  * \param[in]
  *   port - RJ25 port from PORT_1 to M2
  */
-MeBuzzer::MeBuzzer(uint8_t port):MePort(port)
+MeBuzzer::MeBuzzer(uint8_t port) : MePort(port)
 {
-  buzzer_pin = s2;
+    buzzer_pin = s2;
 }
 
 /**
@@ -78,18 +79,16 @@ MeBuzzer::MeBuzzer(uint8_t port):MePort(port)
  * \param[in]
  *   slot - SLOT1 or SLOT2
  */
-MeBuzzer::MeBuzzer(uint8_t port, uint8_t slot):MePort(port)
+MeBuzzer::MeBuzzer(uint8_t port, uint8_t slot) : MePort(port)
 {
-  buzzer_pin = s2;
-  if(slot == SLOT2)
-  {   
     buzzer_pin = s2;
-  }
-  else
-  {
-    buzzer_pin = s1;
-  }
+    if (slot == SLOT2) {
+        buzzer_pin = s2;
+    } else {
+        buzzer_pin = s1;
+    }
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the Buzzer to arduino port,
@@ -118,7 +117,7 @@ MeBuzzer::MeBuzzer(int pin)
  */
 void MeBuzzer::setpin(int pin)
 {
-  buzzer_pin = pin;
+    buzzer_pin = pin;
 }
 
 /**
@@ -141,18 +140,17 @@ void MeBuzzer::setpin(int pin)
  */
 void MeBuzzer::tone(int pin, uint16_t frequency, uint32_t duration)
 {
-  buzzer_pin = pin;
-  int period = 1000000L / frequency;
-  int pulse = period / 2;
-  pinMode(buzzer_pin, OUTPUT);
-  for (long i = 0; i < duration * 1000L; i += period) 
-  {
-    digitalWrite(buzzer_pin, HIGH);
-    delayMicroseconds(pulse);
-    digitalWrite(buzzer_pin, LOW);
-    delayMicroseconds(pulse);
-    wdt_reset();
-  }
+    buzzer_pin = pin;
+    int period = 1000000L / frequency;
+    int pulse = period / 2;
+    pinMode(buzzer_pin, OUTPUT);
+    for (long i = 0; i < duration * 1000L; i += period) {
+        digitalWrite(buzzer_pin, HIGH);
+        delayMicroseconds(pulse);
+        digitalWrite(buzzer_pin, LOW);
+        delayMicroseconds(pulse);
+        wdt_reset();
+    }
 }
 
 /**
@@ -173,17 +171,16 @@ void MeBuzzer::tone(int pin, uint16_t frequency, uint32_t duration)
  */
 void MeBuzzer::tone(uint16_t frequency, uint32_t duration)
 {
-  int period = 1000000L / frequency;
-  int pulse = period / 2;
-  pinMode(buzzer_pin, OUTPUT);
-  for (long i = 0; i < duration * 1000L; i += period) 
-  {
-    digitalWrite(buzzer_pin, HIGH);
-    delayMicroseconds(pulse);
-    digitalWrite(buzzer_pin, LOW);
-    delayMicroseconds(pulse);
-    wdt_reset();
-  }
+    int period = 1000000L / frequency;
+    int pulse = period / 2;
+    pinMode(buzzer_pin, OUTPUT);
+    for (long i = 0; i < duration * 1000L; i += period) {
+        digitalWrite(buzzer_pin, HIGH);
+        delayMicroseconds(pulse);
+        digitalWrite(buzzer_pin, LOW);
+        delayMicroseconds(pulse);
+        wdt_reset();
+    }
 }
 
 /**
@@ -202,9 +199,9 @@ void MeBuzzer::tone(uint16_t frequency, uint32_t duration)
  */
 void MeBuzzer::noTone(int pin)
 {
-  buzzer_pin = pin;
-  pinMode(buzzer_pin, OUTPUT);
-  digitalWrite(buzzer_pin, LOW);
+    buzzer_pin = pin;
+    pinMode(buzzer_pin, OUTPUT);
+    digitalWrite(buzzer_pin, LOW);
 }
 
 /**
@@ -223,6 +220,6 @@ void MeBuzzer::noTone(int pin)
  */
 void MeBuzzer::noTone()
 {
-  pinMode(buzzer_pin, OUTPUT);
-  digitalWrite(buzzer_pin, LOW);
+    pinMode(buzzer_pin, OUTPUT);
+    digitalWrite(buzzer_pin, LOW);
 }

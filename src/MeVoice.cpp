@@ -46,6 +46,7 @@ volatile uint8_t MeVoice::_TxPin = 0;
 volatile unsigned long MeVoice::last_time = 0;
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the Voice device to arduino port,
  * no pins are used or initialized here.
@@ -64,9 +65,10 @@ MeVoice::MeVoice(void) : MeSerial(0)
  */
 MeVoice::MeVoice(uint8_t port) : MeSerial(port)
 {
-  _RxPin = s2;
-  _TxPin = s1;
+    _RxPin = s2;
+    _TxPin = s1;
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the Voice device to arduino port,
@@ -101,13 +103,13 @@ MeVoice::MeVoice(uint8_t rxPin, uint8_t txpin, bool inverse_logic)\
  */
 void MeVoice::begin(long speed)
 {
-  MeSerial::begin(speed);
+    MeSerial::begin(speed);
 #ifdef ME_PORT_DEFINED
-  pinMode(s2, INPUT);
-  pinMode(s1, OUTPUT);
+    pinMode(s2, INPUT);
+    pinMode(s1, OUTPUT);
 #else // ME_PORT_DEFINED
-  pinMode(_RxPin, INPUT);
-  pinMode(_TxPin, OUTPUT);
+    pinMode(_RxPin, INPUT);
+    pinMode(_TxPin, OUTPUT);
 #endif // ME_PORT_DEFINED
 }
 
@@ -127,10 +129,10 @@ void MeVoice::begin(long speed)
  */
 int16_t MeVoice::read(void)
 {
-  int16_t val;
-  val = MeSerial::read();     /* Read serial infrared data */
-  val &= 0xff;
-  return(val);
+    int16_t val;
+    val = MeSerial::read();     /* Read serial infrared data */
+    val &= 0xff;
+    return (val);
 }
 
 /**
@@ -147,7 +149,7 @@ int16_t MeVoice::read(void)
  */
 uint8_t MeVoice::getCode(void)
 {
-  return _irCode;
+    return _irCode;
 }
 
 /**
@@ -164,19 +166,15 @@ uint8_t MeVoice::getCode(void)
  */
 void MeVoice::loop(void)
 {
-  if(MeSerial::available() > 0)
-  {
-    last_time = millis();
-    int r = read();
-    if(r<0xff)
-    {
-      _irCode = r;
+    if (MeSerial::available() > 0) {
+        last_time = millis();
+        int r = read();
+        if (r < 0xff) {
+            _irCode = r;
+        }
+    } else if ((millis() - last_time) > 500) {
+        _irCode = 0;
+        last_time = millis();
     }
-  }
-  else if((millis() - last_time) > 500)
-  {
-    _irCode = 0;
-    last_time = millis();
-  }
 }
 

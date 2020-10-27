@@ -101,54 +101,43 @@ MeEncoderOnBoard::MeEncoderOnBoard()
  */
 MeEncoderOnBoard::MeEncoderOnBoard(int slot)
 {
-  _enabled = false;
-  _Slot = slot;
-  _Port_A = encoder_Port[slot].port_A;
-  _Port_B = encoder_Port[slot].port_B;
-  _Port_PWM = encoder_Port[slot].port_PWM;
-  _Port_H1 = encoder_Port[slot].port_H1;
-  _Port_H2 = encoder_Port[slot].port_H2;
-  _Callback_flag = false;
+    _enabled = false;
+    _Slot = slot;
+    _Port_A = encoder_Port[slot].port_A;
+    _Port_B = encoder_Port[slot].port_B;
+    _Port_PWM = encoder_Port[slot].port_PWM;
+    _Port_H1 = encoder_Port[slot].port_H1;
+    _Port_H2 = encoder_Port[slot].port_H2;
+    _Callback_flag = false;
 
-  pinMode(_Port_A, INPUT_PULLUP);
-  pinMode(_Port_B, INPUT_PULLUP);
-  pinMode(_Port_H1, OUTPUT);
-  pinMode(_Port_H2, OUTPUT);
-  
-  encode_structure.pulsePos = 0;
-  encode_structure.previousPwm = 500;
-  encode_structure.mode = DIRECT_MODE;
-  encode_structure.pulseEncoder = 9;
-  encode_structure.ratio = 39.267;
-  
-  if(_Port_A == 18)
-  {
-    _IntNum = 5;
-  }
-  else if(_Port_A == 19)
-  {
-    _IntNum = 4;
-  }
-  else if(_Port_A == 20)
-  {
-    _IntNum = 3;
-  }
-  else if(_Port_A == 21)
-  {
-    _IntNum = 2;
-  }
-  else if(_Port_A == 3)
-  {
-    _IntNum = 1;
-  }
-  else if(_Port_A == 2)
-  {
-    _IntNum = 0;
-  }
-  setMotorPwm(0);
-  setPulsePos(0);
-  _Measurement_speed_time = millis();
-  reset(slot);
+    pinMode(_Port_A, INPUT_PULLUP);
+    pinMode(_Port_B, INPUT_PULLUP);
+    pinMode(_Port_H1, OUTPUT);
+    pinMode(_Port_H2, OUTPUT);
+
+    encode_structure.pulsePos = 0;
+    encode_structure.previousPwm = 500;
+    encode_structure.mode = DIRECT_MODE;
+    encode_structure.pulseEncoder = 9;
+    encode_structure.ratio = 39.267;
+
+    if (_Port_A == 18) {
+        _IntNum = 5;
+    } else if (_Port_A == 19) {
+        _IntNum = 4;
+    } else if (_Port_A == 20) {
+        _IntNum = 3;
+    } else if (_Port_A == 21) {
+        _IntNum = 2;
+    } else if (_Port_A == 3) {
+        _IntNum = 1;
+    } else if (_Port_A == 2) {
+        _IntNum = 0;
+    }
+    setMotorPwm(0);
+    setPulsePos(0);
+    _Measurement_speed_time = millis();
+    reset(slot);
 }
 
 /**
@@ -167,53 +156,42 @@ MeEncoderOnBoard::MeEncoderOnBoard(int slot)
  */
 void MeEncoderOnBoard::reset(uint8_t slot)
 {
-  _enabled = true;
-  _Slot = slot;
-  _Port_A = encoder_Port[slot].port_A;
-  _Port_B = encoder_Port[slot].port_B;
-  _Port_PWM = encoder_Port[slot].port_PWM;
-  _Port_H1 = encoder_Port[slot].port_H1;
-  _Port_H2 = encoder_Port[slot].port_H2;
-  _Callback_flag = false;
+    _enabled = true;
+    _Slot = slot;
+    _Port_A = encoder_Port[slot].port_A;
+    _Port_B = encoder_Port[slot].port_B;
+    _Port_PWM = encoder_Port[slot].port_PWM;
+    _Port_H1 = encoder_Port[slot].port_H1;
+    _Port_H2 = encoder_Port[slot].port_H2;
+    _Callback_flag = false;
 
-  pinMode(_Port_A, INPUT_PULLUP);
-  pinMode(_Port_B, INPUT_PULLUP);
-  pinMode(_Port_H1, OUTPUT);
-  pinMode(_Port_H2, OUTPUT);
-  
-  // encode_structure.pulsePos = 0;
-  // encode_structure.previousPwm = 500;
-  // encode_structure.mode = DIRECT_MODE;
-  // encode_structure.pulseEncoder = 9;
-  // encode_structure.ratio = 39.267;
-  
-  if(_Port_A == 18)
-  {
-    _IntNum = 5;
-  }
-  else if(_Port_A == 19)
-  {
-    _IntNum = 4;
-  }
-  else if(_Port_A == 20)
-  {
-    _IntNum = 3;
-  }
-  else if(_Port_A == 21)
-  {
-    _IntNum = 2;
-  }
-  else if(_Port_A == 3)
-  {
-    _IntNum = 1;
-  }
-  else if(_Port_A == 2)
-  {
-    _IntNum = 0;
-  }
-  // setMotorPwm(0);
-  // setPulsePos(0);
-  _Measurement_speed_time = millis();
+    pinMode(_Port_A, INPUT_PULLUP);
+    pinMode(_Port_B, INPUT_PULLUP);
+    pinMode(_Port_H1, OUTPUT);
+    pinMode(_Port_H2, OUTPUT);
+
+    // encode_structure.pulsePos = 0;
+    // encode_structure.previousPwm = 500;
+    // encode_structure.mode = DIRECT_MODE;
+    // encode_structure.pulseEncoder = 9;
+    // encode_structure.ratio = 39.267;
+
+    if (_Port_A == 18) {
+        _IntNum = 5;
+    } else if (_Port_A == 19) {
+        _IntNum = 4;
+    } else if (_Port_A == 20) {
+        _IntNum = 3;
+    } else if (_Port_A == 21) {
+        _IntNum = 2;
+    } else if (_Port_A == 3) {
+        _IntNum = 1;
+    } else if (_Port_A == 2) {
+        _IntNum = 0;
+    }
+    // setMotorPwm(0);
+    // setPulsePos(0);
+    _Measurement_speed_time = millis();
 }
 
 /**
@@ -232,7 +210,7 @@ void MeEncoderOnBoard::reset(uint8_t slot)
  */
 uint8_t MeEncoderOnBoard::getSlotNum(void) const
 {
-  return _Slot;
+    return _Slot;
 }
 
 /**
@@ -251,7 +229,7 @@ uint8_t MeEncoderOnBoard::getSlotNum(void) const
  */
 uint8_t MeEncoderOnBoard::getIntNum(void) const
 {
-  return _IntNum;
+    return _IntNum;
 }
 
 /**
@@ -270,7 +248,7 @@ uint8_t MeEncoderOnBoard::getIntNum(void) const
  */
 uint8_t MeEncoderOnBoard::getPortA(void) const
 {
-  return _Port_A;
+    return _Port_A;
 }
 
 /**
@@ -289,7 +267,7 @@ uint8_t MeEncoderOnBoard::getPortA(void) const
  */
 uint8_t MeEncoderOnBoard::getPortB(void) const
 {
-  return _Port_B;
+    return _Port_B;
 }
 
 /**
@@ -308,7 +286,7 @@ uint8_t MeEncoderOnBoard::getPortB(void) const
  */
 long MeEncoderOnBoard::getPulsePos(void) const
 {
-  return encode_structure.pulsePos;
+    return encode_structure.pulsePos;
 }
 
 /**
@@ -328,7 +306,7 @@ long MeEncoderOnBoard::getPulsePos(void) const
  */
 void MeEncoderOnBoard::setPulsePos(long pulsePos)
 {
-  encode_structure.pulsePos = pulsePos;
+    encode_structure.pulsePos = pulsePos;
 }
 
 /**
@@ -347,7 +325,7 @@ void MeEncoderOnBoard::setPulsePos(long pulsePos)
  */
 void MeEncoderOnBoard::pulsePosPlus(void)
 {
-  encode_structure.pulsePos++;
+    encode_structure.pulsePos++;
 }
 
 /**
@@ -366,7 +344,7 @@ void MeEncoderOnBoard::pulsePosPlus(void)
  */
 void MeEncoderOnBoard::pulsePosMinus(void)
 {
-  encode_structure.pulsePos--;
+    encode_structure.pulsePos--;
 }
 
 /**
@@ -385,7 +363,7 @@ void MeEncoderOnBoard::pulsePosMinus(void)
  */
 void MeEncoderOnBoard::setCurrentSpeed(float speed)
 {
-  encode_structure.currentSpeed = speed;
+    encode_structure.currentSpeed = speed;
 }
 
 /**
@@ -404,7 +382,7 @@ void MeEncoderOnBoard::setCurrentSpeed(float speed)
  */
 float MeEncoderOnBoard::getCurrentSpeed(void) const
 {
-  return encode_structure.currentSpeed;
+    return encode_structure.currentSpeed;
 }
 
 /**
@@ -423,7 +401,7 @@ float MeEncoderOnBoard::getCurrentSpeed(void) const
  */
 int16_t MeEncoderOnBoard::getCurPwm(void) const
 {
-  return encode_structure.currentPwm;
+    return encode_structure.currentPwm;
 }
 
 /**
@@ -442,8 +420,8 @@ int16_t MeEncoderOnBoard::getCurPwm(void) const
  */
 void MeEncoderOnBoard::setTarPWM(int16_t pwm_value)
 {
-  encode_structure.mode = PWM_MODE;
-  encode_structure.targetPwm = constrain(pwm_value,-255,255);;
+    encode_structure.mode = PWM_MODE;
+    encode_structure.targetPwm = constrain(pwm_value, -255, 255);;
 }
 
 /**
@@ -462,31 +440,25 @@ void MeEncoderOnBoard::setTarPWM(int16_t pwm_value)
  */
 void MeEncoderOnBoard::setMotorPwm(int16_t pwm)
 {
-  pwm = constrain(pwm,-255,255);
-  if(encode_structure.previousPwm != pwm)
-  {
-    encode_structure.previousPwm = pwm;
-  }
-  else
-  {
-    return;
-  }
-  encode_structure.currentPwm = pwm;
+    pwm = constrain(pwm, -255, 255);
+    if (encode_structure.previousPwm != pwm) {
+        encode_structure.previousPwm = pwm;
+    } else {
+        return;
+    }
+    encode_structure.currentPwm = pwm;
 
-  if(pwm < 0)
-  {
-    digitalWrite(MeEncoderOnBoard::_Port_H1, LOW);
-    delayMicroseconds(5);
-    digitalWrite(MeEncoderOnBoard::_Port_H2, HIGH);
-    analogWrite(MeEncoderOnBoard::_Port_PWM, abs(pwm));
-  }
-  else
-  {
-    digitalWrite(MeEncoderOnBoard::_Port_H1, HIGH);
-    delayMicroseconds(5);
-    digitalWrite(MeEncoderOnBoard::_Port_H2, LOW);
-    analogWrite(MeEncoderOnBoard::_Port_PWM, abs(pwm));
-  }
+    if (pwm < 0) {
+        digitalWrite(MeEncoderOnBoard::_Port_H1, LOW);
+        delayMicroseconds(5);
+        digitalWrite(MeEncoderOnBoard::_Port_H2, HIGH);
+        analogWrite(MeEncoderOnBoard::_Port_PWM, abs(pwm));
+    } else {
+        digitalWrite(MeEncoderOnBoard::_Port_H1, HIGH);
+        delayMicroseconds(5);
+        digitalWrite(MeEncoderOnBoard::_Port_H2, LOW);
+        analogWrite(MeEncoderOnBoard::_Port_PWM, abs(pwm));
+    }
 }
 
 /**
@@ -505,14 +477,14 @@ void MeEncoderOnBoard::setMotorPwm(int16_t pwm)
  */
 void MeEncoderOnBoard::updateSpeed(void)
 {
-  if((millis() - _Measurement_speed_time) > 20)
-  {
-    uint16_t dt = millis() - _Measurement_speed_time;
-    long cur_pos = getPulsePos();
-    setCurrentSpeed(((cur_pos - encode_structure.previousPos) *(1000.0/dt)*60.0) /(encode_structure.pulseEncoder * encode_structure.ratio));
-    encode_structure.previousPos = cur_pos;
-    _Measurement_speed_time = millis();
-  }
+    if ((millis() - _Measurement_speed_time) > 20) {
+        uint16_t dt = millis() - _Measurement_speed_time;
+        long cur_pos = getPulsePos();
+        setCurrentSpeed(((cur_pos - encode_structure.previousPos) * (1000.0 / dt) * 60.0) /
+                        (encode_structure.pulseEncoder * encode_structure.ratio));
+        encode_structure.previousPos = cur_pos;
+        _Measurement_speed_time = millis();
+    }
 }
 
 /**
@@ -531,7 +503,8 @@ void MeEncoderOnBoard::updateSpeed(void)
  */
 void MeEncoderOnBoard::updateCurPos(void)
 {
-  encode_structure.currentPos = (long)((encode_structure.pulsePos/(encode_structure.pulseEncoder * encode_structure.ratio)) * 360);
+    encode_structure.currentPos = (long) (
+            (encode_structure.pulsePos / (encode_structure.pulseEncoder * encode_structure.ratio)) * 360);
 }
 
 /**
@@ -550,7 +523,7 @@ void MeEncoderOnBoard::updateCurPos(void)
  */
 long MeEncoderOnBoard::getCurPos(void) const
 {
-  return encode_structure.currentPos;
+    return encode_structure.currentPos;
 }
 
 /**
@@ -569,10 +542,10 @@ long MeEncoderOnBoard::getCurPos(void) const
  */
 void MeEncoderOnBoard::runSpeed(float speed)
 {
-  encode_structure.mode = PID_MODE;
-  encode_structure.motionState = MOTION_WITHOUT_POS;
-  encode_structure.targetSpeed = speed;
-  _Lock_flag = false;
+    encode_structure.mode = PID_MODE;
+    encode_structure.motionState = MOTION_WITHOUT_POS;
+    encode_structure.targetSpeed = speed;
+    _Lock_flag = false;
 }
 
 /**
@@ -592,9 +565,9 @@ void MeEncoderOnBoard::runSpeed(float speed)
  */
 void MeEncoderOnBoard::setSpeed(float speed)
 {
-  encode_structure.motionState = MOTION_WITHOUT_POS;
-  encode_structure.targetSpeed = speed;
-  _Lock_flag = false;
+    encode_structure.motionState = MOTION_WITHOUT_POS;
+    encode_structure.targetSpeed = speed;
+    _Lock_flag = false;
 }
 
 /**
@@ -617,10 +590,10 @@ void MeEncoderOnBoard::setSpeed(float speed)
  * \par Others
  *    None
  */
-void MeEncoderOnBoard::move(long position,float speed,int16_t extId,cb callback)
+void MeEncoderOnBoard::move(long position, float speed, int16_t extId, cb callback)
 {
-  encode_structure.targetPos = encode_structure.currentPos + position;
-  moveTo(encode_structure.targetPos,speed,extId,callback);
+    encode_structure.targetPos = encode_structure.currentPos + position;
+    moveTo(encode_structure.targetPos, speed, extId, callback);
 }
 
 /**
@@ -643,24 +616,21 @@ void MeEncoderOnBoard::move(long position,float speed,int16_t extId,cb callback)
  * \par Others
  *    None
  */
-void MeEncoderOnBoard::moveTo(long position,float speed,int16_t extId,cb callback)
+void MeEncoderOnBoard::moveTo(long position, float speed, int16_t extId, cb callback)
 {
-  encode_structure.targetSpeed = speed;
-  _extId = extId;
-  _Lock_flag = false;
-  _Callback_flag = false;
-  encode_structure.mode = PID_MODE;
-  encode_structure.motionState = MOTION_WITH_POS;
-  encode_structure.targetPos = position;
-  _callback = callback;
-  if(distanceToGo() > 0)
-  {
-    _Dir_lock_flag = true;
-  }
-  else
-  {
-    _Dir_lock_flag = false;
-  }
+    encode_structure.targetSpeed = speed;
+    _extId = extId;
+    _Lock_flag = false;
+    _Callback_flag = false;
+    encode_structure.mode = PID_MODE;
+    encode_structure.motionState = MOTION_WITH_POS;
+    encode_structure.targetPos = position;
+    _callback = callback;
+    if (distanceToGo() > 0) {
+        _Dir_lock_flag = true;
+    } else {
+        _Dir_lock_flag = false;
+    }
 }
 
 /**
@@ -680,7 +650,7 @@ void MeEncoderOnBoard::moveTo(long position,float speed,int16_t extId,cb callbac
  */
 long MeEncoderOnBoard::distanceToGo(void) const
 {
-  return encode_structure.targetPos - encode_structure.currentPos;
+    return encode_structure.targetPos - encode_structure.currentPos;
 }
 
 /**
@@ -701,11 +671,11 @@ long MeEncoderOnBoard::distanceToGo(void) const
  * \par Others
  *    None
  */
-void MeEncoderOnBoard::setSpeedPid(float p,float i,float d)
+void MeEncoderOnBoard::setSpeedPid(float p, float i, float d)
 {
-  encode_structure.PID_speed.P = p;
-  encode_structure.PID_speed.I = i;
-  encode_structure.PID_speed.D = d;
+    encode_structure.PID_speed.P = p;
+    encode_structure.PID_speed.I = i;
+    encode_structure.PID_speed.D = d;
 }
 
 /**
@@ -726,11 +696,11 @@ void MeEncoderOnBoard::setSpeedPid(float p,float i,float d)
  * \par Others
  *    None
  */
-void MeEncoderOnBoard::setPosPid(float p,float i,float d)
+void MeEncoderOnBoard::setPosPid(float p, float i, float d)
 {
-  encode_structure.PID_pos.P = p;
-  encode_structure.PID_pos.I = i;
-  encode_structure.PID_pos.D = d;
+    encode_structure.PID_pos.P = p;
+    encode_structure.PID_pos.I = i;
+    encode_structure.PID_pos.D = d;
 }
 
 /**
@@ -749,7 +719,7 @@ void MeEncoderOnBoard::setPosPid(float p,float i,float d)
  */
 void MeEncoderOnBoard::setPulse(int16_t pulseValue)
 {
-  encode_structure.pulseEncoder = pulseValue;
+    encode_structure.pulseEncoder = pulseValue;
 }
 
 /**
@@ -768,7 +738,7 @@ void MeEncoderOnBoard::setPulse(int16_t pulseValue)
  */
 void MeEncoderOnBoard::setRatio(int16_t RatioValue)
 {
-  encode_structure.ratio = RatioValue;
+    encode_structure.ratio = RatioValue;
 }
 
 /**
@@ -787,7 +757,7 @@ void MeEncoderOnBoard::setRatio(int16_t RatioValue)
  */
 void MeEncoderOnBoard::setMotionMode(int16_t motionMode)
 {
-  encode_structure.mode = motionMode;
+    encode_structure.mode = motionMode;
 }
 
 /**
@@ -806,104 +776,93 @@ void MeEncoderOnBoard::setMotionMode(int16_t motionMode)
  */
 int16_t MeEncoderOnBoard::pidPositionToPwm(void)
 {
-  float seek_speed = 0;
-  float pos_error = 0;
-  float speed_error = 0;
-  float d_component = 0;
-  float out_put_offset = 0;
+    float seek_speed = 0;
+    float pos_error = 0;
+    float speed_error = 0;
+    float d_component = 0;
+    float out_put_offset = 0;
 
-  pos_error = distanceToGo();
+    pos_error = distanceToGo();
 
-  if((_Lock_flag == false) && (_Dir_lock_flag == true) && (pos_error < 0))
-  {
-    d_component = encode_structure.currentSpeed;
-    out_put_offset = encode_structure.PID_pos.D * d_component;
-    encode_structure.PID_pos.Output = -out_put_offset;
-    _Encoder_output = encode_structure.PID_pos.Output;
-    _Lock_flag = true;
-    encode_structure.currentPwm = _Encoder_output;
-    return _Encoder_output;
-  }
-  else if((_Lock_flag == false) && (_Dir_lock_flag == false) && (pos_error > 0))
-  {
-    d_component = encode_structure.currentSpeed;
-    out_put_offset = encode_structure.PID_pos.D * d_component;
-    encode_structure.PID_pos.Output = -out_put_offset;
-    _Encoder_output = encode_structure.PID_pos.Output;
-    _Lock_flag = true;
-    encode_structure.currentPwm = _Encoder_output;
-    return _Encoder_output;
-  }
-      
-  //speed pid;
-  if((_Lock_flag == false) && (abs(pos_error) >= encode_structure.targetSpeed * DECELERATION_DISTANCE_PITCH))
-  {
-    speed_error = encode_structure.currentSpeed - encode_structure.targetSpeed * (pos_error/abs(pos_error));
-    out_put_offset = encode_structure.PID_speed.P * speed_error;
-    out_put_offset = constrain(out_put_offset,-25,25);
-    encode_structure.PID_speed.Output = _Encoder_output;
-    encode_structure.PID_speed.Output -= out_put_offset;  
-    encode_structure.PID_speed.Output = constrain(encode_structure.PID_speed.Output,-255,255);
-    _Encoder_output = encode_structure.PID_speed.Output;
-  }
-  //position pid;
-  else
-  {
-    if((_Lock_flag == false) && (abs(pos_error) > ENCODER_POS_DEADBAND))
-    {
-      seek_speed = sqrt(abs(encode_structure.targetSpeed * DECELERATION_DISTANCE_PITCH * (pos_error-ENCODER_POS_DEADBAND)))/DECELERATION_DISTANCE_PITCH;
-      d_component = encode_structure.currentSpeed - seek_speed * (pos_error/abs(pos_error));
-      out_put_offset = encode_structure.PID_pos.D * d_component;
-      out_put_offset = constrain(out_put_offset,-20,20);
-
-      encode_structure.PID_pos.Output = _Encoder_output;
-      encode_structure.PID_pos.Output -= out_put_offset;
-      if(pos_error >= 0)
-      {
-        encode_structure.PID_pos.Output = constrain(encode_structure.PID_pos.Output,PWM_MIN_OFFSET,255);
-      }
-      else
-      {
-        encode_structure.PID_pos.Output = constrain(encode_structure.PID_pos.Output,-255,-PWM_MIN_OFFSET);
-      }
-      _Encoder_output = encode_structure.PID_pos.Output;
+    if ((_Lock_flag == false) && (_Dir_lock_flag == true) && (pos_error < 0)) {
+        d_component = encode_structure.currentSpeed;
+        out_put_offset = encode_structure.PID_pos.D * d_component;
+        encode_structure.PID_pos.Output = -out_put_offset;
+        _Encoder_output = encode_structure.PID_pos.Output;
+        _Lock_flag = true;
+        encode_structure.currentPwm = _Encoder_output;
+        return _Encoder_output;
+    } else if ((_Lock_flag == false) && (_Dir_lock_flag == false) && (pos_error > 0)) {
+        d_component = encode_structure.currentSpeed;
+        out_put_offset = encode_structure.PID_pos.D * d_component;
+        encode_structure.PID_pos.Output = -out_put_offset;
+        _Encoder_output = encode_structure.PID_pos.Output;
+        _Lock_flag = true;
+        encode_structure.currentPwm = _Encoder_output;
+        return _Encoder_output;
     }
-    else
-    {
-      _Lock_flag = true;
-      if((_callback != NULL) && (_Callback_flag == false))
-      {
-        _Callback_flag = true;
-        _callback(_Slot,_extId);
-      }
-      d_component = encode_structure.currentSpeed;
-      out_put_offset = encode_structure.PID_pos.D * d_component;
-      out_put_offset = constrain(out_put_offset,-20,20);
-      encode_structure.PID_pos.Output = pos_error * encode_structure.PID_pos.P;
-      encode_structure.PID_pos.Output -= out_put_offset;
-      encode_structure.PID_pos.Output = constrain(encode_structure.PID_pos.Output,-255,255);
-      _Encoder_output = encode_structure.PID_pos.Output;
+
+    //speed pid;
+    if ((_Lock_flag == false) && (abs(pos_error) >= encode_structure.targetSpeed * DECELERATION_DISTANCE_PITCH)) {
+        speed_error = encode_structure.currentSpeed - encode_structure.targetSpeed * (pos_error / abs(pos_error));
+        out_put_offset = encode_structure.PID_speed.P * speed_error;
+        out_put_offset = constrain(out_put_offset, -25, 25);
+        encode_structure.PID_speed.Output = _Encoder_output;
+        encode_structure.PID_speed.Output -= out_put_offset;
+        encode_structure.PID_speed.Output = constrain(encode_structure.PID_speed.Output, -255, 255);
+        _Encoder_output = encode_structure.PID_speed.Output;
     }
-  }
+        //position pid;
+    else {
+        if ((_Lock_flag == false) && (abs(pos_error) > ENCODER_POS_DEADBAND)) {
+            seek_speed = sqrt(abs(encode_structure.targetSpeed * DECELERATION_DISTANCE_PITCH *
+                                  (pos_error - ENCODER_POS_DEADBAND))) / DECELERATION_DISTANCE_PITCH;
+            d_component = encode_structure.currentSpeed - seek_speed * (pos_error / abs(pos_error));
+            out_put_offset = encode_structure.PID_pos.D * d_component;
+            out_put_offset = constrain(out_put_offset, -20, 20);
+
+            encode_structure.PID_pos.Output = _Encoder_output;
+            encode_structure.PID_pos.Output -= out_put_offset;
+            if (pos_error >= 0) {
+                encode_structure.PID_pos.Output = constrain(encode_structure.PID_pos.Output, PWM_MIN_OFFSET, 255);
+            } else {
+                encode_structure.PID_pos.Output = constrain(encode_structure.PID_pos.Output, -255, -PWM_MIN_OFFSET);
+            }
+            _Encoder_output = encode_structure.PID_pos.Output;
+        } else {
+            _Lock_flag = true;
+            if ((_callback != NULL) && (_Callback_flag == false)) {
+                _Callback_flag = true;
+                _callback(_Slot, _extId);
+            }
+            d_component = encode_structure.currentSpeed;
+            out_put_offset = encode_structure.PID_pos.D * d_component;
+            out_put_offset = constrain(out_put_offset, -20, 20);
+            encode_structure.PID_pos.Output = pos_error * encode_structure.PID_pos.P;
+            encode_structure.PID_pos.Output -= out_put_offset;
+            encode_structure.PID_pos.Output = constrain(encode_structure.PID_pos.Output, -255, 255);
+            _Encoder_output = encode_structure.PID_pos.Output;
+        }
+    }
 #ifdef DEBUG_INFO
-  Serial.print("targetPos:");
-  Serial.print(encode_structure.targetPos);
-  Serial.print(" ,currentPos:");
-  Serial.print(encode_structure.currentPos);
-  Serial.print(" ,targetSpeed:");
-  Serial.print(encode_structure.targetSpeed);
-  Serial.print(" ,currentSpeed:");
-  Serial.print(encode_structure.currentSpeed);
-  Serial.print(" ,pos_error:");
-  Serial.print(pos_error);
-  Serial.print(" ,d_component:");
-  Serial.print(d_component);
-  Serial.print(" ,motion_state:");
-  Serial.print(encode_structure.motionState);
-  Serial.print(" ,out1:");
-  Serial.println(_Encoder_output);
+    Serial.print("targetPos:");
+    Serial.print(encode_structure.targetPos);
+    Serial.print(" ,currentPos:");
+    Serial.print(encode_structure.currentPos);
+    Serial.print(" ,targetSpeed:");
+    Serial.print(encode_structure.targetSpeed);
+    Serial.print(" ,currentSpeed:");
+    Serial.print(encode_structure.currentSpeed);
+    Serial.print(" ,pos_error:");
+    Serial.print(pos_error);
+    Serial.print(" ,d_component:");
+    Serial.print(d_component);
+    Serial.print(" ,motion_state:");
+    Serial.print(encode_structure.motionState);
+    Serial.print(" ,out1:");
+    Serial.println(_Encoder_output);
 #endif
-  return _Encoder_output;
+    return _Encoder_output;
 }
 
 /**
@@ -922,41 +881,39 @@ int16_t MeEncoderOnBoard::pidPositionToPwm(void)
  */
 int16_t MeEncoderOnBoard::speedWithoutPos(void)
 {
-  float speed_error;
-  float out_put_offset;
-  speed_error = encode_structure.currentSpeed - encode_structure.targetSpeed;
-  out_put_offset = encode_structure.PID_speed.P * speed_error;
+    float speed_error;
+    float out_put_offset;
+    speed_error = encode_structure.currentSpeed - encode_structure.targetSpeed;
+    out_put_offset = encode_structure.PID_speed.P * speed_error;
 
-  out_put_offset = constrain(out_put_offset,-25,25);
-  encode_structure.PID_speed.Output = _Encoder_output;
-  encode_structure.PID_speed.Output -= out_put_offset;
+    out_put_offset = constrain(out_put_offset, -25, 25);
+    encode_structure.PID_speed.Output = _Encoder_output;
+    encode_structure.PID_speed.Output -= out_put_offset;
 
-  if(_Lock_flag == true)
-  {
-    encode_structure.PID_speed.Output = 0;
-  }
+    if (_Lock_flag == true) {
+        encode_structure.PID_speed.Output = 0;
+    }
 
-  if((_Lock_flag == false) && (encode_structure.targetSpeed == 0) && (abs(out_put_offset) < 15))
-  {
-    encode_structure.PID_speed.Output = 0;
-    _Lock_flag = true;
-  }
+    if ((_Lock_flag == false) && (encode_structure.targetSpeed == 0) && (abs(out_put_offset) < 15)) {
+        encode_structure.PID_speed.Output = 0;
+        _Lock_flag = true;
+    }
 
-  encode_structure.PID_speed.Output = constrain(encode_structure.PID_speed.Output,-255,255);
- _Encoder_output = encode_structure.PID_speed.Output;
+    encode_structure.PID_speed.Output = constrain(encode_structure.PID_speed.Output, -255, 255);
+    _Encoder_output = encode_structure.PID_speed.Output;
 #ifdef DEBUG_INFO
-  Serial.print("Mode:");
-  Serial.print(encode_structure.mode);
-  Serial.print(" ,tar:");
-  Serial.print(encode_structure.targetSpeed);
-  Serial.print(" ,cur:");
-  Serial.print(encode_structure.currentSpeed);
-  Serial.print(" ,speed_error:");
-  Serial.print(speed_error);
-  Serial.print(" ,out:");
-  Serial.println(_Encoder_output);
+    Serial.print("Mode:");
+    Serial.print(encode_structure.mode);
+    Serial.print(" ,tar:");
+    Serial.print(encode_structure.targetSpeed);
+    Serial.print(" ,cur:");
+    Serial.print(encode_structure.currentSpeed);
+    Serial.print(" ,speed_error:");
+    Serial.print(speed_error);
+    Serial.print(" ,out:");
+    Serial.println(_Encoder_output);
 #endif /* DEBUG_INFO */
-  return _Encoder_output;
+    return _Encoder_output;
 }
 
 /**
@@ -975,20 +932,16 @@ int16_t MeEncoderOnBoard::speedWithoutPos(void)
  */
 void MeEncoderOnBoard::encoderMove(void)
 {
-  if(millis() - _Encoder_move_time > 40)
-  {
-    int16_t pwm_encoder = 0;
-    _Encoder_move_time = millis();
-    if(encode_structure.motionState == MOTION_WITH_POS)
-    {
-      pwm_encoder = pidPositionToPwm();
+    if (millis() - _Encoder_move_time > 40) {
+        int16_t pwm_encoder = 0;
+        _Encoder_move_time = millis();
+        if (encode_structure.motionState == MOTION_WITH_POS) {
+            pwm_encoder = pidPositionToPwm();
+        } else if (encode_structure.motionState == MOTION_WITHOUT_POS) {
+            pwm_encoder = speedWithoutPos();
+        }
+        encode_structure.currentPwm = pwm_encoder;
     }
-    else if(encode_structure.motionState == MOTION_WITHOUT_POS)
-    {
-      pwm_encoder = speedWithoutPos();
-    }
-    encode_structure.currentPwm = pwm_encoder;
-  }
 }
 
 /**
@@ -1007,15 +960,13 @@ void MeEncoderOnBoard::encoderMove(void)
  */
 void MeEncoderOnBoard::pwmMove(void)
 {
-  if(millis() - _Encoder_move_time > 40)
-  {
-    _Encoder_move_time = millis();
-    encode_structure.currentPwm = round(0.8 * encode_structure.currentPwm + 0.2 * encode_structure.targetPwm);
-    if((abs(encode_structure.currentPwm) <= 10) && (encode_structure.targetPwm == 0))
-    {
-      encode_structure.currentPwm = 0;
+    if (millis() - _Encoder_move_time > 40) {
+        _Encoder_move_time = millis();
+        encode_structure.currentPwm = round(0.8 * encode_structure.currentPwm + 0.2 * encode_structure.targetPwm);
+        if ((abs(encode_structure.currentPwm) <= 10) && (encode_structure.targetPwm == 0)) {
+            encode_structure.currentPwm = 0;
+        }
     }
-  }
 }
 
 /**
@@ -1035,7 +986,7 @@ void MeEncoderOnBoard::pwmMove(void)
  */
 boolean MeEncoderOnBoard::isTarPosReached(void) const
 {
-  return _Lock_flag;
+    return _Lock_flag;
 }
 
 /**
@@ -1054,18 +1005,15 @@ boolean MeEncoderOnBoard::isTarPosReached(void) const
  */
 void MeEncoderOnBoard::loop(void)
 {
-  if(!_enabled)return;
-  updateCurPos();
-  updateSpeed();
+    if (!_enabled)return;
+    updateCurPos();
+    updateSpeed();
 
-  if(encode_structure.mode == PID_MODE)
-  {
-    encoderMove();
-    setMotorPwm(encode_structure.currentPwm);
-  }
-  else if(encode_structure.mode == PWM_MODE)
-  {
-    pwmMove();
-    setMotorPwm(encode_structure.currentPwm);
-  }
+    if (encode_structure.mode == PID_MODE) {
+        encoderMove();
+        setMotorPwm(encode_structure.currentPwm);
+    } else if (encode_structure.mode == PWM_MODE) {
+        pwmMove();
+        setMotorPwm(encode_structure.currentPwm);
+    }
 }

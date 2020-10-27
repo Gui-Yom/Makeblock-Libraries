@@ -44,6 +44,7 @@
 #include "MeInfraredReceiver.h"
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the Infrared Receiver to arduino port,
  * no pins are used or initialized here.
@@ -62,9 +63,10 @@ MeInfraredReceiver::MeInfraredReceiver(void) : MeSerial(0)
  */
 MeInfraredReceiver::MeInfraredReceiver(uint8_t port) : MeSerial(port)
 {
-  _RxPin = s2;
-  _KeyCheckPin = s1;
+    _RxPin = s2;
+    _KeyCheckPin = s1;
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the Infrared Receiver to arduino port,
@@ -99,11 +101,11 @@ MeInfraredReceiver::MeInfraredReceiver(uint8_t receivePin, uint8_t keycheckpin, 
  */
 void MeInfraredReceiver::begin(void)
 {
-  MeSerial::begin(9600);
+    MeSerial::begin(9600);
 #ifdef ME_PORT_DEFINED
-  pinMode(s1, INPUT);
+    pinMode(s1, INPUT);
 #else // ME_PORT_DEFINED
-  pinMode(_KeyCheckPin, INPUT);
+    pinMode(_KeyCheckPin, INPUT);
 #endif // ME_PORT_DEFINED
 }
 
@@ -123,10 +125,10 @@ void MeInfraredReceiver::begin(void)
  */
 int MeInfraredReceiver::read(void)
 {
-  int16_t val;
-  val = MeSerial::read();     /* Read serial infrared data */
-  val &= 0xff;
-  return(val);
+    int16_t val;
+    val = MeSerial::read();     /* Read serial infrared data */
+    val &= 0xff;
+    return (val);
 }
 
 /**
@@ -143,21 +145,19 @@ int MeInfraredReceiver::read(void)
  */
 bool MeInfraredReceiver::buttonState(void)
 {
-  bool val;
-  if(_hard)
-  {
-    MeSerial::end();
-  }
+    bool val;
+    if (_hard) {
+        MeSerial::end();
+    }
 #ifdef ME_PORT_DEFINED
-  val = MePort::dRead1();
+    val = MePort::dRead1();
 #else // ME_PORT_DEFINED
-  val =  digitalRead(_KeyCheckPin);
+    val =  digitalRead(_KeyCheckPin);
 #endif // ME_PORT_DEFINED
-  if(_hard)
-  {
-    begin();
-  }
-  return(!val);
+    if (_hard) {
+        begin();
+    }
+    return (!val);
 }
 
 /**
@@ -174,7 +174,7 @@ bool MeInfraredReceiver::buttonState(void)
  */
 uint8_t MeInfraredReceiver::getCode(void)
 {
-  return _irCode;
+    return _irCode;
 }
 
 /**
@@ -191,29 +191,21 @@ uint8_t MeInfraredReceiver::getCode(void)
  */
 void MeInfraredReceiver::loop(void)
 {
-  if(buttonState() == 1)
-  {
-    if(MeSerial::available() > 0)
-    {
-      int r = read();
-      if(r<0xff)
-      {
-        if(r == 0)
-        {
-          _irCode = _preIrCode;
+    if (buttonState() == 1) {
+        if (MeSerial::available() > 0) {
+            int r = read();
+            if (r < 0xff) {
+                if (r == 0) {
+                    _irCode = _preIrCode;
+                } else {
+                    _irCode = r;
+                    _preIrCode = _irCode;
+                }
+            }
         }
-        else
-        {
-          _irCode = r;
-          _preIrCode = _irCode;
-        }
-      }
+    } else {
+        _irCode = 0;
+        _preIrCode = 0;
     }
-  }
-  else
-  {
-    _irCode = 0;
-    _preIrCode = 0;
-  }
 }
 

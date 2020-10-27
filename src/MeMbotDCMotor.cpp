@@ -44,6 +44,7 @@
  *   port - RJ25 port from PORT_1 to M2
  */
 #ifdef ME_PORT_DEFINED
+
 MBotDCMotor::MBotDCMotor(uint8_t port) : MeDCMotor(port)
 {
 
@@ -67,32 +68,26 @@ MBotDCMotor::MBotDCMotor(uint8_t port) : MeDCMotor(port)
  */
 void MBotDCMotor::move(int direction, int speed)
 {
-  int leftSpeed = 0;
-  int rightSpeed = 0;
-  if(direction==1)
-  {
-    leftSpeed = -speed;
-    rightSpeed = speed;
-  }
-  else if(direction==2)
-  {
-    leftSpeed = speed;
-    rightSpeed = -speed;
-  }
-  else if(direction==3)
-  {
-    leftSpeed = speed;
-    rightSpeed = speed;
-  }
-  else if(direction==4)
-  {
-    leftSpeed = -speed;
-    rightSpeed = -speed;
-  }
-  MeDCMotor::reset(M1);
-  MeDCMotor::run(leftSpeed);
-  MeDCMotor::reset(M2);
-  MeDCMotor::run(rightSpeed);
+    int leftSpeed = 0;
+    int rightSpeed = 0;
+    if (direction == 1) {
+        leftSpeed = -speed;
+        rightSpeed = speed;
+    } else if (direction == 2) {
+        leftSpeed = speed;
+        rightSpeed = -speed;
+    } else if (direction == 3) {
+        leftSpeed = speed;
+        rightSpeed = speed;
+    } else if (direction == 4) {
+        leftSpeed = -speed;
+        rightSpeed = -speed;
+    }
+    MeDCMotor::reset(M1);
+    MeDCMotor::run(leftSpeed);
+    MeDCMotor::reset(M2);
+    MeDCMotor::run(rightSpeed);
 }
+
 #endif //ME_PORT_DEFINED
 

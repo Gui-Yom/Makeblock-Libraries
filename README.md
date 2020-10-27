@@ -1,3 +1,7 @@
+Fork of the original library.
+Clean C/C++ version with examples.
+Currently, only the MegaPi firmware is updated.
+
 # Makeblock Library v3.27
 
 Arduino Library for Makeblock Electronic Modules

@@ -122,16 +122,12 @@ uint8_t MeHostParser::getPackageReady()
  * \par Others
  *    None
  */
-uint8_t MeHostParser::pushStr(uint8_t * str, uint32_t length)
+uint8_t MeHostParser::pushStr(uint8_t* str, uint32_t length)
 {
-    if (length > ((in + BUF_SIZE - out - 1) & MASK))
-    {
+    if (length > ((in + BUF_SIZE - out - 1) & MASK)) {
         return 0;
-    }
-    else
-    {
-        for (int i = 0; i < length; ++i)
-        {
+    } else {
+        for (int i = 0; i < length; ++i) {
             pushByte(str[i]);
         }
     }
@@ -153,15 +149,12 @@ uint8_t MeHostParser::pushStr(uint8_t * str, uint32_t length)
  */
 uint8_t MeHostParser::pushByte(uint8_t ch)
 {
-    if (((in + 1) & MASK) != out)
-    {
+    if (((in + 1) & MASK) != out) {
         buffer[in] = ch;
         ++in;
         in &= MASK;
         return 1;
-    }
-    else
-    {
+    } else {
         return 0;
     }
 }
@@ -180,17 +173,14 @@ uint8_t MeHostParser::pushByte(uint8_t ch)
  * \par Others
  *    None
  */
-uint8_t MeHostParser::getByte(uint8_t * ch)
+uint8_t MeHostParser::getByte(uint8_t* ch)
 {
-    if (in != out)
-    {
+    if (in != out) {
         *ch = buffer[out];
         ++out;
         out &= MASK;
         return 1;
-    }
-    else
-    {
+    } else {
         // Serial.println("GET error!");
         return 0;
     }
@@ -212,11 +202,10 @@ uint8_t MeHostParser::getByte(uint8_t * ch)
  * \par Others
  *    None
  */
-uint8_t calculateLRC(uint8_t *data, uint32_t length)
+uint8_t calculateLRC(uint8_t* data, uint32_t length)
 {
     uint8_t LRC = 0;
-    for (uint32_t i = 0; i < length; ++i)
-    {
+    for (uint32_t i = 0; i < length; ++i) {
         LRC ^= data[i];
     }
     return LRC;
@@ -239,108 +228,92 @@ uint8_t calculateLRC(uint8_t *data, uint32_t length)
 uint8_t MeHostParser::run(void)
 {
     uint8_t ch = 0;
-    while (getByte(&ch))
-    {
-        switch (state)
-        {
-        case ST_WAIT_4_START:
-            if (HEAD == ch)
-            {
-                state = ST_HEAD_READ;
-            }
-            break;
-        case ST_HEAD_READ:
-            module = ch;
-            state = ST_MODULE_READ;
-            break;
-        case ST_MODULE_READ:
-            //  read 4 bytes as "length"
-            *(((uint8_t *)&length) + lengthRead) = ch;
-            ++lengthRead;
-            if (4 == lengthRead)
-            {
-                lengthRead = 0;
-                state = ST_LENGTH_READ;
-            }
-            break;
-        case ST_LENGTH_READ:
-            //  alloc space for data
-            if (0 == currentDataPos)
-            {
-                if (length > 255)
-                {
+    while (getByte(&ch)) {
+        switch (state) {
+            case ST_WAIT_4_START:
+                if (HEAD == ch) {
+                    state = ST_HEAD_READ;
+                }
+                break;
+            case ST_HEAD_READ:
+                module = ch;
+                state = ST_MODULE_READ;
+                break;
+            case ST_MODULE_READ:
+                //  read 4 bytes as "length"
+                *(((uint8_t*) &length) + lengthRead) = ch;
+                ++lengthRead;
+                if (4 == lengthRead) {
+                    lengthRead = 0;
+                    state = ST_LENGTH_READ;
+                }
+                break;
+            case ST_LENGTH_READ:
+                //  alloc space for data
+                if (0 == currentDataPos) {
+                    if (length > 255) {
+                        state = ST_WAIT_4_START;
+                        currentDataPos = 0;
+                        lengthRead = 0;
+                        length = 0;
+                        module = 0;
+                        check = 0;
+                        break;
+                    }
+                    data = (uint8_t*) malloc(length + 1);
+                    if (NULL == data) {
+                        state = ST_WAIT_4_START;
+                        currentDataPos = 0;
+                        lengthRead = 0;
+                        length = 0;
+                        module = 0;
+                        check = 0;
+                        break;
+                    }
+                }
+                //  read data
+                data[currentDataPos] = ch;
+                ++currentDataPos;
+                if (currentDataPos == length) {
+                    currentDataPos = 0;
+                    state = ST_DATA_READ;
+                }
+                break;
+            case ST_DATA_READ:
+                check = ch;
+                if (check != calculateLRC(data, length)) {
                     state = ST_WAIT_4_START;
+                    if (NULL != data) {
+                        free(data);
+                        data = NULL;
+                    }
                     currentDataPos = 0;
                     lengthRead = 0;
                     length = 0;
                     module = 0;
                     check = 0;
-                    break;
+                } else {
+                    state = ST_CHECK_READ;
                 }
-                data = (uint8_t *)malloc(length + 1);
-                if (NULL == data)
-                {
-                    state = ST_WAIT_4_START;
-                    currentDataPos = 0;
-                    lengthRead = 0;
+                break;
+            case ST_CHECK_READ:
+                if (TAIL != ch) {
+                    if (NULL != data) {
+                        free(data);
+                        data = NULL;
+                    }
                     length = 0;
-                    module = 0;
-                    check = 0;
-                    break;
+                } else {
+                    packageReady = 1;
                 }
-            }
-            //  read data
-            data[currentDataPos] = ch;
-            ++currentDataPos;
-            if (currentDataPos == length)
-            {
-                currentDataPos = 0;
-                state = ST_DATA_READ;
-            }
-            break;
-        case ST_DATA_READ:
-            check = ch;
-            if (check != calculateLRC(data, length))
-            {
                 state = ST_WAIT_4_START;
-                if (NULL != data)
-                {
-                    free(data);
-                    data = NULL;
-                }
                 currentDataPos = 0;
                 lengthRead = 0;
-                length = 0;
                 module = 0;
                 check = 0;
-            }
-            else
-            {
-                state = ST_CHECK_READ;
-            }
-            break;
-        case ST_CHECK_READ:
-            if (TAIL != ch)
-            {
-                if (NULL != data)
-                {
-                    free(data);
-                    data = NULL;
-                }
-                length = 0;
-            }
-            else
-            {
-                packageReady = 1;
-            }
-            state = ST_WAIT_4_START;
-            currentDataPos = 0;
-            lengthRead = 0;
-            module = 0;
-            check = 0;
-            break;
-        default:
-            break;
+                break;
+            default:
+                break;
         }
     }
     return state;
@@ -362,11 +335,10 @@ uint8_t MeHostParser::run(void)
  * \par Others
  *    None
  */
-uint8_t MeHostParser::getData(uint8_t *buf, uint32_t size)
+uint8_t MeHostParser::getData(uint8_t* buf, uint32_t size)
 {
     int copySize = (size > length) ? length : size;
-    if ((NULL != data) && (NULL != buf))
-    {
+    if ((NULL != data) && (NULL != buf)) {
         memcpy(buf, data, copySize);
         free(data);
         data = NULL;
@@ -374,9 +346,7 @@ uint8_t MeHostParser::getData(uint8_t *buf, uint32_t size)
         packageReady = 0;
 
         return copySize;
-    }
-    else
-    {
+    } else {
         return 0;
     }
 }

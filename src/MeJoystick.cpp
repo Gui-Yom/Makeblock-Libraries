@@ -50,6 +50,7 @@ volatile int16_t MeJoystick::_X_offset = 0;
 volatile int16_t MeJoystick::_Y_offset = 0;
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the MeJoystick to arduino port,
  * no pins are used or initialized here.
@@ -68,6 +69,7 @@ MeJoystick::MeJoystick(void) : MePort(0)
 MeJoystick::MeJoystick(uint8_t port) : MePort(port)
 {
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the MeJoystick to arduino port,
@@ -100,13 +102,13 @@ MeJoystick::MeJoystick(uint8_t x_port,uint8_t y_port)
  * \par Others
  *   None
  */
-void MeJoystick::setpin(uint8_t x_port,uint8_t y_port)
+void MeJoystick::setpin(uint8_t x_port, uint8_t y_port)
 {
-  _X_port = x_port;
-  _Y_port = y_port;
+    _X_port = x_port;
+    _Y_port = y_port;
 #ifdef ME_PORT_DEFINED
-  s1 = x_port;
-  s2 = y_port;
+    s1 = x_port;
+    s2 = y_port;
 #endif // ME_PORT_DEFINED
 }
 
@@ -124,14 +126,14 @@ void MeJoystick::setpin(uint8_t x_port,uint8_t y_port)
  */
 int16_t MeJoystick::readX(void)
 {
-  int16_t x_value;
+    int16_t x_value;
 #ifdef ME_PORT_DEFINED
-  x_value = MePort::aRead1();
+    x_value = MePort::aRead1();
 #else // ME_PORT_DEFINED
-  x_value = analogRead(_X_port);
+    x_value = analogRead(_X_port);
 #endif // ME_PORT_DEFINED
-  x_value = (x_value - CENTER_VALUE) + _X_offset;
-  return x_value;
+    x_value = (x_value - CENTER_VALUE) + _X_offset;
+    return x_value;
 }
 
 /**
@@ -148,14 +150,14 @@ int16_t MeJoystick::readX(void)
  */
 int16_t MeJoystick::readY(void)
 {
-  int16_t y_value;
+    int16_t y_value;
 #ifdef ME_PORT_DEFINED
-  y_value = MePort::aRead2();
+    y_value = MePort::aRead2();
 #else // ME_PORT_DEFINED
-  y_value = analogRead(_Y_port);
+    y_value = analogRead(_Y_port);
 #endif // ME_PORT_DEFINED
-  y_value = (y_value - CENTER_VALUE) + _Y_offset;
-  return y_value;
+    y_value = (y_value - CENTER_VALUE) + _Y_offset;
+    return y_value;
 }
 
 /**
@@ -174,26 +176,23 @@ int16_t MeJoystick::readY(void)
  */
 int16_t MeJoystick::read(uint8_t index)
 {
-  int16_t value = 0;
-  if(index == 1)
-  {
+    int16_t value = 0;
+    if (index == 1) {
 #ifdef ME_PORT_DEFINED
-    value = MePort::aRead1();
+        value = MePort::aRead1();
 #else // ME_PORT_DEFINED
-    value = analogRead(_X_port);
+        value = analogRead(_X_port);
 #endif // ME_PORT_DEFINED
-    value = (value - CENTER_VALUE) + _X_offset;
-  }
-  else if(index == 2)
-  {
+        value = (value - CENTER_VALUE) + _X_offset;
+    } else if (index == 2) {
 #ifdef ME_PORT_DEFINED
-    value = MePort::aRead2();
+        value = MePort::aRead2();
 #else // ME_PORT_DEFINED
-    value = analogRead(_Y_port);
+        value = analogRead(_Y_port);
 #endif // ME_PORT_DEFINED
-    value = (value - CENTER_VALUE) + _Y_offset;
-  }
-  return value;
+        value = (value - CENTER_VALUE) + _Y_offset;
+    }
+    return value;
 }
 
 /**
@@ -213,10 +212,10 @@ int16_t MeJoystick::read(uint8_t index)
  * \par Others
  *   None
  */
-void MeJoystick::CalCenterValue(int16_t x_offset,int16_t y_offset)
+void MeJoystick::CalCenterValue(int16_t x_offset, int16_t y_offset)
 {
-  _X_offset = x_offset;
-  _Y_offset = y_offset;
+    _X_offset = x_offset;
+    _Y_offset = y_offset;
 }
 
 /**
@@ -233,27 +232,24 @@ void MeJoystick::CalCenterValue(int16_t x_offset,int16_t y_offset)
  */
 float MeJoystick::angle(void)
 {
-  int16_t x_value;
-  int16_t y_value;
-  float angle;
+    int16_t x_value;
+    int16_t y_value;
+    float angle;
 #ifdef ME_PORT_DEFINED
-  x_value = MePort::aRead1();
-  y_value = MePort::aRead2();
+    x_value = MePort::aRead1();
+    y_value = MePort::aRead2();
 #else // ME_PORT_DEFINED
-  x_value = analogRead(_X_port);
-  y_value = analogRead(_Y_port);
+    x_value = analogRead(_X_port);
+    y_value = analogRead(_Y_port);
 #endif // ME_PORT_DEFINED
-  x_value = (x_value - CENTER_VALUE) + _X_offset;
-  y_value = (y_value - CENTER_VALUE) + _Y_offset;
-  if((abs(x_value) < 10) && (abs(y_value) < 10))
-  {
-    angle = 0;
-  }
-  else
-  {
-    angle = atan2(x_value, y_value) * 180.0 / PI;
-  }
-  return angle;
+    x_value = (x_value - CENTER_VALUE) + _X_offset;
+    y_value = (y_value - CENTER_VALUE) + _Y_offset;
+    if ((abs(x_value) < 10) && (abs(y_value) < 10)) {
+        angle = 0;
+    } else {
+        angle = atan2(x_value, y_value) * 180.0 / PI;
+    }
+    return angle;
 }
 
 /**
@@ -270,9 +266,9 @@ float MeJoystick::angle(void)
  */
 float MeJoystick::OffCenter(void)
 {
-  long dx   = abs(readX());
-  long dy   = abs(readY());
-  long dist = dx * dx + dy * dy;
-  return(min(CENTER_VALUE*sqrt(2), sqrt(dist)));
+    long dx = abs(readX());
+    long dy = abs(readY());
+    long dist = dx * dx + dy * dy;
+    return (min(CENTER_VALUE * sqrt(2), sqrt(dist)));
 }
 

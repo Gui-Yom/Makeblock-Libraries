@@ -58,9 +58,9 @@
  */
 MeSerial::MeSerial(void) : MePort(), SoftwareSerial(NC, NC)
 {
-  _hard = true;
-  _scratch = true;
-  _polling = false;
+    _hard = true;
+    _scratch = true;
+    _polling = false;
 }
 
 /**
@@ -71,19 +71,19 @@ MeSerial::MeSerial(void) : MePort(), SoftwareSerial(NC, NC)
  */
 MeSerial::MeSerial(uint8_t port) : MePort(port), SoftwareSerial(mePort[port].s2, mePort[port].s1)
 {
-  _scratch = false;
-  _hard = false;
-  _polling = false;
-  _RxPin = s2;
-  _TxPin = s1;
+    _scratch = false;
+    _hard = false;
+    _polling = false;
+    _RxPin = s2;
+    _TxPin = s1;
 #if defined(__AVR_ATmega32U4__)
-  //_polling = getPort() > PORT_5;
-   _polling = false;
-  _hard = getPort() == PORT_4;
+    //_polling = getPort() > PORT_5;
+     _polling = false;
+    _hard = getPort() == PORT_4;
 #elif defined(__AVR_ATmega2560__)
-  _hard = (getPort() == PORT_5) | (getPort() == PORT_15) | (getPort() == PORT_16);
+    _hard = (getPort() == PORT_5) | (getPort() == PORT_15) | (getPort() == PORT_16);
 #else
-  _hard = getPort() == PORT_5;
+    _hard = getPort() == PORT_5;
 #endif
 }
 
@@ -98,32 +98,29 @@ MeSerial::MeSerial(uint8_t port) : MePort(port), SoftwareSerial(mePort[port].s2,
  *   inverse_logic - Whether the Serial level need inv.
  */
 MeSerial::MeSerial(uint8_t receivePin, uint8_t transmitPin, bool inverse_logic)\
-                   : SoftwareSerial(receivePin, transmitPin, inverse_logic)
+: SoftwareSerial(receivePin, transmitPin, inverse_logic)
 {
-  _scratch = false;
-  _hard = false;
-  _polling = false;
-  _RxPin = receivePin;
-  _TxPin = transmitPin;
+    _scratch = false;
+    _hard = false;
+    _polling = false;
+    _RxPin = receivePin;
+    _TxPin = transmitPin;
 #if defined(__AVR_ATmega32U4__)
-   _polling = false;
-  if((receivePin == 0) && (transmitPin == 1))
-  {
-    _hard = true;
-  }
-  else
-  {
-    _hard = false;
-  }
+    _polling = false;
+   if((receivePin == 0) && (transmitPin == 1))
+   {
+     _hard = true;
+   }
+   else
+   {
+     _hard = false;
+   }
 #else
-  if((receivePin == 0) && (transmitPin == 1))
-  {
-    _hard = true;
-  }
-  else
-  {
-    _hard = false;
-  }
+    if ((receivePin == 0) && (transmitPin == 1)) {
+        _hard = true;
+    } else {
+        _hard = false;
+    }
 #endif
 }
 
@@ -143,7 +140,7 @@ MeSerial::MeSerial(uint8_t receivePin, uint8_t transmitPin, bool inverse_logic)\
  */
 void MeSerial::setHardware(bool mode)
 {
-  _hard = mode;
+    _hard = mode;
 }
 
 /**
@@ -164,32 +161,24 @@ void MeSerial::setHardware(bool mode)
  */
 void MeSerial::begin(long baudrate)
 {
-  _bitPeriod = 1000000 / baudrate;
-  if (_hard)
-  {
+    _bitPeriod = 1000000 / baudrate;
+    if (_hard) {
 #if defined(__AVR_ATmega32U4__)
-    _scratch ? Serial.begin(baudrate) : Serial1.begin(baudrate);
+        _scratch ? Serial.begin(baudrate) : Serial1.begin(baudrate);
 #elif defined(__AVR_ATmega2560__)
-    if (getPort() == PORT_15)
-    {
-      Serial3.begin(baudrate);
-    }
-    else if (getPort() == PORT_16)
-    {
-      Serial.begin(baudrate);
-    }
-    else
-    {
-      Serial2.begin(baudrate);
-    }
+        if (getPort() == PORT_15) {
+            Serial3.begin(baudrate);
+        } else if (getPort() == PORT_16) {
+            Serial.begin(baudrate);
+        } else {
+            Serial2.begin(baudrate);
+        }
 #else
-    Serial.begin(baudrate);
+        Serial.begin(baudrate);
 #endif
-  }
-  else
-  {
-    SoftwareSerial::begin(baudrate);
-  }
+    } else {
+        SoftwareSerial::begin(baudrate);
+    }
 }
 
 /**
@@ -206,31 +195,23 @@ void MeSerial::begin(long baudrate)
  */
 void MeSerial::end(void)
 {
-  if (_hard)
-  {
+    if (_hard) {
 #if defined(__AVR_ATmega32U4__)
-    Serial1.end();
+        Serial1.end();
 #elif defined(__AVR_ATmega2560__)
-    if (getPort() == PORT_15)
-    {
-      Serial3.end();
-    }
-    else if (getPort() == PORT_16)
-    {
-      Serial.end();
-    }
-    else
-    {
-      Serial2.end();
-    }
+        if (getPort() == PORT_15) {
+            Serial3.end();
+        } else if (getPort() == PORT_16) {
+            Serial.end();
+        } else {
+            Serial2.end();
+        }
 #else
-    Serial.end();
+        Serial.end();
 #endif
-  }
-  else
-  {
-    SoftwareSerial::end();
-  }
+    } else {
+        SoftwareSerial::end();
+    }
 }
 
 /**
@@ -249,31 +230,23 @@ void MeSerial::end(void)
  */
 size_t MeSerial::write(uint8_t byte)
 {
-  if (_hard)
-  {
+    if (_hard) {
 #if defined(__AVR_ATmega32U4__)
-    return (_scratch ? Serial.write(byte) : Serial1.write(byte) );
+        return (_scratch ? Serial.write(byte) : Serial1.write(byte) );
 #elif defined(__AVR_ATmega2560__)
-    if (getPort() == PORT_15)
-    {
-      return (Serial3.write(byte) );
-    }
-    else if (getPort() == PORT_16)
-    {
-      return (Serial.write(byte) );
-    }
-    else
-    {
-      return (Serial2.write(byte) );
-    }
+        if (getPort() == PORT_15) {
+            return (Serial3.write(byte));
+        } else if (getPort() == PORT_16) {
+            return (Serial.write(byte));
+        } else {
+            return (Serial2.write(byte));
+        }
 #else
-    return (Serial.write(byte) );
+        return (Serial.write(byte) );
 #endif
-  }
-  else
-  {
-    return (SoftwareSerial::write(byte) );
-  }
+    } else {
+        return (SoftwareSerial::write(byte));
+    }
 }
 
 /**
@@ -292,37 +265,28 @@ size_t MeSerial::write(uint8_t byte)
  */
 int16_t MeSerial::read(void)
 {
-  if (_polling)
-  {
-    int16_t temp = _byte;
-    _byte = -1;
-    return (temp > -1 ? temp : poll() );
-  }
-  if (_hard)
-  {
+    if (_polling) {
+        int16_t temp = _byte;
+        _byte = -1;
+        return (temp > -1 ? temp : poll());
+    }
+    if (_hard) {
 #if defined(__AVR_ATmega32U4__)
-    return (_scratch ? Serial.read() : Serial1.read() );
+        return (_scratch ? Serial.read() : Serial1.read() );
 #elif defined(__AVR_ATmega2560__)
-    if (getPort() == PORT_15)
-    {
-      return (Serial3.read() );
-    }
-    else if(getPort() == PORT_16)
-    {
-      return (Serial.read() );
-    }
-    else
-    {
-      return (Serial2.read() );
-    }
+        if (getPort() == PORT_15) {
+            return (Serial3.read());
+        } else if (getPort() == PORT_16) {
+            return (Serial.read());
+        } else {
+            return (Serial2.read());
+        }
 #else
-    return (Serial.read() );
+        return (Serial.read() );
 #endif
-  }
-  else
-  {
-    return (SoftwareSerial::read() );
-  }
+    } else {
+        return (SoftwareSerial::read());
+    }
 }
 
 /**
@@ -341,36 +305,27 @@ int16_t MeSerial::read(void)
  */
 int16_t MeSerial::available(void)
 {
-  if (_polling)
-  {
-    _byte = poll();
-    return (_byte > -1 ? 1 : 0);
-  }
-  if (_hard)
-  {
+    if (_polling) {
+        _byte = poll();
+        return (_byte > -1 ? 1 : 0);
+    }
+    if (_hard) {
 #if defined(__AVR_ATmega32U4__)
-    return (_scratch ? Serial.available() : Serial1.available() );
+        return (_scratch ? Serial.available() : Serial1.available() );
 #elif defined(__AVR_ATmega2560__)
-    if (getPort() == PORT_15)
-    {
-      return (Serial3.available() );
-    }
-    else if(getPort() == PORT_16)
-    {
-      return (Serial.available() );
-    }
-    else
-    {
-      return (Serial2.available() );
-    }
+        if (getPort() == PORT_15) {
+            return (Serial3.available());
+        } else if (getPort() == PORT_16) {
+            return (Serial.available());
+        } else {
+            return (Serial2.available());
+        }
 #else
-    return (Serial.available() );
+        return (Serial.available() );
 #endif
-  }
-  else
-  {
-    return (SoftwareSerial::available() );
-  }
+    } else {
+        return (SoftwareSerial::available());
+    }
 }
 
 /**
@@ -391,14 +346,11 @@ int16_t MeSerial::available(void)
  */
 bool MeSerial::listen(void)
 {
-  if (_hard)
-  {
-    return (true);
-  }
-  else
-  {
-    return (SoftwareSerial::listen() );
-  }
+    if (_hard) {
+        return (true);
+    } else {
+        return (SoftwareSerial::listen());
+    }
 }
 
 /**
@@ -415,14 +367,11 @@ bool MeSerial::listen(void)
  */
 bool MeSerial::isListening(void)
 {
-  if (_hard)
-  {
-    return (true);
-  }
-  else
-  {
-    return (SoftwareSerial::isListening() );
-  }
+    if (_hard) {
+        return (true);
+    } else {
+        return (SoftwareSerial::isListening());
+    }
 }
 
 /**
@@ -440,19 +389,17 @@ bool MeSerial::isListening(void)
  */
 int16_t MeSerial::poll(void)
 {
-  int16_t val = 0;
-  int16_t bitDelay = _bitPeriod - clockCyclesToMicroseconds(50);
-  if (digitalRead(_RxPin) == LOW)
-  {
-    for (int16_t offset = 0; offset < 8; offset++)
-    {
-      delayMicroseconds(bitDelay);
-      val |= digitalRead(_RxPin) << offset;
+    int16_t val = 0;
+    int16_t bitDelay = _bitPeriod - clockCyclesToMicroseconds(50);
+    if (digitalRead(_RxPin) == LOW) {
+        for (int16_t offset = 0; offset < 8; offset++) {
+            delayMicroseconds(bitDelay);
+            val |= digitalRead(_RxPin) << offset;
+        }
+        delayMicroseconds(bitDelay);
+        return (val & 0xff);
     }
-    delayMicroseconds(bitDelay);
-    return (val & 0xff);
-  }
-  return (-1);
+    return (-1);
 }
 
 /**
@@ -469,12 +416,11 @@ int16_t MeSerial::poll(void)
  * \par Others
  *   None
  */
-void MeSerial::sendString(char *str)
+void MeSerial::sendString(char* str)
 {
-  while(*str)
-  {
-    write(*str++);
-  }
+    while (*str) {
+        write(*str++);
+    }
 }
 
 /**
@@ -494,79 +440,72 @@ void MeSerial::sendString(char *str)
  * \par Others
  *   None
  */
-void MeSerial::printf(char *fmt,...)
+void MeSerial::printf(char* fmt, ...)
 {
-  va_list ap;
-  char string[128];
-  va_start(ap,fmt);
-  vsprintf(string,fmt,ap);
-  sendString(string);
-  va_end(ap);
+    va_list ap;
+    char string[128];
+    va_start(ap, fmt);
+    vsprintf(string, fmt, ap);
+    sendString(string);
+    va_end(ap);
 }
 
 boolean MeSerial::dataLineAvailable(void)
 {
-  if(available())
-  {
-    char c = read();
-    if(c=='\n')
-    {
-      buffer[bufferIndex] = 0;
-      return true;
+    if (available()) {
+        char c = read();
+        if (c == '\n') {
+            buffer[bufferIndex] = 0;
+            return true;
+        } else {
+            buffer[bufferIndex] = c;
+            bufferIndex++;
+        }
     }
-    else
-    {
-      buffer[bufferIndex]=c;
-      bufferIndex++;
-    }
-  }
-  return false;
+    return false;
 }
 
 String MeSerial::readDataLine(void)
 {
-  if(bufferIndex>0)
-  {
-    lastLine = buffer;
-  }
-  bufferIndex = 0;
-  memset(buffer,0,64);
-  return lastLine;
+    if (bufferIndex > 0) {
+        lastLine = buffer;
+    }
+    bufferIndex = 0;
+    memset(buffer, 0, 64);
+    return lastLine;
 }
 
 float MeSerial::getValue(String key)
 {
-  String s = readDataLine();
-  if(stringLength(s)>2)
-  {
-    char * tmp;
-    char * str;
-    str = strtok_r((char*)s.c_str(), "=", &tmp);
-    if(str!=NULL && strcmp(str,key.c_str())==0)
-    {
-      float v = atof(tmp);
-      return v;
+    String s = readDataLine();
+    if (stringLength(s) > 2) {
+        char* tmp;
+        char* str;
+        str = strtok_r((char*) s.c_str(), "=", &tmp);
+        if (str != NULL && strcmp(str, key.c_str()) == 0) {
+            float v = atof(tmp);
+            return v;
+        }
     }
-  }
-  return 0;
+    return 0;
 }
 
-boolean MeSerial::equalString(String s1,String s2)
+boolean MeSerial::equalString(String s1, String s2)
 {
-  return s1.equals(s2);
+    return s1.equals(s2);
 }
 
-String MeSerial::concatenateWith(String s1,String s2)
+String MeSerial::concatenateWith(String s1, String s2)
 {
-  return s1+s2;
+    return s1 + s2;
 }
 
-char MeSerial::letterOf(int i,String s)
+char MeSerial::letterOf(int i, String s)
 {
-  return s.charAt(i);
+    return s.charAt(i);
 }
 
 int MeSerial::stringLength(String s)
 {
-  return s.length();
+    return s.length();
 }

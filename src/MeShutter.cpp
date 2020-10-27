@@ -45,6 +45,7 @@
 #include "MeShutter.h"
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the MeShutter to arduino port,
  * no pins are used or initialized here.
@@ -64,9 +65,10 @@ MeShutter::MeShutter(void) : MePort(0)
  */
 MeShutter::MeShutter(uint8_t port) : MePort(port)
 {
-  MePort::dWrite1(LOW);
-  MePort::dWrite2(LOW);
+    MePort::dWrite1(LOW);
+    MePort::dWrite2(LOW);
 }
+
 #else //ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the MeShutter to arduino port,
@@ -107,17 +109,17 @@ MeShutter::MeShutter(uint8_t ShotPin, uint8_t FocusPin)
  */
 void MeShutter::setpin(uint8_t ShotPin, uint8_t FocusPin)
 {
-  _ShotPin = ShotPin;
-  _FocusPin = FocusPin;
+    _ShotPin = ShotPin;
+    _FocusPin = FocusPin;
 
-  //set pinMode OUTPUT
-  pinMode(_ShotPin, OUTPUT);
-  pinMode(_FocusPin, OUTPUT);
-  digitalWrite(_ShotPin, LOW);
-  digitalWrite(_FocusPin, LOW);
+    //set pinMode OUTPUT
+    pinMode(_ShotPin, OUTPUT);
+    pinMode(_FocusPin, OUTPUT);
+    digitalWrite(_ShotPin, LOW);
+    digitalWrite(_FocusPin, LOW);
 #ifdef ME_PORT_DEFINED
-  s1 = _ShotPin;
-  s2 = _FocusPin;
+    s1 = _ShotPin;
+    s2 = _FocusPin;
 #endif
 }
 
@@ -136,9 +138,9 @@ void MeShutter::setpin(uint8_t ShotPin, uint8_t FocusPin)
 void MeShutter::shotOn(void)
 {
 #ifdef ME_PORT_DEFINED
-  MePort::dWrite1(HIGH);
+    MePort::dWrite1(HIGH);
 #else //ME_PORT_DEFINED
-  digitalWrite(_ShotPin, HIGH);
+    digitalWrite(_ShotPin, HIGH);
 #endif //ME_PORT_DEFINED
 }
 
@@ -157,9 +159,9 @@ void MeShutter::shotOn(void)
 void MeShutter::shotOff(void)
 {
 #ifdef ME_PORT_DEFINED
-  MePort::dWrite1(LOW);
+    MePort::dWrite1(LOW);
 #else //ME_PORT_DEFINED
-  digitalWrite(_ShotPin, LOW);
+    digitalWrite(_ShotPin, LOW);
 #endif //ME_PORT_DEFINED
 }
 
@@ -178,9 +180,9 @@ void MeShutter::shotOff(void)
 void MeShutter::focusOn(void)
 {
 #ifdef ME_PORT_DEFINED
-  MePort::dWrite2(HIGH);
+    MePort::dWrite2(HIGH);
 #else //ME_PORT_DEFINED
-  digitalWrite(_FocusPin, HIGH);
+    digitalWrite(_FocusPin, HIGH);
 #endif //ME_PORT_DEFINED
 }
 
@@ -199,9 +201,9 @@ void MeShutter::focusOn(void)
 void MeShutter::focusOff(void)
 {
 #ifdef ME_PORT_DEFINED
-  MePort::dWrite2(LOW);
+    MePort::dWrite2(LOW);
 #else //ME_PORT_DEFINED
-  digitalWrite(_FocusPin, LOW);
+    digitalWrite(_FocusPin, LOW);
 #endif //ME_PORT_DEFINED
 }
 
@@ -224,21 +226,18 @@ void MeShutter::focusOff(void)
  */
 void MeShutter::setState(uint8_t state)
 {
-  if(state < 2)
-  {
+    if (state < 2) {
 #ifdef ME_PORT_DEFINED
-    MePort::dWrite1(state);
+        MePort::dWrite1(state);
 #else //ME_PORT_DEFINED
-    digitalWrite(_ShotPin, state);
+        digitalWrite(_ShotPin, state);
 #endif //ME_PORT_DEFINED
-  }
-  else
-  {
+    } else {
 #ifdef ME_PORT_DEFINED
-    MePort::dWrite2(state - 2);
+        MePort::dWrite2(state - 2);
 #else //ME_PORT_DEFINED
-    digitalWrite(_FocusPin, (state - 2));
+        digitalWrite(_FocusPin, (state - 2));
 #endif //ME_PORT_DEFINED
-  }
+    }
 }
 

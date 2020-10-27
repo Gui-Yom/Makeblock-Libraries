@@ -64,8 +64,8 @@ uint8_t endp_out_size;
 uint8_t endp_in_addr;
 uint8_t endp6_mode, endp7_mode;
 
-uint8_t *cmd_buf;
-uint8_t *ret_buf;
+uint8_t* cmd_buf;
+uint8_t* ret_buf;
 PUSB_ENDP_DESCR tmpEp;
 
 /**
@@ -81,7 +81,7 @@ MeUSBHost::MeUSBHost() : MePort(0)
 
 MeUSBHost::MeUSBHost(uint8_t s1, uint8_t s2)
 {
-  HSerial = new MeSerial(s1,s2);
+    HSerial = new MeSerial(s1, s2);
 }
 
 /**
@@ -92,7 +92,7 @@ MeUSBHost::MeUSBHost(uint8_t s1, uint8_t s2)
  */
 MeUSBHost::MeUSBHost(uint8_t port) : MePort(port)
 {
-  HSerial = new MeSerial(port);
+    HSerial = new MeSerial(port);
 }
 
 /**
@@ -111,17 +111,17 @@ MeUSBHost::MeUSBHost(uint8_t port) : MePort(port)
  */
 uint8_t MeUSBHost::CH375_RD()
 {
-  delay(2); // stupid delay, the chip don't got any buffer
-  if(HSerial->available()){
-    uint8_t c = HSerial->read();
+    delay(2); // stupid delay, the chip don't got any buffer
+    if (HSerial->available()) {
+        uint8_t c = HSerial->read();
 #ifdef CH375_DBG
-    Serial.print("<< 0x");
-    Serial.print(c,HEX);
-    Serial.println();
+        Serial.print("<< 0x");
+        Serial.print(c,HEX);
+        Serial.println();
 #endif
-    return c;
-  }
-  return 0;
+        return c;
+    }
+    return 0;
 }
 
 /**
@@ -140,12 +140,12 @@ uint8_t MeUSBHost::CH375_RD()
  */
 void MeUSBHost::CH375_WR(uint8_t c)
 {
-  HSerial->write(c);
-  delay(2);
+    HSerial->write(c);
+    delay(2);
 #ifdef CH375_DBG
-  Serial.print(">> 0x");
-  Serial.print(c,HEX);
-  Serial.println();
+    Serial.print(">> 0x");
+    Serial.print(c,HEX);
+    Serial.println();
 #endif
 }
 
@@ -165,10 +165,10 @@ void MeUSBHost::CH375_WR(uint8_t c)
  */
 int16_t MeUSBHost::set_usb_mode(int16_t mode)
 {
-  CH375_WR(CMD_SET_USB_MODE);
-  CH375_WR(mode);
-  endp6_mode=endp7_mode=0x80;
-  return CH375_RD();
+    CH375_WR(CMD_SET_USB_MODE);
+    CH375_WR(mode);
+    endp6_mode = endp7_mode = 0x80;
+    return CH375_RD();
 }
 
 /**
@@ -187,9 +187,9 @@ int16_t MeUSBHost::set_usb_mode(int16_t mode)
  */
 uint8_t MeUSBHost::getIrq()
 {
-  CH375_WR(CMD_GET_STATUS);
-  delay(20);
-  return CH375_RD();
+    CH375_WR(CMD_GET_STATUS);
+    delay(20);
+    return CH375_RD();
 }
 
 /**
@@ -209,13 +209,13 @@ uint8_t MeUSBHost::getIrq()
 void MeUSBHost::toggle_send()
 {
 #ifdef CH375_DBG
-  Serial.print("toggle send: 0x");
-  Serial.print(endp7_mode,HEX);
-  Serial.println();
+    Serial.print("toggle send: 0x");
+    Serial.print(endp7_mode,HEX);
+    Serial.println();
 #endif
-  CH375_WR(CMD_SET_ENDP7);
-  CH375_WR( endp7_mode );
-  endp7_mode^=0x40;
+    CH375_WR(CMD_SET_ENDP7);
+    CH375_WR(endp7_mode);
+    endp7_mode ^= 0x40;
 }
 
 /**
@@ -234,14 +234,14 @@ void MeUSBHost::toggle_send()
  */
 void MeUSBHost::toggle_recv()
 {
-  CH375_WR( CMD_SET_ENDP6 );
-  CH375_WR( endp6_mode );
+    CH375_WR(CMD_SET_ENDP6);
+    CH375_WR(endp6_mode);
 #ifdef CH375_DBG
-  Serial.print("toggle recv: 0x");
-  Serial.print(endp6_mode,HEX);
-  Serial.println();
+    Serial.print("toggle recv: 0x");
+    Serial.print(endp6_mode,HEX);
+    Serial.println();
 #endif
-  endp6_mode^=0x40;
+    endp6_mode ^= 0x40;
 }
 
 /**
@@ -258,17 +258,17 @@ void MeUSBHost::toggle_recv()
  * \par Others
  *    None
  */
-uint8_t MeUSBHost::issue_token( uint8_t endp_and_pid )
+uint8_t MeUSBHost::issue_token(uint8_t endp_and_pid)
 {
-  CH375_WR( CMD_ISSUE_TOKEN );
-  CH375_WR( endp_and_pid );  /* Bit7~4 for EndPoint No, Bit3~0 for Token PID */
+    CH375_WR(CMD_ISSUE_TOKEN);
+    CH375_WR(endp_and_pid);  /* Bit7~4 for EndPoint No, Bit3~0 for Token PID */
 #ifdef CH375_DBG
-  Serial.print("issue token: 0x");
-  Serial.print(endp_and_pid,HEX);
-  Serial.println();
+    Serial.print("issue token: 0x");
+    Serial.print(endp_and_pid,HEX);
+    Serial.println();
 #endif
-  delay(2);
-  return getIrq();
+    delay(2);
+    return getIrq();
 }
 
 /**
@@ -287,18 +287,18 @@ uint8_t MeUSBHost::issue_token( uint8_t endp_and_pid )
  * \par Others
  *    None
  */
-void MeUSBHost::wr_usb_data( uint8_t len, uint8_t *buf )
+void MeUSBHost::wr_usb_data(uint8_t len, uint8_t* buf)
 {
 #ifdef CH375_DBG
-  Serial.print("usb wr: ");
-  Serial.print(len,DEC);
-  Serial.println();
+    Serial.print("usb wr: ");
+    Serial.print(len,DEC);
+    Serial.println();
 #endif
-  CH375_WR( CMD_WR_USB_DATA7 );
-  CH375_WR( len );
-  while( len-- ){
-    CH375_WR( *buf++ );
-  }
+    CH375_WR(CMD_WR_USB_DATA7);
+    CH375_WR(len);
+    while (len--) {
+        CH375_WR(*buf++);
+    }
 }
 
 /**
@@ -317,18 +317,18 @@ void MeUSBHost::wr_usb_data( uint8_t len, uint8_t *buf )
  * \par Others
  *    None
  */
-uint8_t MeUSBHost::rd_usb_data( uint8_t *buf )
+uint8_t MeUSBHost::rd_usb_data(uint8_t* buf)
 {
-  uint8_t i, len;
-  CH375_WR( CMD_RD_USB_DATA );
-  len=CH375_RD();
+    uint8_t i, len;
+    CH375_WR(CMD_RD_USB_DATA);
+    len = CH375_RD();
 #ifdef CH375_DBG
-  Serial.print("usb rd: ");
-  Serial.print(len,DEC);
-  Serial.println();
+    Serial.print("usb rd: ");
+    Serial.print(len,DEC);
+    Serial.println();
 #endif
-  for ( i=0; i!=len; i++ ) *buf++=CH375_RD();
-  return( len );
+    for (i = 0; i != len; i++) *buf++ = CH375_RD();
+    return (len);
 }
 
 /**
@@ -345,9 +345,10 @@ uint8_t MeUSBHost::rd_usb_data( uint8_t *buf )
  * \par Others
  *    None
  */
-int16_t MeUSBHost::get_version(){
-  CH375_WR(CMD_GET_IC_VER);
-  return CH375_RD();
+int16_t MeUSBHost::get_version()
+{
+    CH375_WR(CMD_GET_IC_VER);
+    return CH375_RD();
 }
 
 /**
@@ -366,9 +367,9 @@ int16_t MeUSBHost::get_version(){
  */
 void MeUSBHost::set_freq(void)
 {
-  CH375_WR(0x0b);
-  CH375_WR(0x17);
-  CH375_WR(0xd8);
+    CH375_WR(0x0b);
+    CH375_WR(0x17);
+    CH375_WR(0xd8);
 }
 
 /**
@@ -385,17 +386,17 @@ void MeUSBHost::set_freq(void)
  * \par Others
  *    None
  */
-uint8_t MeUSBHost::set_addr( uint8_t addr )
+uint8_t MeUSBHost::set_addr(uint8_t addr)
 {
-  uint8_t irq;
-  CH375_WR(CMD_SET_ADDRESS);
-  CH375_WR(addr);
-  irq = getIrq();
-  if(irq==USB_INT_SUCCESS){
-    CH375_WR(CMD_SET_USB_ADDR);
+    uint8_t irq;
+    CH375_WR(CMD_SET_ADDRESS);
     CH375_WR(addr);
-  }
-  return irq;
+    irq = getIrq();
+    if (irq == USB_INT_SUCCESS) {
+        CH375_WR(CMD_SET_USB_ADDR);
+        CH375_WR(addr);
+    }
+    return irq;
 }
 
 /**
@@ -412,11 +413,12 @@ uint8_t MeUSBHost::set_addr( uint8_t addr )
  * \par Others
  *    None
  */
-uint8_t MeUSBHost::set_config(uint8_t cfg){
-  endp6_mode=endp7_mode=0x80; // reset the sync flags
-  CH375_WR(CMD_SET_CONFIG);
-  CH375_WR(cfg);
-  return getIrq();
+uint8_t MeUSBHost::set_config(uint8_t cfg)
+{
+    endp6_mode = endp7_mode = 0x80; // reset the sync flags
+    CH375_WR(CMD_SET_CONFIG);
+    CH375_WR(cfg);
+    return getIrq();
 }
 
 /**
@@ -435,10 +437,10 @@ uint8_t MeUSBHost::set_config(uint8_t cfg){
  */
 uint8_t MeUSBHost::clr_stall6(void)
 {
-  CH375_WR( CMD_CLR_STALL );
-  CH375_WR( endp_out_addr | 0x80 );
-  endp6_mode=0x80;
-  return getIrq();
+    CH375_WR(CMD_CLR_STALL);
+    CH375_WR(endp_out_addr | 0x80);
+    endp6_mode = 0x80;
+    return getIrq();
 }
 
 /**
@@ -457,9 +459,9 @@ uint8_t MeUSBHost::clr_stall6(void)
  */
 uint8_t MeUSBHost::get_desr(uint8_t type)
 {
-  CH375_WR( CMD_GET_DESCR );
-  CH375_WR( type );   /* description type, only 1(device) or 2(config) */
-  return getIrq();
+    CH375_WR(CMD_GET_DESCR);
+    CH375_WR(type);   /* description type, only 1(device) or 2(config) */
+    return getIrq();
 }
 
 /**
@@ -478,44 +480,44 @@ uint8_t MeUSBHost::get_desr(uint8_t type)
  */
 uint8_t MeUSBHost::host_recv()
 {
-  uint8_t irq;
-  toggle_recv();
-  irq = issue_token( ( endp_in_addr << 4 ) | DEF_USB_PID_IN );
-  if(irq==USB_INT_SUCCESS){
-    int16_t len = rd_usb_data(RECV_BUFFER);
+    uint8_t irq;
+    toggle_recv();
+    irq = issue_token((endp_in_addr << 4) | DEF_USB_PID_IN);
+    if (irq == USB_INT_SUCCESS) {
+        int16_t len = rd_usb_data(RECV_BUFFER);
 #ifdef CH375_DBG
-    for(int16_t i=0;i<len;i++){
-      // point hid device
-      Serial.print(" 0x");
-      Serial.print((int16_t)RECV_BUFFER[i],HEX);
+        for(int16_t i=0;i<len;i++){
+          // point hid device
+          Serial.print(" 0x");
+          Serial.print((int16_t)RECV_BUFFER[i],HEX);
+        }
+        Serial.println();
+#endif
+        stallCount = 0;
+        return len;
+    } else if (irq == USB_INT_DISCONNECT) {
+        device_online = false;
+        device_ready = false;
+#ifdef CH375_DBG
+        Serial.println("##### disconn #####");
+#endif
+        return 0;
+    } else {
+        clr_stall6();
+#ifdef CH375_DBG
+        Serial.println("##### stall #####");
+#endif
+        delay(10);
+        /*
+        stallCount++;
+        if(stallCount>10){
+          device_online = false;
+          device_ready = false;
+          resetBus();
+        }
+        */
+        return 0;
     }
-    Serial.println();
-#endif
-    stallCount = 0;
-    return len;
-  }else if(irq==USB_INT_DISCONNECT){
-    device_online = false;
-    device_ready = false;
-#ifdef CH375_DBG
-    Serial.println("##### disconn #####");
-#endif
-    return 0;
-  }else{
-    clr_stall6();
-#ifdef CH375_DBG
-    Serial.println("##### stall #####");
-#endif
-    delay(10);
-    /*
-    stallCount++;
-    if(stallCount>10){
-      device_online = false;
-      device_ready = false;
-      resetBus();
-    }
-    */
-    return 0;
-  }
 }
 
 /**
@@ -534,21 +536,21 @@ uint8_t MeUSBHost::host_recv()
  */
 void MeUSBHost::resetBus()
 {
-  int16_t c;
-  c = set_usb_mode(7);
+    int16_t c;
+    c = set_usb_mode(7);
 #ifdef CH375_DBG
-  Serial.print("set mode 7: 0x");
-  Serial.print(c,HEX);
-  Serial.println();
+    Serial.print("set mode 7: 0x");
+    Serial.print(c,HEX);
+    Serial.println();
 #endif
-  delay(10);
-  c = set_usb_mode(6);
+    delay(10);
+    c = set_usb_mode(6);
 #ifdef CH375_DBG
-  Serial.print("set mode 6: 0x");
-  Serial.print(c,HEX);
-  Serial.println();
+    Serial.print("set mode 6: 0x");
+    Serial.print(c,HEX);
+    Serial.println();
 #endif
-  delay(10);
+    delay(10);
 }
 
 /**
@@ -567,16 +569,15 @@ void MeUSBHost::resetBus()
  */
 void MeUSBHost::init(int8_t type)
 {
-  ch375_online = false;
-  device_online = false;
-  device_ready = false;
-  usbtype = type;
-  if(HSerial == NULL)
-  {
-    HSerial = new MeSerial(s2, s1);
-  }
-  
-  HSerial->begin(9600);
+    ch375_online = false;
+    device_online = false;
+    device_ready = false;
+    usbtype = type;
+    if (HSerial == NULL) {
+        HSerial = new MeSerial(s2, s1);
+    }
+
+    HSerial->begin(9600);
 }
 
 
@@ -596,84 +597,85 @@ void MeUSBHost::init(int8_t type)
  */
 int16_t MeUSBHost::initHIDDevice()
 {
-  int16_t irq, len, address;
-  if(usbtype==USB1_0) set_freq(); //work on a lower freq, necessary for ch375
-  irq = get_desr(1);
+    int16_t irq, len, address;
+    if (usbtype == USB1_0) set_freq(); //work on a lower freq, necessary for ch375
+    irq = get_desr(1);
 #ifdef CH375_DBG
-  Serial.print("get des irq: 0x");
-  Serial.print(irq,HEX);
-  Serial.println();
+    Serial.print("get des irq: 0x");
+    Serial.print(irq,HEX);
+    Serial.println();
 #endif
-  if(irq==USB_INT_SUCCESS){
-      len = rd_usb_data( RECV_BUFFER );
+    if (irq == USB_INT_SUCCESS) {
+        len = rd_usb_data(RECV_BUFFER);
 #ifdef CH375_DBG
-      Serial.print("descr1 len: ");
-      Serial.print(len,DEC);
-      Serial.print(" type: 0x");
-      Serial.print(p_dev_descr->bDescriptorType,HEX);
-      Serial.println();
+        Serial.print("descr1 len: ");
+        Serial.print(len,DEC);
+        Serial.print(" type: 0x");
+        Serial.print(p_dev_descr->bDescriptorType,HEX);
+        Serial.println();
 #endif
-      irq = set_addr(2);
-      if(irq==USB_INT_SUCCESS){
-        irq = get_desr(2); // max buf 64byte, todo:config descr overflow
-        if(irq==USB_INT_SUCCESS){
-          len = rd_usb_data( RECV_BUFFER );
+        irq = set_addr(2);
+        if (irq == USB_INT_SUCCESS) {
+            irq = get_desr(2); // max buf 64byte, todo:config descr overflow
+            if (irq == USB_INT_SUCCESS) {
+                len = rd_usb_data(RECV_BUFFER);
 #ifdef CH375_DBG
-          Serial.print("descr1 len: ");
-          Serial.print(len,DEC);
-          Serial.print(" class: 0x");
-          Serial.print(p_cfg_descr->itf_descr.bInterfaceClass,HEX);
-          Serial.print(" subclass: 0x");
-          Serial.print(p_cfg_descr->itf_descr.bInterfaceSubClass,HEX);
-          Serial.println();
+                Serial.print("descr1 len: ");
+                Serial.print(len,DEC);
+                Serial.print(" class: 0x");
+                Serial.print(p_cfg_descr->itf_descr.bInterfaceClass,HEX);
+                Serial.print(" subclass: 0x");
+                Serial.print(p_cfg_descr->itf_descr.bInterfaceSubClass,HEX);
+                Serial.println();
 
-          Serial.print("num of ep: ");
-          Serial.print(p_cfg_descr->itf_descr.bNumEndpoints,DEC);
-          Serial.println();
+                Serial.print("num of ep: ");
+                Serial.print(p_cfg_descr->itf_descr.bNumEndpoints,DEC);
+                Serial.println();
 
-          Serial.print("ep0: 0x");
-          Serial.print(p_cfg_descr->endp_descr[0].bLength,HEX);
-          Serial.print(" 0x");
-          Serial.print(p_cfg_descr->endp_descr[0].bDescriptorType,HEX);
-          Serial.println();
+                Serial.print("ep0: 0x");
+                Serial.print(p_cfg_descr->endp_descr[0].bLength,HEX);
+                Serial.print(" 0x");
+                Serial.print(p_cfg_descr->endp_descr[0].bDescriptorType,HEX);
+                Serial.println();
 #endif
-          if(p_cfg_descr->endp_descr[0].bDescriptorType==0x21){ // skip hid des
-            tmpEp = (PUSB_ENDP_DESCR)((int8_t*)(&(p_cfg_descr->endp_descr[0]))+p_cfg_descr->endp_descr[0].bLength); // get the real ep position
-          }
+                if (p_cfg_descr->endp_descr[0].bDescriptorType == 0x21) { // skip hid des
+                    tmpEp = (PUSB_ENDP_DESCR) ((int8_t*) (&(p_cfg_descr->endp_descr[0])) +
+                                               p_cfg_descr->endp_descr[0].bLength); // get the real ep position
+                }
 #ifdef CH375_DBG
-          Serial.print("endpoint: 0x");
-          Serial.print(tmpEp->bEndpointAddress,HEX);
-          Serial.print(" 0x");
-          Serial.print(tmpEp->bDescriptorType,HEX);
-          Serial.println();
+                Serial.print("endpoint: 0x");
+                Serial.print(tmpEp->bEndpointAddress,HEX);
+                Serial.print(" 0x");
+                Serial.print(tmpEp->bDescriptorType,HEX);
+                Serial.println();
 #endif
-          endp_out_addr=endp_in_addr=0;
-          address =tmpEp->bEndpointAddress;  /* Address of First EndPoint */
-          // actually we only care about the input end points
-          if( address&0x80 ){
-            endp_in_addr = address&0x0f;  /* Address of IN EndPoint */
-          }else{  /* OUT EndPoint */
-            endp_out_addr = address&0x0f;
-            endp_out_size = p_cfg_descr->endp_descr[0].wMaxPacketSize;
-			/* Length of Package for Received Data EndPoint */
-            if( endp_out_size == 0 || endp_out_size > 64 )
-              endp_out_size = 64;
-          }
-          // todo: some joystick with more than 2 node
-          // just assume every thing is fine, bring the device up
-          irq = set_config(p_cfg_descr->cfg_descr.bConfigurationvalue);
-          if(irq==USB_INT_SUCCESS){
-            CH375_WR( CMD_SET_RETRY );  // set the retry times
-            CH375_WR( 0x25 );
-            CH375_WR( 0x85 );
-            device_ready = true;
-            return 1;
-          }
+                endp_out_addr = endp_in_addr = 0;
+                address = tmpEp->bEndpointAddress;  /* Address of First EndPoint */
+                // actually we only care about the input end points
+                if (address & 0x80) {
+                    endp_in_addr = address & 0x0f;  /* Address of IN EndPoint */
+                } else {  /* OUT EndPoint */
+                    endp_out_addr = address & 0x0f;
+                    endp_out_size = p_cfg_descr->endp_descr[0].wMaxPacketSize;
+                    /* Length of Package for Received Data EndPoint */
+                    if (endp_out_size == 0 || endp_out_size > 64)
+                        endp_out_size = 64;
+                }
+                // todo: some joystick with more than 2 node
+                // just assume every thing is fine, bring the device up
+                irq = set_config(p_cfg_descr->cfg_descr.bConfigurationvalue);
+                if (irq == USB_INT_SUCCESS) {
+                    CH375_WR(CMD_SET_RETRY);  // set the retry times
+                    CH375_WR(0x25);
+                    CH375_WR(0x85);
+                    device_ready = true;
+                    return 1;
+                }
+            }
+
         }
-
-      }
-  }
-  return 0;
+    }
+    return 0;
 }
 
 /**
@@ -692,30 +694,30 @@ int16_t MeUSBHost::initHIDDevice()
  */
 int16_t MeUSBHost::probeDevice()
 {
-  int16_t c;
-  if(!ch375_online){
-    CH375_WR( CMD_CHECK_EXIST );
-    CH375_WR( 0x5A);
-    c = CH375_RD(); // should return 0xA5
-    if(c!=0xA5) return 0;
-    ch375_online = true;
-    resetBus();
-  }
+    int16_t c;
+    if (!ch375_online) {
+        CH375_WR(CMD_CHECK_EXIST);
+        CH375_WR(0x5A);
+        c = CH375_RD(); // should return 0xA5
+        if (c != 0xA5) return 0;
+        ch375_online = true;
+        resetBus();
+    }
 
-  c = getIrq();
-  if(c!=USB_INT_CONNECT) return 0;
-  resetBus(); // reset bus and wait the device online again
-  c=0;
-  while(c!=USB_INT_CONNECT){
-    delay(500); // some device may need long time to get ready
     c = getIrq();
+    if (c != USB_INT_CONNECT) return 0;
+    resetBus(); // reset bus and wait the device online again
+    c = 0;
+    while (c != USB_INT_CONNECT) {
+        delay(500); // some device may need long time to get ready
+        c = getIrq();
 #ifdef CH375_DBG
-    Serial.print("waiting:");
-    Serial.println(c,HEX);
+        Serial.print("waiting:");
+        Serial.println(c,HEX);
 #endif
-  }
-  if( initHIDDevice()==1)
-    device_online=true;
+    }
+    if (initHIDDevice() == 1)
+        device_online = true;
 }
 
 

@@ -41,8 +41,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "MePIRMotionSensor.h"
 
-volatile uint8_t       MePIRMotionSensor::_SensorPin        = 0;
-volatile uint8_t       MePIRMotionSensor::_ModePin          = 0;
+volatile uint8_t       MePIRMotionSensor::_SensorPin = 0;
+volatile uint8_t       MePIRMotionSensor::_ModePin = 0;
 
 /* Private functions ---------------------------------------------------------*/
 
@@ -53,6 +53,7 @@ volatile uint8_t       MePIRMotionSensor::_ModePin          = 0;
  *   None
  */
 #ifdef ME_PORT_DEFINED
+
 MePIRMotionSensor::MePIRMotionSensor(void) : MePort(0)
 {
 
@@ -67,6 +68,7 @@ MePIRMotionSensor::MePIRMotionSensor(uint8_t port) : MePort(port)
 {
 
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the Motion Sensor device to arduino port
@@ -100,15 +102,15 @@ MePIRMotionSensor::MePIRMotionSensor(uint8_t ModePin,uint8_t SensorPin)
  * \par Others
  *    Set global variable _KeyPin and s2
  */
-void MePIRMotionSensor::setpin(uint8_t ModePin,uint8_t SensorPin)
+void MePIRMotionSensor::setpin(uint8_t ModePin, uint8_t SensorPin)
 {
-  _ModePin = ModePin;
-  _SensorPin = SensorPin;
-  pinMode(_ModePin, OUTPUT);
-  pinMode(_SensorPin, INPUT);
+    _ModePin = ModePin;
+    _SensorPin = SensorPin;
+    pinMode(_ModePin, OUTPUT);
+    pinMode(_SensorPin, INPUT);
 #ifdef ME_PORT_DEFINED
-  s1 = _ModePin;
-  s2 = _SensorPin;
+    s1 = _ModePin;
+    s2 = _SensorPin;
 #endif // ME_PORT_DEFINED
 }
 
@@ -129,9 +131,9 @@ void MePIRMotionSensor::setpin(uint8_t ModePin,uint8_t SensorPin)
 void MePIRMotionSensor::SetPirMotionMode(uint8_t ModePin)
 {
 #ifdef ME_PORT_DEFINED
-  MePort::dWrite1(ModePin);
+    MePort::dWrite1(ModePin);
 #else // ME_PORT_DEFINED
-  digitalWrite(_ModePin, ModePin);
+    digitalWrite(_ModePin, ModePin);
 #endif // ME_PORT_DEFINED
 }
 
@@ -153,9 +155,9 @@ void MePIRMotionSensor::SetPirMotionMode(uint8_t ModePin)
 bool MePIRMotionSensor::isHumanDetected()
 {
 #ifdef ME_PORT_DEFINED
-  return(MePort::dRead2());
+    return (MePort::dRead2());
 #else // ME_PORT_DEFINED
-  return digitalRead(_SensorPin);
+    return digitalRead(_SensorPin);
 #endif // ME_PORT_DEFINED
 }
 

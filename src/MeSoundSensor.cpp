@@ -41,6 +41,7 @@
 #include "MeSoundSensor.h"
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the Sound Sensor to arduino port,
  * no pins are used or initialized here.
@@ -59,6 +60,7 @@ MeSoundSensor::MeSoundSensor(void) : MePort(0)
 MeSoundSensor::MeSoundSensor(uint8_t port) : MePort(port)
 {
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the Sound Sensor to arduino port,
@@ -88,10 +90,10 @@ MeSoundSensor::MeSoundSensor(uint8_t port)
  */
 void MeSoundSensor::setpin(uint8_t SoundSensorPin)
 {
-  _SoundSensorRead = SoundSensorPin;
+    _SoundSensorRead = SoundSensorPin;
 
 #ifdef ME_PORT_DEFINED
-  s2 = _SoundSensorRead;
+    s2 = _SoundSensorRead;
 #endif // ME_PORT_DEFINED
 }
 
@@ -110,9 +112,9 @@ void MeSoundSensor::setpin(uint8_t SoundSensorPin)
 int16_t MeSoundSensor::strength(void)
 {
 #ifdef ME_PORT_DEFINED
-  return(MePort::aRead2());
+    return (MePort::aRead2());
 #else // ME_PORT_DEFINED
-  return analogRead(_SoundSensorRead);
+    return analogRead(_SoundSensorRead);
 #endif // ME_PORT_DEFINED
 }
 

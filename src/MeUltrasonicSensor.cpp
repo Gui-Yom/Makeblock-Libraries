@@ -45,6 +45,7 @@
 #include "MeUltrasonicSensor.h"
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the ultrasonic sensor to arduino port,
  * no pins are used or initialized here.
@@ -65,6 +66,7 @@ MeUltrasonicSensor::MeUltrasonicSensor(uint8_t port) : MePort(port)
 {
 
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the ultrasonic Sensor to arduino port,
@@ -97,12 +99,12 @@ MeUltrasonicSensor::MeUltrasonicSensor(uint8_t port)
  */
 void MeUltrasonicSensor::setpin(uint8_t SignalPin)
 {
-  _SignalPin = SignalPin;
-  _lastEnterTime = millis();
-  _measureFlag = true;
-  _measureValue = 0;
+    _SignalPin = SignalPin;
+    _lastEnterTime = millis();
+    _measureFlag = true;
+    _measureValue = 0;
 #ifdef ME_PORT_DEFINED
-  s2 = _SignalPin;
+    s2 = _SignalPin;
 #endif // ME_PORT_DEFINED
 }
 
@@ -122,16 +124,13 @@ void MeUltrasonicSensor::setpin(uint8_t SignalPin)
  */
 double MeUltrasonicSensor::distanceCm(uint16_t MAXcm)
 {
-  long distance = measure();
+    long distance = measure();
 
-  if((((double)distance / 58.0) >= 400.0) || (distance == 0))
-  {
-    return( (double)400.0);//MAXcm
-  }
-  else
-  {
-    return( (double)distance / 58.0);
-  }
+    if ((((double) distance / 58.0) >= 400.0) || (distance == 0)) {
+        return ((double) 400.0);//MAXcm
+    } else {
+        return ((double) distance / 58.0);
+    }
 }
 
 /**
@@ -150,16 +149,13 @@ double MeUltrasonicSensor::distanceCm(uint16_t MAXcm)
  */
 double MeUltrasonicSensor::distanceInch(uint16_t MAXinch)
 {
-  long distance = measure();
+    long distance = measure();
 
-  if((((double)distance / 148.0) >= 400.0) || (distance == 0))
-  {
-    return( (double)180.0);//MAXinch
-  }
-  else
-  {
-    return( (double)distance / 148.0);
-  }
+    if ((((double) distance / 148.0) >= 400.0) || (distance == 0)) {
+        return ((double) 180.0);//MAXinch
+    } else {
+        return ((double) distance / 148.0);
+    }
 }
 
 /**
@@ -179,29 +175,25 @@ double MeUltrasonicSensor::distanceInch(uint16_t MAXinch)
  */
 long MeUltrasonicSensor::measure(unsigned long timeout)
 {
-  long duration;
-  if(millis() - _lastEnterTime > 23)
-  {
-    _measureFlag = true; 
-  }
+    long duration;
+    if (millis() - _lastEnterTime > 23) {
+        _measureFlag = true;
+    }
 
-  if(_measureFlag == true)
-  {
-    _lastEnterTime = millis();
-    _measureFlag = false;
-    MePort::dWrite2(LOW);
-    delayMicroseconds(2);
-    MePort::dWrite2(HIGH);
-    delayMicroseconds(10);
-    MePort::dWrite2(LOW);
-    pinMode(s2, INPUT);
-    duration = pulseIn(s2, HIGH);
-    _measureValue = duration;
-  }
-  else
-  {
-    duration = _measureValue;
-  }
-  return(duration);
+    if (_measureFlag == true) {
+        _lastEnterTime = millis();
+        _measureFlag = false;
+        MePort::dWrite2(LOW);
+        delayMicroseconds(2);
+        MePort::dWrite2(HIGH);
+        delayMicroseconds(10);
+        MePort::dWrite2(LOW);
+        pinMode(s2, INPUT);
+        duration = pulseIn(s2, HIGH);
+        _measureValue = duration;
+    } else {
+        duration = _measureValue;
+    }
+    return (duration);
 }
 

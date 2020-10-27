@@ -44,6 +44,7 @@
 
 /* Private functions ---------------------------------------------------------*/
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the limit switch to arduino port,
  * no pins are used or initialized here.
@@ -63,7 +64,7 @@ MeLimitSwitch::MeLimitSwitch(void) : MePort(0)
  */
 MeLimitSwitch::MeLimitSwitch(uint8_t port) : MePort(port)
 {
-  pinMode(s2, INPUT_PULLUP);
+    pinMode(s2, INPUT_PULLUP);
 }
 
 /**
@@ -76,16 +77,14 @@ MeLimitSwitch::MeLimitSwitch(uint8_t port) : MePort(port)
  */
 MeLimitSwitch::MeLimitSwitch(uint8_t port, uint8_t slot) : MePort(port)
 {
-  reset(port, slot);
-  if (getSlot() == SLOT1)
-  {
-    pinMode(s1, INPUT_PULLUP);
-  }
-  else
-  {
-    pinMode(s2, INPUT_PULLUP);
-  }
+    reset(port, slot);
+    if (getSlot() == SLOT1) {
+        pinMode(s1, INPUT_PULLUP);
+    } else {
+        pinMode(s2, INPUT_PULLUP);
+    }
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the limit switch to arduino port,
@@ -115,17 +114,14 @@ MeLimitSwitch::MeLimitSwitch(uint8_t switchPin)
  */
 void MeLimitSwitch::setpin(uint8_t switchPin)
 {
-  _switchPin = switchPin;
-  pinMode(_switchPin, INPUT_PULLUP);
+    _switchPin = switchPin;
+    pinMode(_switchPin, INPUT_PULLUP);
 #ifdef ME_PORT_DEFINED
-  if (getSlot() == SLOT1)
-  {
-    s1 = switchPin;
-  }
-  else
-  {
-    s2 = switchPin;
-  }
+    if (getSlot() == SLOT1) {
+        s1 = switchPin;
+    } else {
+        s2 = switchPin;
+    }
 #endif // ME_PORT_DEFINED
 }
 
@@ -146,9 +142,9 @@ void MeLimitSwitch::setpin(uint8_t switchPin)
 bool MeLimitSwitch::touched(void)
 {
 #ifdef ME_PORT_DEFINED
-  return(!(getSlot() == SLOT1 ? digitalRead(s1) : digitalRead(s2)));
+    return (!(getSlot() == SLOT1 ? digitalRead(s1) : digitalRead(s2)));
 #else // ME_PORT_DEFINED
-  return digitalRead(_switchPin);
+    return digitalRead(_switchPin);
 #endif // ME_PORT_DEFINED
 }
 

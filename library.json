@@ -1,0 +1,32 @@
+{
+  "name": "MakeBlockDrive",
+  "version": "3.2.8",
+  "description": "Use to drive all devices provided by Makeblock company.",
+  "keywords": "makeblock, robot, device control",
+  "repository":
+  {
+    "type": "git",
+    "url": "https://github.com/Gui-Yom/Makeblock-Libraries.git"
+  },
+  "authors":
+  [
+    {
+      "name": "Mark Yan",
+      "email": "me@john-smith.com",
+      "url": "https://www.john-smith/contact"
+    },
+    {
+      "name": "Makeblock",
+      "email": "me@andrew-smith.com",
+      "url": "https://www.andrew-smith/contact",
+      "maintainer": true
+    }
+  ],
+  "license": "None",
+  "homepage": "https://www.makeblock.cc/",
+  "dependencies": {
+  "arduino-libraries/Servo": "^1.1.7"
+  },
+  "frameworks": "arduino",
+  "platforms": "atmelavr"
+}

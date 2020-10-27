@@ -47,6 +47,7 @@
 
 /* Private functions ---------------------------------------------------------*/
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the Me potentiometer device to arduino port,
  * no pins are used or initialized here.
@@ -67,6 +68,7 @@ MePotentiometer::MePotentiometer(uint8_t port) : MePort(port)
 {
 
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the Me potentiometer device to arduino port
@@ -79,6 +81,7 @@ MePotentiometer::MePotentiometer(uint8_t potentiometerPin)
   pinMode(_potentiometerPin, INPUT);
 }
 #endif // ME_PORT_DEFINED 
+
 /**
  * \par Function
  *    setpin
@@ -95,10 +98,10 @@ MePotentiometer::MePotentiometer(uint8_t potentiometerPin)
  */
 void MePotentiometer::setpin(uint8_t potentiometerPin)
 {
-  _potentiometerPin = potentiometerPin;
-  pinMode(_potentiometerPin, INPUT);
+    _potentiometerPin = potentiometerPin;
+    pinMode(_potentiometerPin, INPUT);
 #ifdef ME_PORT_DEFINED
-  s2 = potentiometerPin;
+    s2 = potentiometerPin;
 #endif // ME_PORT_DEFINED
 }
 
@@ -119,9 +122,9 @@ void MePotentiometer::setpin(uint8_t potentiometerPin)
 uint16_t MePotentiometer::read(void)
 {
 #ifdef ME_PORT_DEFINED
-  return(MePort::aRead2() );
+    return (MePort::aRead2());
 #else // ME_PORT_DEFINED
-  return analogRead(_potentiometerPin);
+    return analogRead(_potentiometerPin);
 #endif // ME_PORT_DEFINED
 }
 

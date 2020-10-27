@@ -44,6 +44,7 @@
 #include "MeLineFollower.h"
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the line follwer device to arduino port,
  * no pins are used or initialized here.
@@ -64,7 +65,8 @@ MeLineFollower::MeLineFollower(uint8_t port) : MePort(port)
 {
 
 }
-#else // ME_PORT_DEFINED 
+
+#else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the line follwer device to arduino port,
  * it will assigned the input pin.
@@ -98,15 +100,15 @@ MeLineFollower::MeLineFollower(uint8_t Sensor1,uint8_t Sensor2)
  * \par Others
  *   None
  */
-void MeLineFollower::setpin(uint8_t Sensor1,uint8_t Sensor2)
+void MeLineFollower::setpin(uint8_t Sensor1, uint8_t Sensor2)
 {
-  _Sensor1 = Sensor1;
-  _Sensor2 = Sensor2;
-  pinMode(_Sensor1,INPUT);
-  pinMode(_Sensor2,INPUT);
+    _Sensor1 = Sensor1;
+    _Sensor2 = Sensor2;
+    pinMode(_Sensor1, INPUT);
+    pinMode(_Sensor2, INPUT);
 #ifdef ME_PORT_DEFINED
-  s1 = _Sensor1;
-  s2 = _Sensor2;
+    s1 = _Sensor1;
+    s2 = _Sensor2;
 #endif // ME_PORT_DEFINED
 }
 
@@ -127,16 +129,16 @@ void MeLineFollower::setpin(uint8_t Sensor1,uint8_t Sensor2)
  */
 uint8_t MeLineFollower::readSensors(void)
 {
-  uint8_t state	= S1_IN_S2_IN;
+    uint8_t state = S1_IN_S2_IN;
 #ifdef ME_PORT_DEFINED
-  bool s1State = MePort::dRead1();
-  bool s2State = MePort::dRead2();
+    bool s1State = MePort::dRead1();
+    bool s2State = MePort::dRead2();
 #else // ME_PORT_DEFINED
-  bool s1State = digitalRead(_Sensor1);
-  bool s2State = digitalRead(_Sensor2);
+    bool s1State = digitalRead(_Sensor1);
+    bool s2State = digitalRead(_Sensor2);
 #endif // ME_PORT_DEFINED
-  state = ( (1 & s1State) << 1) | s2State;
-  return(state);
+    state = ((1 & s1State) << 1) | s2State;
+    return (state);
 }
 
 /**
@@ -155,9 +157,9 @@ uint8_t MeLineFollower::readSensors(void)
 bool MeLineFollower::readSensor1(void)
 {
 #ifdef ME_PORT_DEFINED
-  return(MePort::dRead1() );
+    return (MePort::dRead1());
 #else // ME_PORT_DEFINED
-  return digitalRead(_Sensor1);
+    return digitalRead(_Sensor1);
 #endif // ME_PORT_DEFINED
 }
 
@@ -177,9 +179,9 @@ bool MeLineFollower::readSensor1(void)
 bool MeLineFollower::readSensor2(void)
 {
 #ifdef ME_PORT_DEFINED
-	return(MePort::dRead2() );
+    return (MePort::dRead2());
 #else // ME_PORT_DEFINED
-  return digitalRead(_Sensor2);
+    return digitalRead(_Sensor2);
 #endif // ME_PORT_DEFINED
 }
 

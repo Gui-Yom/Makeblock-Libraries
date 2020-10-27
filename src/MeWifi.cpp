@@ -40,6 +40,7 @@
 #include "MeSerial.h"
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the Me wifi to arduino port,
  * no pins are used or initialized here.
@@ -61,6 +62,7 @@ MeWifi::MeWifi(uint8_t port) : MeSerial(port)
 {
 
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the Me wifi to arduino port,

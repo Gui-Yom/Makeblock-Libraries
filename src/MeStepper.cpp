@@ -64,8 +64,8 @@
 
 typedef enum
 {
-  DIRECTION_CCW = 0,  ///< Clockwise
-  DIRECTION_CW  = 1   ///< Counter-Clockwise
+    DIRECTION_CCW = 0,  ///< Clockwise
+    DIRECTION_CW = 1   ///< Counter-Clockwise
 } Direction;
 
 /**
@@ -74,7 +74,7 @@ typedef enum
  * \param[in]
  *   None
  */
-MeStepper::MeStepper(): MePort(0)
+MeStepper::MeStepper() : MePort(0)
 {
 
 }
@@ -85,17 +85,17 @@ MeStepper::MeStepper(): MePort(0)
  * \param[in]
  *   port - RJ25 port from PORT_1 to M2
  */
-MeStepper::MeStepper(uint8_t port): MePort(port)
+MeStepper::MeStepper(uint8_t port) : MePort(port)
 {
-  _currentPos = 0;
-  _targetPos = 0;
-  _acceleration = 0;
-  _lastStepTime = micros();
-  _speed = 0;
-  _dir = DIRECTION_CW;
-  setCurrentPosition(0);
-  pinMode(s1,OUTPUT);
-  pinMode(s2,OUTPUT);
+    _currentPos = 0;
+    _targetPos = 0;
+    _acceleration = 0;
+    _lastStepTime = micros();
+    _speed = 0;
+    _dir = DIRECTION_CW;
+    setCurrentPosition(0);
+    pinMode(s1, OUTPUT);
+    pinMode(s2, OUTPUT);
 }
 
 /**
@@ -116,13 +116,13 @@ MeStepper::MeStepper(uint8_t port): MePort(port)
  */
 void MeStepper::setpin(uint8_t dir_data, uint8_t step_data)
 {
-  _dir_data = dir_data;
-  _step_data = step_data;
-  pinMode(_dir_data, OUTPUT);
-  pinMode(_step_data, OUTPUT);
+    _dir_data = dir_data;
+    _step_data = step_data;
+    pinMode(_dir_data, OUTPUT);
+    pinMode(_step_data, OUTPUT);
 #ifdef ME_PORT_DEFINED
-  s1 = _dir_data;
-  s2 = _step_data;
+    s1 = _dir_data;
+    s2 = _step_data;
 #endif // ME_PORT_DEFINED
 }
 
@@ -143,11 +143,10 @@ void MeStepper::setpin(uint8_t dir_data, uint8_t step_data)
  */
 void MeStepper::moveTo(long absolute)
 {
-  if (_targetPos != absolute)
-  {
-    _targetPos = absolute;
-    computeNewSpeed();
-  }
+    if (_targetPos != absolute) {
+        _targetPos = absolute;
+        computeNewSpeed();
+    }
 }
 
 /**
@@ -166,7 +165,7 @@ void MeStepper::moveTo(long absolute)
  */
 void MeStepper::move(long relative)
 {
-  moveTo(_currentPos + relative);
+    moveTo(_currentPos + relative);
 }
 
 /**
@@ -185,32 +184,25 @@ void MeStepper::move(long relative)
  */
 boolean MeStepper::runSpeed()
 {
-  // Dont do anything unless we actually have a step interval
-  if (!_stepInterval)
-  {
-    return false;
-  }
+    // Dont do anything unless we actually have a step interval
+    if (!_stepInterval) {
+        return false;
+    }
 
-  if (micros() - _lastStepTime > _stepInterval)
-  {
-    if (_dir == DIRECTION_CW)
-    {
-      // Clockwise
-      _currentPos += 1;
+    if (micros() - _lastStepTime > _stepInterval) {
+        if (_dir == DIRECTION_CW) {
+            // Clockwise
+            _currentPos += 1;
+        } else {
+            // Anticlockwise
+            _currentPos -= 1;
+        }
+        step();
+        _lastStepTime = micros();
+        return true;
+    } else {
+        return false;
     }
-    else
-    {
-      // Anticlockwise  
-      _currentPos -= 1;
-    }
-    step();
-    _lastStepTime = micros();
-    return true;
-  }
-  else
-  {
-    return false;
-  }
 }
 
 /**
@@ -229,7 +221,7 @@ boolean MeStepper::runSpeed()
  */
 long MeStepper::distanceToGo()
 {
-  return _targetPos - _currentPos;
+    return _targetPos - _currentPos;
 }
 
 /**
@@ -248,7 +240,7 @@ long MeStepper::distanceToGo()
  */
 long MeStepper::targetPosition()
 {
-  return _targetPos;
+    return _targetPos;
 }
 
 /**
@@ -267,7 +259,7 @@ long MeStepper::targetPosition()
  */
 long MeStepper::currentPosition()
 {
-  return _currentPos;
+    return _currentPos;
 }
 
 /**
@@ -286,9 +278,9 @@ long MeStepper::currentPosition()
  */
 void MeStepper::setCurrentPosition(long position)
 {
-  _targetPos = _currentPos = position;
-  _n = 0;
-  _stepInterval = 0;
+    _targetPos = _currentPos = position;
+    _n = 0;
+    _stepInterval = 0;
 }
 
 /**
@@ -307,80 +299,62 @@ void MeStepper::setCurrentPosition(long position)
  */
 void MeStepper::computeNewSpeed()
 {
-  long distanceTo = distanceToGo();
-  long stepsToStop = (long)((_speed * _speed) / (2.0 * _acceleration));
-  if (distanceTo == 0 && stepsToStop <= 1)
-  {
-    // We are at the target and its time to stop
-    _stepInterval = 0;
-    _speed = 0.0;
-    _n = 0;
-    return;
-  }
+    long distanceTo = distanceToGo();
+    long stepsToStop = (long) ((_speed * _speed) / (2.0 * _acceleration));
+    if (distanceTo == 0 && stepsToStop <= 1) {
+        // We are at the target and its time to stop
+        _stepInterval = 0;
+        _speed = 0.0;
+        _n = 0;
+        return;
+    }
 
-  if (distanceTo > 0)
-  {
-    // We are anticlockwise from the target
-    // Need to go clockwise from here, maybe decelerate now
-    if (_n > 0)
-    {
-      // Currently accelerating, need to decel now? Or maybe going the wrong way?
-      if ((stepsToStop >= distanceTo) || _dir == DIRECTION_CCW)
-      {
-        _n = -stepsToStop; // Start deceleration
-      }
+    if (distanceTo > 0) {
+        // We are anticlockwise from the target
+        // Need to go clockwise from here, maybe decelerate now
+        if (_n > 0) {
+            // Currently accelerating, need to decel now? Or maybe going the wrong way?
+            if ((stepsToStop >= distanceTo) || _dir == DIRECTION_CCW) {
+                _n = -stepsToStop; // Start deceleration
+            }
+        } else if (_n < 0) {
+            // Currently decelerating, need to accel again?
+            if ((stepsToStop < distanceTo) && _dir == DIRECTION_CW) {
+                _n = -_n; // Start accceleration
+            }
+        }
+    } else if (distanceTo < 0) {
+        // We are clockwise from the target
+        // Need to go anticlockwise from here, maybe decelerate
+        if (_n > 0) {
+            // Currently accelerating, need to decel now? Or maybe going the wrong way?
+            if ((stepsToStop >= -distanceTo) || _dir == DIRECTION_CW) {
+                _n = -stepsToStop; // Start deceleration
+            }
+        } else if (_n < 0) {
+            // Currently decelerating, need to accel again?
+            if ((stepsToStop < -distanceTo) && _dir == DIRECTION_CCW) {
+                _n = -_n; // Start accceleration
+            }
+        }
     }
-    else if (_n < 0)
-    {
-      // Currently decelerating, need to accel again?
-      if ((stepsToStop < distanceTo) && _dir == DIRECTION_CW)
-      {
-        _n = -_n; // Start accceleration
-      }
-    }
-  }
-  else if (distanceTo < 0)
-  {
-    // We are clockwise from the target
-    // Need to go anticlockwise from here, maybe decelerate
-    if (_n > 0)
-    {
-      // Currently accelerating, need to decel now? Or maybe going the wrong way?
-      if ((stepsToStop >= -distanceTo) || _dir == DIRECTION_CW)
-      {
-        _n = -stepsToStop; // Start deceleration
-      }
-    }
-    else if (_n < 0)
-    {
-      // Currently decelerating, need to accel again?
-      if ((stepsToStop < -distanceTo) && _dir == DIRECTION_CCW)
-      {
-        _n = -_n; // Start accceleration
-      }
-    }
-  }
 
-  // Need to accelerate or decelerate
-  if (_n == 0)
-  {
-    // First step from stopped
-    _cn = _c0;
-    _dir = (distanceTo > 0) ? DIRECTION_CW : DIRECTION_CCW;
-  }
-  else
-  {
-    // Subsequent step. Works for accel (n is +_ve) and decel (n is -ve).
-    _cn = _cn - ((2.0 * _cn) / ((4.0 * _n) + 1)); // Equation 13
-    _cn = max(_cn, _cmin);
-  }
-  _n++;
-  _stepInterval = _cn;
-  _speed = 1000000.0 / _cn;
-  if (_dir == DIRECTION_CCW)
-  {
-    _speed = -_speed;
-  }
+    // Need to accelerate or decelerate
+    if (_n == 0) {
+        // First step from stopped
+        _cn = _c0;
+        _dir = (distanceTo > 0) ? DIRECTION_CW : DIRECTION_CCW;
+    } else {
+        // Subsequent step. Works for accel (n is +_ve) and decel (n is -ve).
+        _cn = _cn - ((2.0 * _cn) / ((4.0 * _n) + 1)); // Equation 13
+        _cn = max(_cn, _cmin);
+    }
+    _n++;
+    _stepInterval = _cn;
+    _speed = 1000000.0 / _cn;
+    if (_dir == DIRECTION_CCW) {
+        _speed = -_speed;
+    }
 }
 
 /**
@@ -399,16 +373,14 @@ void MeStepper::computeNewSpeed()
  */
 boolean MeStepper::run()
 {
-  if((_speed == 0.0) || (distanceToGo() == 0))
-  {
-    return false;
-  }
+    if ((_speed == 0.0) || (distanceToGo() == 0)) {
+        return false;
+    }
 
-  if (runSpeed())
-  {
-	computeNewSpeed();
-    return true;
-  }
+    if (runSpeed()) {
+        computeNewSpeed();
+        return true;
+    }
 }
 
 /**
@@ -427,17 +399,15 @@ boolean MeStepper::run()
  */
 void MeStepper::setMaxSpeed(float speed)
 {
-  if (_maxSpeed != speed)
-  {
-    _maxSpeed = speed;
-    _cmin = 1000000.0 / speed;
-    // Recompute _n from current speed and adjust speed if accelerating or cruising
-    if (_n > 0)
-    {
-      _n = (long)((_speed * _speed) / (2.0 * _acceleration)); // Equation 16
-      computeNewSpeed();
+    if (_maxSpeed != speed) {
+        _maxSpeed = speed;
+        _cmin = 1000000.0 / speed;
+        // Recompute _n from current speed and adjust speed if accelerating or cruising
+        if (_n > 0) {
+            _n = (long) ((_speed * _speed) / (2.0 * _acceleration)); // Equation 16
+            computeNewSpeed();
+        }
     }
-  }
 }
 
 /**
@@ -456,19 +426,17 @@ void MeStepper::setMaxSpeed(float speed)
  */
 void MeStepper::setAcceleration(float acceleration)
 {
-  if(acceleration == 0.0)
-  {
-    return;
-  }
-  if(_acceleration != acceleration)
-  {
-    _n = _n * (_acceleration / acceleration);
-    //	_c0 = sqrt(2.0 / acceleration) * 1000000.0;
-    // Accelerates at half the expected rate. Why?
-    _c0 = sqrt(1.0/acceleration) * 1000000.0;
-    _acceleration = acceleration;
-    computeNewSpeed();
-  }
+    if (acceleration == 0.0) {
+        return;
+    }
+    if (_acceleration != acceleration) {
+        _n = _n * (_acceleration / acceleration);
+        //	_c0 = sqrt(2.0 / acceleration) * 1000000.0;
+        // Accelerates at half the expected rate. Why?
+        _c0 = sqrt(1.0 / acceleration) * 1000000.0;
+        _acceleration = acceleration;
+        computeNewSpeed();
+    }
 }
 
 /**
@@ -487,22 +455,17 @@ void MeStepper::setAcceleration(float acceleration)
  */
 void MeStepper::setSpeed(float speed)
 {
-  if (speed == _speed)
-  {
-    return;
-  }
-  speed = constrain(speed, -_maxSpeed, _maxSpeed);
-  if (speed == 0.0)
-  {
-    _stepInterval = 0;
-  }
-
-  else
-  {
-    _stepInterval = fabs(1000000.0 /speed);
-    _dir = (speed > 0.0) ? DIRECTION_CW : DIRECTION_CCW;
-  }
-  _speed = speed;
+    if (speed == _speed) {
+        return;
+    }
+    speed = constrain(speed, -_maxSpeed, _maxSpeed);
+    if (speed == 0.0) {
+        _stepInterval = 0;
+    } else {
+        _stepInterval = fabs(1000000.0 / speed);
+        _dir = (speed > 0.0) ? DIRECTION_CW : DIRECTION_CCW;
+    }
+    _speed = speed;
 }
 
 /**
@@ -521,7 +484,7 @@ void MeStepper::setSpeed(float speed)
  */
 float MeStepper::speed()
 {
-  return _speed;
+    return _speed;
 }
 
 /**
@@ -540,17 +503,14 @@ float MeStepper::speed()
  */
 void MeStepper::step()
 {
-  if(_dir == DIRECTION_CW)
-  {
-    digitalWrite(s1,LOW);
-  }
-  else
-  {
-    digitalWrite(s1,HIGH);
-  }
-  digitalWrite(s2, HIGH);
-  delayMicroseconds(1);
-  digitalWrite(s2, LOW);
+    if (_dir == DIRECTION_CW) {
+        digitalWrite(s1, LOW);
+    } else {
+        digitalWrite(s1, HIGH);
+    }
+    digitalWrite(s2, HIGH);
+    delayMicroseconds(1);
+    digitalWrite(s2, LOW);
 }
 
 /**
@@ -569,10 +529,8 @@ void MeStepper::step()
  */
 void MeStepper::runToPosition()
 {
-  while (run())
-  {
-    ;
-  }
+    while (run()) { ;
+    }
 }
 
 /**
@@ -591,19 +549,15 @@ void MeStepper::runToPosition()
  */
 boolean MeStepper::runSpeedToPosition()
 {
-  if (_targetPos == _currentPos)
-  {
-    return false;
-  }
-  if (_targetPos >_currentPos)
-  {
-	_dir = DIRECTION_CW;
-  }
-  else
-  {
-	_dir = DIRECTION_CCW;
-  }
-  return runSpeed();
+    if (_targetPos == _currentPos) {
+        return false;
+    }
+    if (_targetPos > _currentPos) {
+        _dir = DIRECTION_CW;
+    } else {
+        _dir = DIRECTION_CCW;
+    }
+    return runSpeed();
 }
 
 /**
@@ -622,7 +576,7 @@ boolean MeStepper::runSpeedToPosition()
  */
 void MeStepper::runToNewPosition(long position)
 {
-  moveTo(position);
-  runToPosition();
+    moveTo(position);
+    runToPosition();
 }
 

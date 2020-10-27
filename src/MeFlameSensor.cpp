@@ -40,6 +40,7 @@
 #include "MeFlameSensor.h"
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the flame snesor to arduino port,
  * no pins are used or initialized here.
@@ -60,6 +61,7 @@ MeFlameSensor::MeFlameSensor(uint8_t port) : MePort(port)
 {
 
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the flame snesor to arduino port,
@@ -76,6 +78,7 @@ MeFlameSensor::MeFlameSensor(uint8_t digital_pin,uint8_t analog_pin)
   pinMode(_digital_pin, INPUT);
 }
 #endif // ME_PORT_DEFINED
+
 /**
  * \par Function
  *   setpin
@@ -92,14 +95,14 @@ MeFlameSensor::MeFlameSensor(uint8_t digital_pin,uint8_t analog_pin)
  * \par Others
  *   None
  */
-void MeFlameSensor::setpin(uint8_t digital_pin,uint8_t analog_pin)
+void MeFlameSensor::setpin(uint8_t digital_pin, uint8_t analog_pin)
 {
-  _digital_pin = digital_pin;
-  _analog_pin = analog_pin;
-  pinMode(_digital_pin, INPUT);
+    _digital_pin = digital_pin;
+    _analog_pin = analog_pin;
+    pinMode(_digital_pin, INPUT);
 #ifdef ME_PORT_DEFINED
-  s1 = _analog_pin;
-  s2 = _digital_pin;
+    s1 = _analog_pin;
+    s2 = _digital_pin;
 #endif // ME_PORT_DEFINED
 }
 
@@ -120,9 +123,9 @@ void MeFlameSensor::setpin(uint8_t digital_pin,uint8_t analog_pin)
 uint8_t MeFlameSensor::readDigital(void)
 {
 #ifdef ME_PORT_DEFINED
-  return( MePort::dRead2() );
+    return (MePort::dRead2());
 #else //ME_PORT_DEFINED
-  return digitalRead(_digital_pin);
+    return digitalRead(_digital_pin);
 #endif //ME_PORT_DEFINED
 }
 
@@ -141,8 +144,8 @@ uint8_t MeFlameSensor::readDigital(void)
 int16_t MeFlameSensor::readAnalog(void)
 {
 #ifdef ME_PORT_DEFINED
-  return( MePort::aRead1() );
+    return (MePort::aRead1());
 #else //ME_PORT_DEFINED
-  return analogRead(_analog_pin);
+    return analogRead(_analog_pin);
 #endif //ME_PORT_DEFINED
 }

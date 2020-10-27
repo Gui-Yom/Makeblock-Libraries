@@ -60,9 +60,9 @@
  */
 MePort::MePort(void)
 {
-  s1 = mePort[0].s1;
-  s2 = mePort[0].s2;
-  _port = 0;
+    s1 = mePort[0].s1;
+    s2 = mePort[0].s2;
+    _port = 0;
 }
 
 /**
@@ -73,9 +73,9 @@ MePort::MePort(void)
  */
 MePort::MePort(uint8_t port)
 {
-  s1 = mePort[port].s1;
-  s2 = mePort[port].s2;
-  _port = port;
+    s1 = mePort[port].s1;
+    s2 = mePort[port].s2;
+    _port = port;
 }
 
 /**
@@ -88,10 +88,10 @@ MePort::MePort(uint8_t port)
  */
 MePort::MePort(uint8_t port, uint8_t slot)
 {
-  s1 = mePort[port].s1;
-  s2 = mePort[port].s2;
-  _port = port;
-  _slot = slot;
+    s1 = mePort[port].s1;
+    s2 = mePort[port].s2;
+    _port = port;
+    _slot = slot;
 }
 
 /**
@@ -108,7 +108,7 @@ MePort::MePort(uint8_t port, uint8_t slot)
  */
 uint8_t MePort::getPort()
 {
-  return(_port);
+    return (_port);
 }
 
 /**
@@ -125,7 +125,7 @@ uint8_t MePort::getPort()
  */
 uint8_t MePort::getSlot(void)
 {
-  return(_slot);
+    return (_slot);
 }
 
 /**
@@ -144,10 +144,10 @@ uint8_t MePort::getSlot(void)
  */
 bool MePort::dRead1(uint8_t mode)
 {
-  bool val;
-  pinMode(s1, mode);
-  val = digitalRead(s1);
-  return(val);
+    bool val;
+    pinMode(s1, mode);
+    val = digitalRead(s1);
+    return (val);
 }
 
 /**
@@ -166,10 +166,10 @@ bool MePort::dRead1(uint8_t mode)
  */
 bool MePort::dRead2(uint8_t mode)
 {
-  bool val;
-  pinMode(s2, mode);
-  val = digitalRead(s2);
-  return(val);
+    bool val;
+    pinMode(s2, mode);
+    val = digitalRead(s2);
+    return (val);
 }
 
 /**
@@ -187,10 +187,10 @@ bool MePort::dRead2(uint8_t mode)
  */
 bool MePort::dpRead1(void)
 {
-  bool val;
-  pinMode(s1, INPUT_PULLUP);
-  val = digitalRead(s1);
-  return(val);
+    bool val;
+    pinMode(s1, INPUT_PULLUP);
+    val = digitalRead(s1);
+    return (val);
 }
 
 /**
@@ -208,10 +208,10 @@ bool MePort::dpRead1(void)
  */
 bool MePort::dpRead2(void)
 {
-  bool val;
-  pinMode(s2, INPUT_PULLUP);
-  val = digitalRead(s2);
-  return(val);
+    bool val;
+    pinMode(s2, INPUT_PULLUP);
+    val = digitalRead(s2);
+    return (val);
 }
 
 /**
@@ -230,8 +230,8 @@ bool MePort::dpRead2(void)
  */
 void MePort::dWrite1(bool value)
 {
-  pinMode(s1, OUTPUT);
-  digitalWrite(s1, value);
+    pinMode(s1, OUTPUT);
+    digitalWrite(s1, value);
 }
 
 /**
@@ -250,8 +250,8 @@ void MePort::dWrite1(bool value)
  */
 void MePort::dWrite2(bool value)
 {
-  pinMode(s2, OUTPUT);
-  digitalWrite(s2, value);
+    pinMode(s2, OUTPUT);
+    digitalWrite(s2, value);
 }
 
 /**
@@ -268,10 +268,10 @@ void MePort::dWrite2(bool value)
  */
 int16_t MePort::aRead1(void)
 {
-  int16_t val;
-  pinMode(s1, INPUT);
-  val = analogRead(s1);
-  return(val);
+    int16_t val;
+    pinMode(s1, INPUT);
+    val = analogRead(s1);
+    return (val);
 }
 
 /**
@@ -288,10 +288,10 @@ int16_t MePort::aRead1(void)
  */
 int16_t MePort::aRead2(void)
 {
-  int16_t val;
-  pinMode(s2, INPUT);
-  val = analogRead(s2);
-  return(val);
+    int16_t val;
+    pinMode(s2, INPUT);
+    val = analogRead(s2);
+    return (val);
 }
 
 /**
@@ -310,7 +310,7 @@ int16_t MePort::aRead2(void)
  */
 void MePort::aWrite1(int16_t value)
 {
-  analogWrite(s1, value);
+    analogWrite(s1, value);
 }
 
 /**
@@ -329,7 +329,7 @@ void MePort::aWrite1(int16_t value)
  */
 void MePort::aWrite2(int16_t value)
 {
-  analogWrite(s2, value);
+    analogWrite(s2, value);
 }
 
 /**
@@ -348,9 +348,9 @@ void MePort::aWrite2(int16_t value)
  */
 void MePort::reset(uint8_t port)
 {
-  s1 = mePort[port].s1;
-  s2 = mePort[port].s2;
-  _port = port;
+    s1 = mePort[port].s1;
+    s2 = mePort[port].s2;
+    _port = port;
 }
 
 /**
@@ -371,10 +371,10 @@ void MePort::reset(uint8_t port)
  */
 void MePort::reset(uint8_t port, uint8_t slot)
 {
-  s1 = mePort[port].s1;
-  s2 = mePort[port].s2;
-  _port = port;
-  _slot = slot;
+    s1 = mePort[port].s1;
+    s2 = mePort[port].s2;
+    _port = port;
+    _slot = slot;
 }
 
 /**
@@ -391,7 +391,7 @@ void MePort::reset(uint8_t port, uint8_t slot)
  */
 uint8_t MePort::pin1(void)
 {
-  return(s1);
+    return (s1);
 }
 
 /**
@@ -408,7 +408,7 @@ uint8_t MePort::pin1(void)
  */
 uint8_t MePort::pin2(void)
 {
-  return(s2);
+    return (s2);
 }
 
 /**
@@ -426,7 +426,7 @@ uint8_t MePort::pin2(void)
  */
 uint8_t MePort::pin(void)
 {
-  return(_slot == SLOT_1 ? s1 : s2);
+    return (_slot == SLOT_1 ? s1 : s2);
 }
 
 /**
@@ -447,6 +447,6 @@ uint8_t MePort::pin(void)
  */
 uint8_t MePort::pin(uint8_t port, uint8_t slot)
 {
-  return(slot == SLOT_1 ? mePort[port].s1 : mePort[port].s2);
+    return (slot == SLOT_1 ? mePort[port].s1 : mePort[port].s2);
 }
 

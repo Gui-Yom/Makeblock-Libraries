@@ -42,6 +42,7 @@
 #include "MeTouchSensor.h"
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the touch Sensor to arduino port,
  * no pins are used or initialized here.
@@ -62,6 +63,7 @@ MeTouchSensor::MeTouchSensor(uint8_t port) : MePort(port)
 {
 
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the touch Sensor to arduino port,
@@ -99,13 +101,13 @@ MeTouchSensor::MeTouchSensor(uint8_t TogPin, uint8_t OutputPin)
  */
 void MeTouchSensor::setpin(uint8_t TogPin, uint8_t OutputPin)
 {
-  _TogPin = TogPin;
-  _OutputPin = OutputPin;
-  pinMode(_TogPin,OUTPUT);
-  pinMode(_OutputPin,INPUT);
+    _TogPin = TogPin;
+    _OutputPin = OutputPin;
+    pinMode(_TogPin, OUTPUT);
+    pinMode(_OutputPin, INPUT);
 #ifdef ME_PORT_DEFINED
-  s1 = _TogPin;
-  s2 = _OutputPin;
+    s1 = _TogPin;
+    s2 = _OutputPin;
 #endif // ME_PORT_DEFINED
 }
 
@@ -124,9 +126,9 @@ void MeTouchSensor::setpin(uint8_t TogPin, uint8_t OutputPin)
 bool MeTouchSensor::touched(void)
 {
 #ifdef ME_PORT_DEFINED
-  return(MePort::dRead2());
+    return (MePort::dRead2());
 #else // ME_PORT_DEFINED
-  return(digitalRead(_OutputPin))
+    return(digitalRead(_OutputPin))
 #endif // ME_PORT_DEFINED
 }
 
@@ -147,9 +149,9 @@ bool MeTouchSensor::touched(void)
 void MeTouchSensor::SetTogMode(uint8_t TogMode)
 {
 #ifdef ME_PORT_DEFINED
-  MePort::dWrite1(TogMode);
+    MePort::dWrite1(TogMode);
 #else // ME_PORT_DEFINED
-  digitalWrite(_TogPin,TogMode);
+    digitalWrite(_TogPin,TogMode);
 #endif // ME_PORT_DEFINED
 }
 

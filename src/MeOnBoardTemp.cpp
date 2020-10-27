@@ -39,12 +39,13 @@
  */
 #include "MeOnBoardTemp.h"
 
-const int16_t TEMPERATURENOMINAL     = 25;    //Nominl temperature depicted on the datasheet
-const int16_t SERIESRESISTOR         = 10000; // Value of the series resistor
-const int16_t BCOEFFICIENT           = 3380;  // Beta value for our thermistor(3350-3399)
-const int16_t TERMISTORNOMINAL       = 10000; // Nominal temperature value for the thermistor
+const int16_t TEMPERATURENOMINAL = 25;    //Nominl temperature depicted on the datasheet
+const int16_t SERIESRESISTOR = 10000; // Value of the series resistor
+const int16_t BCOEFFICIENT = 3380;  // Beta value for our thermistor(3350-3399)
+const int16_t TERMISTORNOMINAL = 10000; // Nominal temperature value for the thermistor
 
 #ifdef ME_PORT_DEFINED
+
 /**
  * Alternate Constructor which can call your own function to map the On Board Temperature to arduino port,
  * no pins are used or initialized here.
@@ -65,6 +66,7 @@ MeOnBoardTemp::MeOnBoardTemp(uint8_t port) : MePort(port)
 {
 
 }
+
 #else // ME_PORT_DEFINED
 /**
  * Alternate Constructor which can call your own function to map the On Board Temperature to arduino port,
@@ -94,9 +96,9 @@ MeOnBoardTemp::MeOnBoardTemp(uint8_t analog_pin)
  */
 void MeOnBoardTemp::setpin(uint8_t analog_pin)
 {
-  _analog_pin = analog_pin;
+    _analog_pin = analog_pin;
 #ifdef ME_PORT_DEFINED
-  s2 = _analog_pin;
+    s2 = _analog_pin;
 #endif // ME_PORT_DEFINED
 }
 
@@ -115,9 +117,9 @@ void MeOnBoardTemp::setpin(uint8_t analog_pin)
 int16_t MeOnBoardTemp::readAnalog(void)
 {
 #ifdef ME_PORT_DEFINED
-  return( MePort::aRead2() );
+    return (MePort::aRead2());
 #else //ME_PORT_DEFINED
-  return analogRead(_analog_pin);
+    return analogRead(_analog_pin);
 #endif //ME_PORT_DEFINED
 }
 
@@ -135,26 +137,26 @@ int16_t MeOnBoardTemp::readAnalog(void)
  */
 float MeOnBoardTemp::readValue(void)
 {
-  int16_t In_temp;
+    int16_t In_temp;
 #ifdef ME_PORT_DEFINED
-  In_temp = MePort::aRead2();
+    In_temp = MePort::aRead2();
 #else //ME_PORT_DEFINED
-  In_temp = analogRead(_analog_pin);
+    In_temp = analogRead(_analog_pin);
 #endif //ME_PORT_DEFINED
-  float media;
-  float temperatura;
-  media = (float)In_temp;
-  // Convert the thermal stress value to resistance
-  media = 1023.0 / media - 1;
-  media = SERIESRESISTOR / media;
-  //Calculate temperature using the Beta Factor equation
+    float media;
+    float temperatura;
+    media = (float) In_temp;
+    // Convert the thermal stress value to resistance
+    media = 1023.0 / media - 1;
+    media = SERIESRESISTOR / media;
+    //Calculate temperature using the Beta Factor equation
 
-  temperatura = media / TERMISTORNOMINAL;              // (R/Ro)
-  temperatura = log(temperatura); // ln(R/Ro)
-  temperatura /= BCOEFFICIENT;                         // 1/B * ln(R/Ro)
-  temperatura += 1.0 / (TEMPERATURENOMINAL + 273.15);  // + (1/To)
-  temperatura = 1.0 / temperatura;                     // Invert the value
-  temperatura -= 273.15;                               // Convert it to Celsius
-  return temperatura;
+    temperatura = media / TERMISTORNOMINAL;              // (R/Ro)
+    temperatura = log(temperatura); // ln(R/Ro)
+    temperatura /= BCOEFFICIENT;                         // 1/B * ln(R/Ro)
+    temperatura += 1.0 / (TEMPERATURENOMINAL + 273.15);  // + (1/To)
+    temperatura = 1.0 / temperatura;                     // Invert the value
+    temperatura -= 273.15;                               // Convert it to Celsius
+    return temperatura;
 }
 
